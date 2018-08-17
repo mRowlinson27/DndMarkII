@@ -21,9 +21,9 @@ namespace NeutroniumTest.ViewModel
 
         public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
 
-        public ICommand ToggleEditMode { get; }
+//        public ICommand ToggleEditMode { get; }
 
-        public bool ToggleEditModeCanExecute => ToggleEditMode.CanExecute(null);
+//        public bool ToggleEditModeCanExecute => ToggleEditMode.CanExecute(null);
 
         private readonly SkillTableModel _model;
 

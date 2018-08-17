@@ -1,7 +1,7 @@
-﻿<chromiumFxInfra:ChromiumFxWebBrowserApp x:Class="NeutroniumTest.App"
+﻿<chromiumFxInfra:ChromiumFxWebBrowserApp x:Class="DndMarkII.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:NeutroniumTest"
+             xmlns:local="clr-namespace:DndMarkII"
              xmlns:chromiumFxInfra="clr-namespace:Neutronium.WebBrowserEngine.ChromiumFx;assembly=Neutronium.WebBrowserEngine.ChromiumFx" 
              StartupUri="MainWindow.xaml">
     <chromiumFxInfra:ChromiumFxWebBrowserApp.Resources>
