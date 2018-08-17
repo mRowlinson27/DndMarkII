@@ -1,5 +1,5 @@
 ﻿
-namespace NeutroniumTest.Model
+namespace DndMarkII.Model
 {
     using System;
     using System.Collections.Generic;

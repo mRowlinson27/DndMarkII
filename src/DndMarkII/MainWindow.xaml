@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DndMarkII"
-        xmlns:WPF="clr-namespace:Neutronium.WPF;assembly=Neutronium.WPF" x:Class="NeutroniumTest.MainWindow"
+        xmlns:WPF="clr-namespace:Neutronium.WPF;assembly=Neutronium.WPF" x:Class="DndMarkII.MainWindow"
         mc:Ignorable="d"
         Icon="Content\logo.png"
-        Visibility="{Binding ElementName=HtmlView, Path=IsHTMLLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
+        Visibility= "{Binding ElementName=HtmlView, Path=IsHTMLLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
         Title="MainWindow" Height="350" Width="525" Background="White">
     <Grid>
         <WPF:HTMLViewControl x:Name="HtmlView" IsDebug="True" RelativeSource="View\MainView.html"/>

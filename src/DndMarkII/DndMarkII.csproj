@@ -86,10 +86,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Compile Include="AsyncCommands\AsyncResultCommand.cs" />
     <Compile Include="AsyncCommands\AsyncSimpleCommand.cs" />
     <Compile Include="AsyncCommands\AsyncCommandBase.cs" />
@@ -98,6 +98,7 @@
     <Compile Include="AsyncCommands\CancellableAsyncCommand.cs" />
     <Compile Include="AsyncCommands\IAsyncCommand.cs" />
     <Compile Include="AsyncCommands\NotifyTaskCompletion.cs" />
+    <Compile Include="BootStrapper.cs" />
     <Compile Include="Model\SkillTableModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\SkillTableViewModel.cs" />

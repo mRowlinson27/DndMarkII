@@ -1,6 +1,7 @@
 ﻿﻿
 namespace DndMarkII
 {
+    using System;
     using Chromium.Event;
     using Neutronium.Core.JavascriptFramework;
     using Neutronium.WebBrowserEngine.ChromiumFx;
@@ -11,22 +12,30 @@ namespace DndMarkII
     /// </summary>
     public partial class App : ChromiumFxWebBrowserApp
     {
-//        [STAThread]
-//        public static void Main()
-//        {
-//            var logger = new Logger(new FileWriter(new StreamWriterWrapperFactory()), new DateTimeWrapper());
-//
-//            logger.LogMessage("Program started");
-//        }
+        [STAThread]
+        static void Main()
+        {
+            BootStrapper.Logger.LogMessage("\n");
+            BootStrapper.Logger.LogMessage("Program started");
 
+            var application = BootStrapper.SetupApplication();
+            var mainWindow = BootStrapper.CreateMainWindow();
+
+            BootStrapper.Logger.LogMessage("Bootstrapping complete");
+            application.Run(mainWindow);
+
+            BootStrapper.Logger.LogMessage("Program closed");
+        }
+
+        //These do nothing
         protected override IJavascriptFrameworkManager GetJavascriptUIFrameworkManager()
         {
             return new KnockoutFrameworkManager();
         }
 
+        //These do nothing
         protected override void UpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
         {
-            beforeLineCommand.CommandLine.AppendSwitch("disable-web-security");
         }
     }
 }

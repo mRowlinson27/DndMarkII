@@ -1,9 +1,8 @@
 ﻿
-namespace NeutroniumTest.AsyncCommands
+namespace DndMarkII.AsyncCommands
 {
     using System;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Neutronium.MVVMComponents;
 

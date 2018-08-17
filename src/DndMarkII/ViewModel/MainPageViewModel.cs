@@ -1,20 +1,13 @@
 ﻿
-namespace NeutroniumTest.ViewModel
+namespace DndMarkII.ViewModel
 {
     using System;
-    using Model;
 
     public class MainPageViewModel : ViewModelBase, IDisposable
     {
-        public TitleZoneViewModel TitleZoneViewModel { get; }
+        public TitleZoneViewModel TitleZoneViewModel { get; set; }
 
-        public SkillTableViewModel SkillTableViewModel { get; }
-
-        public MainPageViewModel()
-        {
-            TitleZoneViewModel = new TitleZoneViewModel();
-            SkillTableViewModel = new SkillTableViewModel(new SkillTableModel());
-        }
+        public SkillTableViewModel SkillTableViewModel { get; set; }
 
         public void Dispose()
         {

@@ -1,5 +1,5 @@
 ﻿
-namespace NeutroniumTest.ViewModel
+namespace DndMarkII.ViewModel
 {
     using System;
     using System.Collections.Generic;

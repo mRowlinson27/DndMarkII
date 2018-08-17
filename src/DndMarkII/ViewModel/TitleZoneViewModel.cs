@@ -1,5 +1,5 @@
 ﻿
-namespace NeutroniumTest.ViewModel
+namespace DndMarkII.ViewModel
 {
     public class TitleZoneViewModel : ViewModelBase
     {

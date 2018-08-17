@@ -1,18 +1,19 @@
-﻿using NeutroniumTest.ViewModel;
-using System.Windows;
-using System;
-
-namespace NeutroniumTest
+﻿
+namespace DndMarkII
 {
+    using System;
+    using System.Windows;
+    using ViewModel;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainPageViewModel mainPageViewModel)
         {
             InitializeComponent();
-            DataContext = new MainPageViewModel();
+            DataContext = mainPageViewModel;
         }
 
         protected override void OnClosed(EventArgs e)

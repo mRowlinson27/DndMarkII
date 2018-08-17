@@ -1,8 +1,6 @@
 ﻿
-namespace NeutroniumTest.Dto
+namespace DndMarkII.Dto
 {
-    using System;
-
     public class Skill
     {
         public string Type { get; set; }
