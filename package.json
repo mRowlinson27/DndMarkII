@@ -1,0 +1,11 @@
+{
+  "name": "dnddesktop",
+  "description": "includes all tools used in WebApp",
+  "dependencies": {
+    "requirejs": "^2.3.2",
+    "text": "github:requirejs/text"
+  },
+  "author": "",
+  "license": "ISC",
+  "files": []
+}

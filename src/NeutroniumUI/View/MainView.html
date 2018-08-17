@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="js/script.js"></script>
+    <link href="style/style.css" rel="stylesheet" />
+</head>
+<body>  
+    <div id="mainContainer" class="marginContainer">
+        <div data-bind="component:{name: 'title-zone', params: ViewModel().TitleZoneViewModel}"></div>
+        <div data-bind="component:{name: 'skill-table', params: ViewModel().SkillTableViewModel}"></div>
+    </div>
+
+<script>
+    document.write(
+        '<script type="text/javascript" src="../node_modules/requirejs/require.js"><' +
+        '/script><script type="text/javascript" src="js/mainConfigFile.js"><' +
+        '/script><script type="text/javascript" src="js/templateConfigFile.js"><' +
+        '/script>');
+</script>
+
+</body>
+</html>
