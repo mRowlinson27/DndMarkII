@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeutroniumTest", "src\NeutroniumUI\NeutroniumTest.csproj", "{13A28907-569B-430A-A2C0-4959F784E354}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndMarkII", "src\NeutroniumUI\DndMarkII.csproj", "{13A28907-569B-430A-A2C0-4959F784E354}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
