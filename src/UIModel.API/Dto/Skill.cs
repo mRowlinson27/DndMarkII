@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII.Dto
+namespace UIModel.API.Dto
 {
     public class Skill
     {

@@ -6,8 +6,8 @@ namespace DndMarkII.ViewModel
     using System.Threading.Tasks;
     using System.Windows.Input;
     using AsyncCommands;
-    using Dto;
-    using Model;
+    using UIModel.API;
+    using UIModel.API.Dto;
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
@@ -25,9 +25,9 @@ namespace DndMarkII.ViewModel
 
 //        public bool ToggleEditModeCanExecute => ToggleEditMode.CanExecute(null);
 
-        private readonly SkillTableModel _model;
+        private readonly ISkillTableModel _model;
 
-        public SkillTableViewModel(SkillTableModel model)
+        public SkillTableViewModel(ISkillTableModel model)
         {
             _model = model;
 

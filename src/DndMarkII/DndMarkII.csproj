@@ -99,7 +99,6 @@
     <Compile Include="AsyncCommands\IAsyncCommand.cs" />
     <Compile Include="AsyncCommands\NotifyTaskCompletion.cs" />
     <Compile Include="BootStrapper.cs" />
-    <Compile Include="Model\SkillTableModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\SkillTableViewModel.cs" />
     <Compile Include="ViewModel\TitleZoneViewModel.cs" />
@@ -108,7 +107,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Dto\Skill.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -182,6 +180,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UIModel.API\UIModel.API.csproj">
+      <Project>{7476ce24-8486-4dfb-bf5a-a0df872678b0}</Project>
+      <Name>UIModel.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIModel\UIModel.csproj">
+      <Project>{e5c63301-f8ac-4365-9b68-ab5dd6de3825}</Project>
+      <Name>UIModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities.API\Utilities.API.csproj">
       <Project>{cf0e9721-c68b-4f37-9242-f18f9bed25fe}</Project>
       <Name>Utilities.API</Name>

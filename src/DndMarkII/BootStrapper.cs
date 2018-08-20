@@ -4,10 +4,10 @@ namespace DndMarkII
     using System;
     using Chromium;
     using Chromium.Event;
-    using Model;
     using Neutronium.JavascriptFramework.Knockout;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
+    using UIModel;
     using Utilities.API;
     using ViewModel;
 
@@ -31,9 +31,9 @@ namespace DndMarkII
 
         public MainWindow CreateMainWindow()
         {
-            var mainPageViewModel = new MainPageViewModel
+            var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
-                TitleZoneViewModel = new TitleZoneViewModel(),
+                TitleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel()),
                 SkillTableViewModel = new SkillTableViewModel(new SkillTableModel())
             };
 

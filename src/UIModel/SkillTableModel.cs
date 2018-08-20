@@ -1,13 +1,14 @@
 ﻿
-namespace DndMarkII.Model
+namespace UIModel
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Threading.Tasks;
-    using Dto;
+    using API;
+    using API.Dto;
 
-    public class SkillTableModel
+    public class SkillTableModel : ISkillTableModel
     {
         public IList<Skill> Skills => _skills;
 
@@ -57,7 +58,7 @@ namespace DndMarkII.Model
 
         private void UpdateBackEnd()
         {
-            
+
         }
     }
 }
