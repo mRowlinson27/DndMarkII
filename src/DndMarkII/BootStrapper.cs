@@ -43,7 +43,7 @@ namespace DndMarkII
         {
             var engine = HTMLEngineFactory.Engine;
 
-            var windowFactory = new ChromiumFXWPFWebWindowFactory(UpdateChromiumSettings, PrivateUpdateLineCommandArg);
+            var windowFactory = new ChromiumFXWPFWebWindowFactory(UpdateChromiumSettings, UpdateLineCommandArg);
             engine.RegisterHTMLEngine(windowFactory);
 
             engine.RegisterJavaScriptFramework(new KnockoutFrameworkManager());
@@ -54,7 +54,7 @@ namespace DndMarkII
 
         }
 
-        private static void PrivateUpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
+        private static void UpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
         {
             beforeLineCommand.CommandLine.AppendSwitch("disable-gpu");
             beforeLineCommand.CommandLine.AppendSwitch("disable-web-security");
