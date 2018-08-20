@@ -17,7 +17,7 @@ namespace DndMarkII.AsyncCommands
         {
             if (!CanExecute(parameter))
             {
-                throw new Exception("This should not have happened");
+                return;
             }
 
             Task<object> wrappedTask = WrapTaskWithReturnValue();

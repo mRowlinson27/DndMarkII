@@ -17,7 +17,6 @@ namespace DndMarkII
         static void Main()
         {
             var logger = LoggerFactory.GetInstance;
-            logger.LogMessage("\n");
             logger.LogMessage("Program started");
 
             using (var bootstrapper = new BootStrapper(logger))
@@ -30,7 +29,7 @@ namespace DndMarkII
                 application.Run(mainWindow);
             }
 
-            logger.LogMessage("Program closed");
+            logger.LogMessage("Program closed\n");
         }
 
         //These do nothing

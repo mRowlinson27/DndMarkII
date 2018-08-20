@@ -38,7 +38,7 @@ namespace DndMarkII.AsyncCommands
         {
             if (!CanExecute(parameter))
             {
-                throw new Exception("This should not have happened");
+                return;
             }
 
             Execution = new NotifyTaskCompletion<TResult>(_command((TIn)parameter));

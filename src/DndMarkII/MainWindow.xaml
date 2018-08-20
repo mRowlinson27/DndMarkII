@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Icon="Content\logo.png"
         Visibility= "{Binding ElementName=HtmlView, Path=IsHTMLLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
-        Title="MainWindow" Height="350" Width="525" Background="White">
+        Title="MainWindow" Height="350" Width="525" Background="#4e4b4b">
     <Grid>
         <WPF:HTMLViewControl x:Name="HtmlView" IsDebug="True" RelativeSource="View\MainView.html"/>
     </Grid>
