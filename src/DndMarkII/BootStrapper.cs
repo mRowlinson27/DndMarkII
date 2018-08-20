@@ -1,7 +1,7 @@
 ﻿
 namespace DndMarkII
 {
-    using System.Windows;
+    using System;
     using Chromium;
     using Chromium.Event;
     using Model;
@@ -9,17 +9,18 @@ namespace DndMarkII
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
     using Utilities.API;
-    using Utilities.Implementation;
-    using Utilities.Implementation.DAL;
     using ViewModel;
 
-    public static class BootStrapper
+    public class BootStrapper : IDisposable
     {
-        public static ILogger Logger => _logger ?? (_logger = new Logger(new FileWriter(new StreamWriterWrapperFactory()), new DateTimeWrapper()));
+        private readonly ILogger _logger;
 
-        private static ILogger _logger;
+        public BootStrapper(ILogger logger)
+        {
+            _logger = logger;
+        }
 
-        public static App SetupApplication()
+        public App SetupApplication()
         {
             InitializeChromium();
 
@@ -28,7 +29,7 @@ namespace DndMarkII
             return application;
         }
 
-        public static MainWindow CreateMainWindow()
+        public MainWindow CreateMainWindow()
         {
             var mainPageViewModel = new MainPageViewModel
             {
@@ -36,10 +37,16 @@ namespace DndMarkII
                 SkillTableViewModel = new SkillTableViewModel(new SkillTableModel())
             };
 
-            return new MainWindow(mainPageViewModel);
+            return new MainWindow(_logger, mainPageViewModel);
         }
 
-        private static void InitializeChromium()
+        public void Dispose()
+        {
+            HTMLEngineFactory.Engine.Dispose();
+            _logger.LogEntry();
+        }
+
+        private void InitializeChromium()
         {
             var engine = HTMLEngineFactory.Engine;
 
@@ -49,12 +56,12 @@ namespace DndMarkII
             engine.RegisterJavaScriptFramework(new KnockoutFrameworkManager());
         }
 
-        private static void UpdateChromiumSettings(CfxSettings settings)
+        private void UpdateChromiumSettings(CfxSettings settings)
         {
 
         }
 
-        private static void UpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
+        private void UpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
         {
             beforeLineCommand.CommandLine.AppendSwitch("disable-gpu");
             beforeLineCommand.CommandLine.AppendSwitch("disable-web-security");

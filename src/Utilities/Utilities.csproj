@@ -46,6 +46,7 @@
     <Compile Include="Implementation\Logger.cs" />
     <Compile Include="Implementation\DAL\StreamWriterWrapper.cs" />
     <Compile Include="Implementation\DAL\StreamWriterWrapperFactory.cs" />
+    <Compile Include="Implementation\LoggerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

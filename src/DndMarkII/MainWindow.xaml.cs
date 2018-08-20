@@ -3,6 +3,7 @@ namespace DndMarkII
 {
     using System;
     using System.Windows;
+    using Utilities.API;
     using ViewModel;
 
     /// <summary>
@@ -10,14 +11,18 @@ namespace DndMarkII
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(MainPageViewModel mainPageViewModel)
+        private readonly ILogger _logger;
+
+        public MainWindow(ILogger logger, MainPageViewModel mainPageViewModel)
         {
+            _logger = logger;
             InitializeComponent();
             DataContext = mainPageViewModel;
         }
 
         protected override void OnClosed(EventArgs e)
         {
+            _logger.LogEntry();
             base.OnClosed(e);
             this.HtmlView.Dispose();
         }

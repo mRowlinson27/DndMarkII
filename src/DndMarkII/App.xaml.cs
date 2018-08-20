@@ -6,6 +6,7 @@ namespace DndMarkII
     using Neutronium.Core.JavascriptFramework;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.JavascriptFramework.Knockout;
+    using Utilities.Implementation;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -15,16 +16,21 @@ namespace DndMarkII
         [STAThread]
         static void Main()
         {
-            BootStrapper.Logger.LogMessage("\n");
-            BootStrapper.Logger.LogMessage("Program started");
+            var logger = LoggerFactory.GetInstance;
+            logger.LogMessage("\n");
+            logger.LogMessage("Program started");
 
-            var application = BootStrapper.SetupApplication();
-            var mainWindow = BootStrapper.CreateMainWindow();
+            using (var bootstrapper = new BootStrapper(logger))
+            {
+                var application = bootstrapper.SetupApplication();
+                var mainWindow = bootstrapper.CreateMainWindow();
 
-            BootStrapper.Logger.LogMessage("Bootstrapping complete");
-            application.Run(mainWindow);
+                logger.LogMessage("Bootstrapping complete");
 
-            BootStrapper.Logger.LogMessage("Program closed");
+                application.Run(mainWindow);
+            }
+
+            logger.LogMessage("Program closed");
         }
 
         //These do nothing
