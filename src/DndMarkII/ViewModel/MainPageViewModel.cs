@@ -8,6 +8,8 @@ namespace DndMarkII.ViewModel
     {
         public TitleZoneViewModel TitleZoneViewModel { get; set; }
 
+        public PrimaryStatsTableViewModel PrimaryStatsTableViewModel { get; set; }
+
         public SkillTableViewModel SkillTableViewModel { get; set; }
 
         private readonly IMainPageModel _model;
@@ -15,6 +17,13 @@ namespace DndMarkII.ViewModel
         public MainPageViewModel(IMainPageModel model)
         {
             _model = model;
+        }
+
+        public override void Init()
+        {
+            TitleZoneViewModel.Init();
+            PrimaryStatsTableViewModel.Init();
+            SkillTableViewModel.Init();
         }
 
         public void Dispose()

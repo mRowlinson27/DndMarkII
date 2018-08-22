@@ -2,12 +2,15 @@
 namespace UIModel.API
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using Dto;
 
     public interface ISkillTableModel
     {
-        IList<Skill> Skills { get; }
+        event PropertyChangedEventHandler PropertyChanged;
+
+        Task<IEnumerable<Skill>> RequestSkillsAsync();
 
         Task AddSkillAsync();
 

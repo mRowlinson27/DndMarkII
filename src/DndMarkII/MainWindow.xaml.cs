@@ -13,11 +13,19 @@ namespace DndMarkII
     {
         private readonly ILogger _logger;
 
+        private readonly MainPageViewModel _mainPageViewModel;
+
         public MainWindow(ILogger logger, MainPageViewModel mainPageViewModel)
         {
             _logger = logger;
+            _mainPageViewModel = mainPageViewModel;
             InitializeComponent();
             DataContext = mainPageViewModel;
+        }
+
+        public void Init()
+        {
+            _mainPageViewModel.Init();
         }
 
         protected override void OnClosed(EventArgs e)

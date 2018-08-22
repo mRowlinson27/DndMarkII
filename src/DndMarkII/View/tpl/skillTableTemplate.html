@@ -1,6 +1,6 @@
 ﻿<div class="skillTableWidgit">
-    
-    <button data-bind="enable:AddSkillCanExecute, execute: $data.AddSkill, executeoption: { event:'click', callback : function(){} }">Add</button>
+
+    <button data-bind="enable: ($data.AddSkillCanExecute && $data.DataAvailable), execute: $data.AddSkill, executeoption: { event:'click', callback : function(){} }">Add</button>
 
     <div class="skillTable">
         <div class="skillTableBody" data-bind="foreach: Skills()">

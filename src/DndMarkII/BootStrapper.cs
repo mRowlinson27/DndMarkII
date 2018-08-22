@@ -34,7 +34,8 @@ namespace DndMarkII
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
                 TitleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel()),
-                SkillTableViewModel = new SkillTableViewModel(new SkillTableModel())
+                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger)),
+                PrimaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel())
             };
 
             return new MainWindow(_logger, mainPageViewModel);

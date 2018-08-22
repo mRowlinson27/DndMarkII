@@ -2,6 +2,7 @@
 namespace Utilities.Implementation
 {
     using System;
+    using System.Threading;
     using API;
     using API.DAL;
 
@@ -27,7 +28,7 @@ namespace Utilities.Implementation
             var classFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);
             var className = classFileName.Substring(0, classFileName.Length - 3);
 
-            var finalLog = time.ToString("hh:mm:ss:ffffff tt") + " | " + className + "::" + memberName + ":" + sourceLineNumber +
+            var finalLog = time.ToString("hh:mm:ss:ffffff tt") + " | " + Thread.CurrentThread.ManagedThreadId + " | " + className + "::" + memberName + ":" + sourceLineNumber +
                            " | " + message + '\n';
 
             lock (sync)

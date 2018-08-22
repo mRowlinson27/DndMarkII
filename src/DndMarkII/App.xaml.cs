@@ -6,6 +6,7 @@ namespace DndMarkII
     using Neutronium.Core.JavascriptFramework;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.JavascriptFramework.Knockout;
+    using Neutronium.WPF;
     using Utilities.Implementation;
 
     /// <summary>
@@ -13,6 +14,8 @@ namespace DndMarkII
     /// </summary>
     public partial class App : ChromiumFxWebBrowserApp
     {
+        public MainWindow MainWindow { get; set; }
+
         [STAThread]
         static void Main()
         {
@@ -24,12 +27,20 @@ namespace DndMarkII
                 var application = bootstrapper.SetupApplication();
                 var mainWindow = bootstrapper.CreateMainWindow();
 
+                application.MainWindow = mainWindow;
+
                 logger.LogMessage("Bootstrapping complete");
 
                 application.Run(mainWindow);
             }
 
             logger.LogMessage("Program closed\n");
+        }
+
+        protected override void OnStartUp(IHTMLEngineFactory factory)
+        {
+            base.OnStartUp(factory);
+            MainWindow.Init();
         }
 
         //These do nothing

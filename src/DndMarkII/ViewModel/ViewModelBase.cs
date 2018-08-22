@@ -20,6 +20,8 @@ namespace DndMarkII.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pn));
         }
 
+        public virtual void Init() { }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

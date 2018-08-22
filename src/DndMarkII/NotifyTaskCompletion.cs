@@ -1,12 +1,14 @@
 ﻿
-namespace DndMarkII.AsyncCommands
+namespace DndMarkII
 {
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Utilities.API;
 
     public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {
+        private readonly ILogger _logger;
         public Task<TResult> Task { get; private set; }
 
         public TResult Result => (Task.Status == TaskStatus.RanToCompletion) ? Task.Result : default(TResult);
@@ -39,15 +41,24 @@ namespace DndMarkII.AsyncCommands
             TaskCompletion = WatchTaskAsync(task);
         }
 
+        public NotifyTaskCompletion(Task<TResult> task, ILogger logger)
+        {
+            _logger = logger;
+            Task = task;
+            TaskCompletion = WatchTaskAsync(task);
+        }
+
         private async Task WatchTaskAsync(Task task)
         {
             try
             {
                 await task;
+                _logger?.LogMessage("Finished watching task");
             }
             catch (Exception e)
             {
-                throw e;
+                _logger?.LogMessage("EXCEPTION");
+                throw;
             }
 
             var propertyChanged = PropertyChanged;
