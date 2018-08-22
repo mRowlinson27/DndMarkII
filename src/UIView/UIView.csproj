@@ -148,6 +148,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Content\logo.png" />
     <Content Include="View\js\templateConfigFile.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
