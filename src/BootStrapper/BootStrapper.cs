@@ -1,5 +1,5 @@
 ﻿
-namespace UIView
+namespace BootStrapper
 {
     using System;
     using Chromium;
@@ -9,8 +9,10 @@ namespace UIView
     using Neutronium.WPF;
     using UIModel;
     using UIUtilities;
+    using UIUtilities.AsyncCommands;
+    using UIView;
+    using UIView.ViewModel;
     using Utilities.API;
-    using ViewModel;
 
     public class BootStrapper : IDisposable
     {
@@ -35,7 +37,7 @@ namespace UIView
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
                 TitleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel()),
-                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), new ObservableBinder()),
+                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), new ObservableBinder(), new AsyncCommandFactory(), new AsyncTaskRunnerFactory()),
                 PrimaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel())
             };
 

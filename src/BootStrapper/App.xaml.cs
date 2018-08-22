@@ -7,6 +7,7 @@ namespace BootStrapper
     using Neutronium.JavascriptFramework.Knockout;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
+    using UIView;
     using Utilities.Implementation;
 
     /// <summary>
@@ -14,7 +15,7 @@ namespace BootStrapper
     /// </summary>
     public partial class App : ChromiumFxWebBrowserApp
     {
-        public UIView.MainWindow MainWindow { get; set; }
+        public new MainWindow MainWindow { get; set; }
 
         [STAThread]
         static void Main()
@@ -22,7 +23,7 @@ namespace BootStrapper
             var logger = LoggerFactory.GetInstance;
             logger.LogMessage("Program started");
 
-            using (var bootstrapper = new UIView.BootStrapper(logger))
+            using (var bootstrapper = new BootStrapper(logger))
             {
                 var application = bootstrapper.SetupApplication();
                 var mainWindow = bootstrapper.CreateMainWindow();

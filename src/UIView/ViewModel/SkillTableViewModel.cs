@@ -9,26 +9,23 @@ namespace UIView.ViewModel
     using System.Windows.Input;
     using UIModel.API;
     using UIModel.API.Dto;
-    using UIUtilities;
     using UIUtilities.API;
-    using UIUtilities.AsyncCommands;
+    using UIUtilities.API.AsyncCommands;
     using Utilities.API;
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
-        public IList<Skill> Skills => _skills;
+        public ObservableCollection<Skill> Skills { get; set; } = new ObservableCollection<Skill>();
 
-        private readonly ObservableCollection<Skill> _skills = new ObservableCollection<Skill>();
-
-        private NotifyTaskCompletion<IEnumerable<Skill>> _skillsRequest;
+        private IAsyncTaskRunner<IEnumerable<Skill>> _skillsRequestTaskRunner;
 
 
-        public ICommand AddSkill { get; }
+        public ICommand AddSkill { get; private set; }
 
         public bool AddSkillCanExecute => AddSkill.CanExecute(null);
 
 
-        public ICommand RemoveSkill { get; }
+        public ICommand RemoveSkill { get; private set; }
 
         public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
 
@@ -47,19 +44,33 @@ namespace UIView.ViewModel
 
         private readonly IObservableBinder _observableBinder;
 
-        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableBinder observableBinder)
+        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableBinder observableBinder, IAsyncCommandFactory asyncCommandFactory, 
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
         {
             _logger = logger;
-            _model = model;
             _observableBinder = observableBinder;
 
-            AddSkill = AsyncCommandFactory.Create(AddSkillCommandAsync);
+            _model = model;
+            _model.PropertyChanged += ModelOnPropertyChanged;
+
+            SetupTaskRunners(asyncTaskRunnerFactory);
+
+            SetupCommandBindings(asyncCommandFactory);
+        }
+
+        private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+        {
+            _skillsRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestSkillsAsync);
+            _skillsRequestTaskRunner.PropertyChanged += SkillsRequestTaskRunnerOnPropertyChanged;
+        }
+
+        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
+        {
+            AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
             AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
 
-            RemoveSkill = AsyncCommandFactory.Create<Skill>(RemoveSkillCommandAsync);
+            RemoveSkill = asyncCommandFactory.Create<Skill>(RemoveSkillCommandAsync);
             RemoveSkill.CanExecuteChanged += RemoveSkillOnCanExecuteChanged;
-
-            _model.PropertyChanged += ModelOnPropertyChanged;
         }
 
         public override void Init()
@@ -84,25 +95,18 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
-            if (_skillsRequest != null)
-            {
-                _skillsRequest.PropertyChanged -= SkillsRequestOnPropertyChanged;
-            }
-
             DataAvailable = false;
-
-            _skillsRequest = new NotifyTaskCompletion<IEnumerable<Skill>>(_model.RequestSkillsAsync());
-            _skillsRequest.PropertyChanged += SkillsRequestOnPropertyChanged;
+            _skillsRequestTaskRunner.StartTask();
         }
 
-        private void SkillsRequestOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void SkillsRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "IsSuccessfullyCompleted")
             {
                 return;
             }
 
-            _observableBinder.Rebind(_skills, _skillsRequest.Result);
+            _observableBinder.Rebind(Skills, _skillsRequestTaskRunner.Result);
 
             DataAvailable = true;
             _logger.LogExit();
@@ -122,7 +126,7 @@ namespace UIView.ViewModel
         {
             AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
             RemoveSkill.CanExecuteChanged -= RemoveSkillOnCanExecuteChanged;
-            _skillsRequest.PropertyChanged -= SkillsRequestOnPropertyChanged;
+            _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _model.PropertyChanged -= ModelOnPropertyChanged;
         }
     }

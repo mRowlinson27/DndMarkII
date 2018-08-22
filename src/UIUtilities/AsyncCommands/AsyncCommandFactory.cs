@@ -3,15 +3,16 @@ namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.Threading.Tasks;
+    using API.AsyncCommands;
 
-    public static class AsyncCommandFactory
+    public class AsyncCommandFactory : IAsyncCommandFactory
     {
-        public static AsyncSimpleCommand Create(Func<Task> command)
+        public IAsyncCommand Create(Func<Task> command)
         {
             return new AsyncSimpleCommand(command);
         }
 
-        public static AsyncCommandWithInput<TIn> Create<TIn>(Func<TIn, Task> command)
+        public IAsyncCommand Create<TIn>(Func<TIn, Task> command)
         {
             return new AsyncCommandWithInput<TIn>(command);
         }
