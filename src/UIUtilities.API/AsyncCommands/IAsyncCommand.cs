@@ -1,5 +1,5 @@
 ﻿
-namespace UIView.AsyncCommands
+namespace UIUtilities.API.AsyncCommands
 {
     using System.Threading.Tasks;
     using System.Windows.Input;

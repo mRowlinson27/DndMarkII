@@ -1,5 +1,5 @@
 ﻿
-namespace UIView.AsyncCommands
+namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.ComponentModel;

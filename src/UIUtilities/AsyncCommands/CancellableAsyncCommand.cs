@@ -1,5 +1,5 @@
 ﻿
-namespace UIView.AsyncCommands
+namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.ComponentModel;
@@ -7,6 +7,7 @@ namespace UIView.AsyncCommands
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
+    using UIUtilities;
 
     public class CancellableAsyncCommand<TResult> : AsyncCommandBase, INotifyPropertyChanged
     {

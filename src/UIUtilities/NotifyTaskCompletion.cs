@@ -1,5 +1,5 @@
 ﻿
-namespace UIView
+namespace UIUtilities
 {
     using System;
     using System.ComponentModel;
@@ -8,7 +8,6 @@ namespace UIView
 
     public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {
-        private readonly ILogger _logger;
         public Task<TResult> Task { get; private set; }
 
         public TResult Result => (Task.Status == TaskStatus.RanToCompletion) ? Task.Result : default(TResult);
@@ -40,6 +39,8 @@ namespace UIView
             Task = task;
             TaskCompletion = WatchTaskAsync(task);
         }
+
+        private readonly ILogger _logger;
 
         public NotifyTaskCompletion(Task<TResult> task, ILogger logger)
         {

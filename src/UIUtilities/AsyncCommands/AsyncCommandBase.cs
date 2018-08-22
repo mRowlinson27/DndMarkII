@@ -1,10 +1,12 @@
 ﻿
-namespace UIView.AsyncCommands
+namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
+    using API.AsyncCommands;
+    using UIUtilities;
 
     public abstract class AsyncCommandBase : IAsyncCommand, INotifyPropertyChanged
     {

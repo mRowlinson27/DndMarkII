@@ -7,10 +7,11 @@ namespace UIView.ViewModel
     using System.ComponentModel;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using AsyncCommands;
-    using ExtensionMethods;
     using UIModel.API;
     using UIModel.API.Dto;
+    using UIUtilities;
+    using UIUtilities.API;
+    using UIUtilities.AsyncCommands;
     using Utilities.API;
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
@@ -44,10 +45,13 @@ namespace UIView.ViewModel
 
         private readonly ISkillTableModel _model;
 
-        public SkillTableViewModel(ILogger logger,ISkillTableModel model)
+        private readonly IObservableBinder _observableBinder;
+
+        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableBinder observableBinder)
         {
             _logger = logger;
             _model = model;
+            _observableBinder = observableBinder;
 
             AddSkill = AsyncCommandFactory.Create(AddSkillCommandAsync);
             AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
@@ -98,7 +102,7 @@ namespace UIView.ViewModel
                 return;
             }
 
-            _skills.RebindTo(_skillsRequest.Result);
+            _observableBinder.Rebind(_skills, _skillsRequest.Result);
 
             DataAvailable = true;
             _logger.LogExit();

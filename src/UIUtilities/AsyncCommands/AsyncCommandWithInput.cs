@@ -1,8 +1,9 @@
 ﻿
-namespace UIView.AsyncCommands
+namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.Threading.Tasks;
+    using UIUtilities;
 
     public class AsyncCommandWithInput<TIn> : AsyncCommandBase
     {

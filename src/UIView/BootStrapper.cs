@@ -8,6 +8,7 @@ namespace UIView
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
     using UIModel;
+    using UIUtilities;
     using Utilities.API;
     using ViewModel;
 
@@ -34,7 +35,7 @@ namespace UIView
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
                 TitleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel()),
-                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger)),
+                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), new ObservableBinder()),
                 PrimaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel())
             };
 
