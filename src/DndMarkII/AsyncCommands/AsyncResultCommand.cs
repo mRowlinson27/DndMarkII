@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII.AsyncCommands
+namespace UIView.AsyncCommands
 {
     using System;
     using System.ComponentModel;

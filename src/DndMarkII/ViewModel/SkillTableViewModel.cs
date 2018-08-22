@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII.ViewModel
+namespace UIView.ViewModel
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace DndMarkII.ViewModel
     using System.Threading.Tasks;
     using System.Windows.Input;
     using AsyncCommands;
-    using Extension;
+    using ExtensionMethods;
     using UIModel.API;
     using UIModel.API.Dto;
     using Utilities.API;

@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII
+namespace UIView
 {
     using System;
     using Chromium;

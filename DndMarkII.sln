@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndMarkII", "src\DndMarkII\DndMarkII.csproj", "{13A28907-569B-430A-A2C0-4959F784E354}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIView", "src\DndMarkII\UIView.csproj", "{13A28907-569B-430A-A2C0-4959F784E354}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5EEE2F49-BECE-4C30-9EC0-A9248F3015C3}"
 EndProject

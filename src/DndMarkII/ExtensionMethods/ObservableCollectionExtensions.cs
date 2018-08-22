@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII.Extension
+namespace UIView.ExtensionMethods
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

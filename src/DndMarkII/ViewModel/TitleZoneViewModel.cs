@@ -1,5 +1,5 @@
 ﻿
-namespace DndMarkII.ViewModel
+namespace UIView.ViewModel
 {
     using UIModel.API;
 

@@ -1,11 +1,11 @@
 ﻿﻿
-namespace DndMarkII
+namespace UIView
 {
     using System;
     using Chromium.Event;
     using Neutronium.Core.JavascriptFramework;
-    using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.JavascriptFramework.Knockout;
+    using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
     using Utilities.Implementation;
 

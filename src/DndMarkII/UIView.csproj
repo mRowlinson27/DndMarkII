@@ -9,8 +9,8 @@
     <ProjectGuid>{13A28907-569B-430A-A2C0-4959F784E354}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DndMarkII</RootNamespace>
-    <AssemblyName>DndMarkII</AssemblyName>
+    <RootNamespace>UIView</RootNamespace>
+    <AssemblyName>UIView</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -97,7 +97,7 @@
     <Compile Include="AsyncCommands\AsyncCommandWithInput.cs" />
     <Compile Include="AsyncCommands\CancellableAsyncCommand.cs" />
     <Compile Include="AsyncCommands\IAsyncCommand.cs" />
-    <Compile Include="Extension\ObservableCollectionExtensions.cs" />
+    <Compile Include="ExtensionMethods\ObservableCollectionExtensions.cs" />
     <Compile Include="NotifyTaskCompletion.cs" />
     <Compile Include="BootStrapper.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -148,9 +148,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="View\js\templateConfigFile.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
