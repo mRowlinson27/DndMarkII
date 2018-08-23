@@ -127,6 +127,7 @@ namespace UIView.ViewModel
             AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
             RemoveSkill.CanExecuteChanged -= RemoveSkillOnCanExecuteChanged;
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
+            _skillsRequestTaskRunner.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;
         }
     }

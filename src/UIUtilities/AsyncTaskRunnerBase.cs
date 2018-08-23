@@ -4,45 +4,51 @@ namespace UIUtilities
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using API;
 
-    internal abstract class AsyncTaskRunnerBase<TReturn>
+    public abstract class AsyncTaskRunnerBase<TResult> : IAsyncTaskRunnerBase<TResult>
     {
+        public bool HasStarted { get; internal set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual Task Task => _notifyTaskCompletion.Task;
 
-        public TaskStatus Status { get; }
+        public TaskStatus Status => NotifyTaskCompletion.Status;
 
-        public bool HasStarted { get; }
+        public bool IsCompleted => NotifyTaskCompletion.IsCompleted;
 
-        public bool IsCompleted { get; }
+        public bool IsNotCompleted => NotifyTaskCompletion.IsNotCompleted;
 
-        public bool IsNotCompleted { get; }
+        public bool IsSuccessfullyCompleted => NotifyTaskCompletion.IsSuccessfullyCompleted;
 
-        public bool IsSuccessfullyCompleted { get; }
+        public bool IsCanceled => NotifyTaskCompletion.IsCanceled;
 
-        public bool IsCanceled { get; }
+        public bool IsFaulted => NotifyTaskCompletion.IsFaulted;
 
-        public bool IsFaulted { get; }
+        public AggregateException Exception => NotifyTaskCompletion.Exception;
 
-        public AggregateException Exception { get; }
+        public Exception InnerException => NotifyTaskCompletion.InnerException;
 
-        public Exception InnerException { get; }
-
-        public string ErrorMessage { get; }
-
-        public Task TaskCompletion { get; }
+        public string ErrorMessage => NotifyTaskCompletion.ErrorMessage;
 
 
-        internal NotifyTaskCompletion<TReturn> _notifyTaskCompletion;
+        internal INotifyTaskCompletion<TResult> NotifyTaskCompletion;
 
         public abstract void StartTask();
 
         public abstract void CancelTask();
 
-        private void NotifyTaskCompletionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        internal void NotifyTaskCompletionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, e);
+        }
+
+        public void Dispose()
+        {
+            if (NotifyTaskCompletion != null)
+            {
+                NotifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
+            }
         }
     }
 }

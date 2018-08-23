@@ -2,42 +2,17 @@
 namespace UIUtilities
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
     using API;
 
-    public class AsyncTaskRunner : IAsyncTaskRunner
+    public class AsyncTaskRunner : AsyncTaskRunnerBase<object>, IAsyncTaskRunner
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public virtual Task Task => _notifyTaskCompletion.Task;
-
-        public TaskStatus Status { get; }
-
-        public bool HasStarted { get; }
-
-        public bool IsCompleted { get; }
-
-        public bool IsNotCompleted { get; }
-
-        public bool IsSuccessfullyCompleted { get; }
-
-        public bool IsCanceled { get; }
-
-        public bool IsFaulted { get; }
-
-        public AggregateException Exception { get; }
-
-        public Exception InnerException { get; }
-
-        public string ErrorMessage { get; }
+        public Task Task => NotifyTaskCompletion.Task;
 
 
         private readonly Func<Task> _taskFunc;
 
         private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
-        private INotifyTaskCompletion<object> _notifyTaskCompletion;
 
         public AsyncTaskRunner(Func<Task> taskFunc, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
         {
@@ -45,18 +20,20 @@ namespace UIUtilities
             _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
         }
 
-        public virtual void StartTask()
+        public override void StartTask()
         {
-            if (_notifyTaskCompletion != null)
+            if (NotifyTaskCompletion != null)
             {
-                _notifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
+                NotifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            _notifyTaskCompletion = _notifyTaskCompletionFactory.Create(WrapTaskWithReturnValue());
-            _notifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create(WrapTaskWithReturnValue());
+            NotifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+
+            HasStarted = true;
         }
 
-        public void CancelTask()
+        public override void CancelTask()
         {
             throw new NotImplementedException();
         }
@@ -66,47 +43,18 @@ namespace UIUtilities
             await _taskFunc();
             return null;
         }
-
-        private void NotifyTaskCompletionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
-        }
     }
 
-    public class AsyncTaskRunner<TReturn> : IAsyncTaskRunner<TReturn>
+    public class AsyncTaskRunner<TReturn> : AsyncTaskRunnerBase<TReturn>, IAsyncTaskRunner<TReturn>
     {
+        public Task<TReturn> Task => NotifyTaskCompletion.Task;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public TReturn Result => NotifyTaskCompletion.Result;
 
-        public TReturn Result => _notifyTaskCompletion.Result;
-
-        public Task<TReturn> Task { get; }
-
-        public TaskStatus Status { get; }
-
-        public bool HasStarted { get; }
-
-        public bool IsCompleted { get; }
-
-        public bool IsNotCompleted { get; }
-
-        public bool IsSuccessfullyCompleted { get; }
-
-        public bool IsCanceled { get; }
-
-        public bool IsFaulted { get; }
-
-        public AggregateException Exception { get; }
-
-        public Exception InnerException { get; }
-
-        public string ErrorMessage { get; }
 
         private readonly Func<Task<TReturn>> _taskFunc;
 
         private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
-        private INotifyTaskCompletion<TReturn> _notifyTaskCompletion;
 
         public AsyncTaskRunner(Func<Task<TReturn>> taskFunc, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
         {
@@ -114,25 +62,22 @@ namespace UIUtilities
             _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
         }
 
-        public void StartTask()
+        public override void StartTask()
         {
-            if (_notifyTaskCompletion != null)
+            if (NotifyTaskCompletion != null)
             {
-                _notifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
+                NotifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            _notifyTaskCompletion = _notifyTaskCompletionFactory.Create(_taskFunc());
-            _notifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create(_taskFunc());
+            NotifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+
+            HasStarted = true;
         }
 
-        public void CancelTask()
+        public override void CancelTask()
         {
             throw new NotImplementedException();
-        }
-
-        private void NotifyTaskCompletionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, e);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace UIUtilities.API
     using System.ComponentModel;
     using System.Threading.Tasks;
 
-    public interface IAsyncTaskRunnerBase : INotifyPropertyChanged
+    public interface IAsyncTaskRunnerBase<TResult> : INotifyPropertyChanged, IDisposable
     {
         TaskStatus Status { get; }
 
@@ -32,14 +32,14 @@ namespace UIUtilities.API
         void CancelTask();
     }
 
-    public interface IAsyncTaskRunner<TResult> : IAsyncTaskRunnerBase
+    public interface IAsyncTaskRunner<TResult> : IAsyncTaskRunnerBase<TResult>
     {
         Task<TResult> Task { get; }
 
         TResult Result { get; }
     }
 
-    public interface IAsyncTaskRunner : IAsyncTaskRunnerBase
+    public interface IAsyncTaskRunner : IAsyncTaskRunnerBase<object>
     {
         Task Task { get; }
     }
