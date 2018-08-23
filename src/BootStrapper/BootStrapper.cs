@@ -34,7 +34,7 @@ namespace BootStrapper
 
         public MainWindow CreateMainWindow()
         {
-            var observableBinder = new ObservableBinder();
+            var observableBinder = new ObservableHelper();
 
             var notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
             var asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
@@ -44,7 +44,7 @@ namespace BootStrapper
 
             var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
 
-            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel());
+            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel(_logger));
 
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {

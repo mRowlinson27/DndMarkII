@@ -6,10 +6,8 @@ namespace UIModel.API
     using System.Threading.Tasks;
     using Dto;
 
-    public interface ISkillTableModel
+    public interface ISkillTableModel : INotifyPropertyChanged
     {
-        event PropertyChangedEventHandler PropertyChanged;
-
         Task<IEnumerable<Skill>> RequestSkillsAsync();
 
         Task AddSkillAsync();

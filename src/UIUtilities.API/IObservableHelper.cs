@@ -4,7 +4,7 @@ namespace UIUtilities.API
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
-    public interface IObservableBinder
+    public interface IObservableHelper
     {
         void Rebind<T>(ObservableCollection<T> collection, IEnumerable<T> newCollection);
 

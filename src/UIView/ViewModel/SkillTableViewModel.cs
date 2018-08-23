@@ -42,13 +42,13 @@ namespace UIView.ViewModel
 
         private readonly ISkillTableModel _model;
 
-        private readonly IObservableBinder _observableBinder;
+        private readonly IObservableHelper _observableHelper;
 
-        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableBinder observableBinder, IAsyncCommandFactory asyncCommandFactory, 
+        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
             IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
         {
             _logger = logger;
-            _observableBinder = observableBinder;
+            _observableHelper = observableHelper;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -106,7 +106,7 @@ namespace UIView.ViewModel
                 return;
             }
 
-            _observableBinder.Rebind(Skills, _skillsRequestTaskRunner.Result);
+            _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
 
             DataAvailable = true;
             _logger.LogExit();

@@ -45,7 +45,7 @@
     <Compile Include="IAsyncTaskRunnerFactory.cs" />
     <Compile Include="INotifyTaskCompletion.cs" />
     <Compile Include="INotifyTaskCompletionFactory.cs" />
-    <Compile Include="IObservableBinder.cs" />
+    <Compile Include="IObservableHelper.cs" />
     <Compile Include="IAsyncTaskRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

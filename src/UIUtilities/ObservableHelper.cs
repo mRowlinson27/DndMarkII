@@ -5,7 +5,7 @@ namespace UIUtilities
     using System.Collections.ObjectModel;
     using API;
 
-    public class ObservableBinder : IObservableBinder
+    public class ObservableHelper : IObservableHelper
     {
         public void Rebind<T>(ObservableCollection<T> collection, IEnumerable<T> newCollection)
         {

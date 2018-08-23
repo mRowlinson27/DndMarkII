@@ -21,7 +21,7 @@ namespace UIView.UnitTests
 
         private ILogger _logger;
         private ISkillTableModel _skillTableModel;
-        private IObservableBinder _observableBinder;
+        private IObservableHelper _observableHelper;
         private IAsyncCommandFactory _asyncCommandFactory;
         private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
 
@@ -30,12 +30,12 @@ namespace UIView.UnitTests
         {
             _logger = A.Fake<ILogger>();
             _skillTableModel = A.Fake<ISkillTableModel>();
-            _observableBinder = new ObservableBinder();
+            _observableHelper = new ObservableHelper();
             var notifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
             _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableBinder, _asyncCommandFactory, _asyncTaskRunnerFactory);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory);
         }
 
         [TearDown]
