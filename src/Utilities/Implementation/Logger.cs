@@ -9,9 +9,16 @@ namespace Utilities.Implementation
     public class Logger : ILogger
     {
         private readonly IFileWriter _fileWriter;
+
         private readonly IDateTimeWrapper _dateTimeWrapper;
+
         private string logFilePath = "C:\\Temp\\CharacterLog.txt";
+
         private object sync = new object();
+
+        private const string EntryMessage = "ENTERING";
+
+        private const string ExitMessage = "EXITING";
 
         public Logger(IFileWriter fileWriter, IDateTimeWrapper dateTimeWrapper)
         {
@@ -35,20 +42,21 @@ namespace Utilities.Implementation
             {
                 _fileWriter.Write(logFilePath, finalLog);
             }
+            Console.WriteLine(finalLog);
         }
 
         public void LogEntry([System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
             [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
             [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            LogMessage("ENTERED", memberName, sourceFilePath, sourceLineNumber);
+            LogMessage(EntryMessage, memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogExit([System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
             [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
             [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            LogMessage("EXITING", memberName, sourceFilePath, sourceLineNumber);
+            LogMessage(ExitMessage, memberName, sourceFilePath, sourceLineNumber);
         }
     }
 }
