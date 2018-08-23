@@ -4,9 +4,10 @@ namespace UIUtilities
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using API;
     using Utilities.API;
 
-    public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
+    public sealed class NotifyTaskCompletion<TResult> : INotifyTaskCompletion<TResult>
     {
         public Task<TResult> Task { get; private set; }
 
@@ -34,12 +35,6 @@ namespace UIUtilities
 
         public Task TaskCompletion { get; }
 
-        public NotifyTaskCompletion(Task<TResult> task)
-        {
-            Task = task;
-            TaskCompletion = WatchTaskAsync(task);
-        }
-
         private readonly ILogger _logger;
 
         public NotifyTaskCompletion(Task<TResult> task, ILogger logger)
@@ -54,11 +49,11 @@ namespace UIUtilities
             try
             {
                 await task;
-                _logger?.LogMessage("Finished watching task");
+                _logger.LogMessage("Finished watching task");
             }
             catch (Exception e)
             {
-                _logger?.LogMessage("EXCEPTION");
+                _logger.LogMessage("EXCEPTION");
                 throw;
             }
 

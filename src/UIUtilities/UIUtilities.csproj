@@ -54,6 +54,7 @@
     <Compile Include="AsyncTaskRunnerBase.cs" />
     <Compile Include="AsyncTaskRunnerFactory.cs" />
     <Compile Include="NotifyTaskCompletion.cs" />
+    <Compile Include="NotifyTaskCompletionFactory.cs" />
     <Compile Include="ObservableBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

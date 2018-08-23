@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace UIUtilities.UnitTests
 {
-    class AsyncTaskRunnerTests
+    using NUnit.Framework;
+
+    [TestFixture]
+    public class AsyncTaskRunnerTests
     {
+        [Test]
+        public void AsyncTaskRunner_HasNotRanTask_HasStartedFalse()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+        }
     }
 }

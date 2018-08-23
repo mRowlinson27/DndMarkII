@@ -34,11 +34,23 @@ namespace BootStrapper
 
         public MainWindow CreateMainWindow()
         {
+            var observableBinder = new ObservableBinder();
+
+            var notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
+            var asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
+            var asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
+
+            var titleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel());
+
+            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
+
+            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel());
+
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
-                TitleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel()),
-                SkillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), new ObservableBinder(), new AsyncCommandFactory(), new AsyncTaskRunnerFactory()),
-                PrimaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel())
+                TitleZoneViewModel = titleZoneViewModel,
+                SkillTableViewModel = skillTableViewModel,
+                PrimaryStatsTableViewModel = primaryStatsTableViewModel
             };
 
             return new MainWindow(_logger, mainPageViewModel);

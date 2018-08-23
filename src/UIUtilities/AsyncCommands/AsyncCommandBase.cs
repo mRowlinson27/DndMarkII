@@ -5,6 +5,7 @@ namespace UIUtilities.AsyncCommands
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
+    using API;
     using API.AsyncCommands;
     using UIUtilities;
 
@@ -17,7 +18,7 @@ namespace UIUtilities.AsyncCommands
             return Execution == null || Execution.IsCompleted;
         }
 
-        public NotifyTaskCompletion<object> Execution
+        public INotifyTaskCompletion<object> Execution
         {
             get => _execution;
             protected set
@@ -27,7 +28,7 @@ namespace UIUtilities.AsyncCommands
             }
         }
 
-        private NotifyTaskCompletion<object> _execution;
+        private INotifyTaskCompletion<object> _execution;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

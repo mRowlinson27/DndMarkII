@@ -35,11 +35,14 @@ namespace UIUtilities
 
         private readonly Func<Task> _taskFunc;
 
-        private NotifyTaskCompletion<object> _notifyTaskCompletion;
+        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
 
-        public AsyncTaskRunner(Func<Task> taskFunc)
+        private INotifyTaskCompletion<object> _notifyTaskCompletion;
+
+        public AsyncTaskRunner(Func<Task> taskFunc, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
         {
             _taskFunc = taskFunc;
+            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
         }
 
         public virtual void StartTask()
@@ -49,7 +52,7 @@ namespace UIUtilities
                 _notifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            _notifyTaskCompletion = new NotifyTaskCompletion<object>(WrapTaskWithReturnValue());
+            _notifyTaskCompletion = _notifyTaskCompletionFactory.Create(WrapTaskWithReturnValue());
             _notifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
         }
 
@@ -101,11 +104,14 @@ namespace UIUtilities
 
         private readonly Func<Task<TReturn>> _taskFunc;
 
-        private NotifyTaskCompletion<TReturn> _notifyTaskCompletion;
+        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
 
-        public AsyncTaskRunner(Func<Task<TReturn>> taskFunc)
+        private INotifyTaskCompletion<TReturn> _notifyTaskCompletion;
+
+        public AsyncTaskRunner(Func<Task<TReturn>> taskFunc, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
         {
             _taskFunc = taskFunc;
+            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
         }
 
         public void StartTask()
@@ -115,7 +121,7 @@ namespace UIUtilities
                 _notifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            _notifyTaskCompletion = new NotifyTaskCompletion<TReturn>(_taskFunc());
+            _notifyTaskCompletion = _notifyTaskCompletionFactory.Create(_taskFunc());
             _notifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
         }
 

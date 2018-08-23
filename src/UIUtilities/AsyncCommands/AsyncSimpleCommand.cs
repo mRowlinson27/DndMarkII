@@ -3,15 +3,19 @@ namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.Threading.Tasks;
+    using API;
     using UIUtilities;
 
     public class AsyncSimpleCommand : AsyncCommandBase
     {
         private readonly Func<Task> _command;
 
-        public AsyncSimpleCommand(Func<Task> command)
+        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
+
+        public AsyncSimpleCommand(Func<Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
         {
             _command = command;
+            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
         }
 
         public override async Task ExecuteAsync(object parameter)
@@ -23,7 +27,7 @@ namespace UIUtilities.AsyncCommands
 
             Task<object> wrappedTask = WrapTaskWithReturnValue();
 
-            Execution = new NotifyTaskCompletion<object>(wrappedTask);
+            Execution = _notifyTaskCompletionFactory.Create(wrappedTask);
 
             RaiseCanExecuteChanged();
 

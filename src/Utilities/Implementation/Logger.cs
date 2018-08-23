@@ -42,7 +42,10 @@ namespace Utilities.Implementation
             {
                 _fileWriter.Write(logFilePath, finalLog);
             }
-            Console.WriteLine(finalLog);
+
+#if DEBUG
+            Console.Write(finalLog);
+#endif
         }
 
         public void LogEntry([System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
