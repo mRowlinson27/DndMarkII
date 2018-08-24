@@ -40,7 +40,45 @@ namespace UIModel
 
         private List<PrimaryStat> GenerateStats()
         {
-            return new List<PrimaryStat>();
+            return new List<PrimaryStat>
+            {
+                new PrimaryStat
+                {
+                    Name = "Str",
+                    AbilityScore = 16,
+                    AbilityModifier = 3
+                },
+                new PrimaryStat
+                {
+                    Name = "Con",
+                    AbilityScore = 10,
+                    AbilityModifier = 0
+                },
+                new PrimaryStat
+                {
+                    Name = "Dex",
+                    AbilityScore = 18,
+                    AbilityModifier = 4
+                }
+                ,new PrimaryStat
+                {
+                    Name = "Wis",
+                    AbilityScore = 8,
+                    AbilityModifier = -1
+                },
+                new PrimaryStat
+                {
+                    Name = "Cha",
+                    AbilityScore = 16,
+                    AbilityModifier = 3
+                },
+                new PrimaryStat
+                {
+                    Name = "Int",
+                    AbilityScore = 14,
+                    AbilityModifier = 2
+                }
+            };
         }
     }
 }

@@ -44,7 +44,7 @@ namespace BootStrapper
 
             var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
 
-            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(new PrimaryStatsTableModel(_logger));
+            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, new PrimaryStatsTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
 
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
