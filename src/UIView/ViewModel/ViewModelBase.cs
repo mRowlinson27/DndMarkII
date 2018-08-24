@@ -5,6 +5,13 @@ namespace UIView.ViewModel
 
     public class ViewModelBase : INotifyPropertyChanged
     {
+        public bool DataAvailable
+        {
+            get => _dataAvailable;
+            set => Set(ref _dataAvailable, value, "DataAvailable");
+        }
+        private bool _dataAvailable = false;
+
         protected bool Set<T>(ref T ipnv, T value, string ipn)
         {
             if (object.Equals(ipnv, value))

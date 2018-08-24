@@ -30,14 +30,6 @@ namespace UIView.ViewModel
         public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
 
 
-        public bool DataAvailable
-        {
-            get => _dataAvailable;
-            set => Set(ref _dataAvailable, value, "DataAvailable");
-        }
-        private bool _dataAvailable = false;
-
-
         private readonly ILogger _logger;
 
         private readonly ISkillTableModel _model;
