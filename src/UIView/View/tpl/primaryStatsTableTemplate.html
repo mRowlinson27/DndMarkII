@@ -1,3 +1,11 @@
 ﻿<div class="primaryStatsTableWidgit">
-    
+    <div class="primaryStatsTable">
+        <div class="primaryStatsTableBody" data-bind="foreach: PrimaryStats()">
+            <div class="primaryStatsEntry">
+                <div class="primaryStatsEntryName" data-bind="text:Name"></div>
+                <div class="primaryStatsEntryAbilityScore" data-bind="text:AbilityScore"></div>
+                <div class="primaryStatsEntryAbilityModifier" data-bind="text:AbilityModifier"></div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -56,6 +56,81 @@
     width: 100%;
 }
 
+
+/***********************************
+     Primary Stats Div Table Styling
+************************************/
+.primaryStatsTable {
+    display: table;
+    margin: 10px;
+    width: calc(100% - 20px)
+}
+
+.primaryStatsTableRow {
+    display: table-row;
+}
+
+.primaryStatsTableBody {
+    display: table-row-group;
+}
+
+.primaryStatsTableTextCell {
+    display: table-cell;
+    padding: 3px 10px;
+}
+
+/***********************************
+    PrimaryStatsEntry Table Styling
+************************************/
+
+.primaryStatsEntry {
+    border-radius: 5px;
+    border: 1px solid black;
+    color: black;
+    width: 100%;
+    height: 24px;
+    cursor: cell
+}
+
+    .primaryStatsEntry:nth-child(even) {
+        background-color: #71979f;
+    }
+
+    .primaryStatsEntry:nth-child(odd) {
+        background-color: #3f5ea3;
+    }
+
+    .primaryStatsEntry:hover {
+        border: 2px solid white;
+        height: 22px;
+        width: calc(100% - 2px);
+    }
+
+.primaryStatsEntryName {
+    display: inline-block;
+    padding: 3px 10px;
+    position: relative;
+    left: 20px;
+    cursor: cell
+}
+
+.primaryStatsEntryAbilityScore {
+    padding: 3px 10px;
+    position: relative;
+    right: 20px;
+    float: right;
+    cursor: cell
+}
+
+
+.primaryStatsEntryAbilityModifier {
+    padding: 3px 10px;
+    position: relative;
+    right: 40px;
+    float: right;
+    cursor: cell
+}
+
 /************************************************************
     Skill Table Widgit Styling
 ************************************************************/
