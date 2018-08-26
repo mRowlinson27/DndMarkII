@@ -2,12 +2,13 @@
 namespace Database.API
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Dto;
 
     public interface IPrimaryStatsRepo
     {
-        IEnumerable<PrimaryStat> Get();
+        Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync();
 
-        void Update(IEnumerable<PrimaryStat> stats);
+        Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats);
     }
 }

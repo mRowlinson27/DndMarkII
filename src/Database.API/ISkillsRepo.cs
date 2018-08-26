@@ -2,12 +2,13 @@
 namespace Database.API
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Dto;
 
     public interface ISkillsRepo
     {
-        IEnumerable<Skill> Get();
+        Task<IEnumerable<Skill>> GetSkillsAsync();
 
-        void Update(IEnumerable<Skill> skills);
+        Task UpdateSkillsAsync(IEnumerable<Skill> skills);
     }
 }
