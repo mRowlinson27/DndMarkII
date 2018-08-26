@@ -14,7 +14,7 @@ namespace UIModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly List<Skill> _skills;
+        private readonly List<UiSkill> _skills;
 
         private readonly ILogger _logger;
 
@@ -26,7 +26,7 @@ namespace UIModel
             _skills = GenerateSkills();
         }
 
-        public async Task<IEnumerable<Skill>> RequestSkillsAsync()
+        public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()
         {
             _logger.LogEntry();
             await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(true);
@@ -41,18 +41,18 @@ namespace UIModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 
-        public async Task RemoveSkillAsync(Skill skill)
+        public async Task RemoveSkillAsync(UiSkill uiSkill)
         {
             await Task.Run(() => UpdateBackEnd());
-            _skills.Remove(skill);
+            _skills.Remove(uiSkill);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 
-        private Skill GetBlankSkill()
+        private UiSkill GetBlankSkill()
         {
-            return new Skill
+            return new UiSkill
             {
-                Name = "New Skill",
+                Name = "New UiSkill",
                 Modifier = AbilityModifier.Con,
                 Total = _generator.Next(0, 20)
             };
@@ -63,11 +63,11 @@ namespace UIModel
 
         }
 
-        private List<Skill> GenerateSkills()
+        private List<UiSkill> GenerateSkills()
         {
-            var result = new List<Skill>
+            var result = new List<UiSkill>
             {
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Acrobatics",
                     Ranks = 0,
@@ -77,7 +77,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = true
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Appraise",
                     Ranks = 0,
@@ -86,7 +86,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Bluff",
                     Ranks = 0,
@@ -95,7 +95,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Climb",
                     Ranks = 0,
@@ -104,7 +104,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Diplomacy",
                     Ranks = 0,
@@ -113,7 +113,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Disable Device",
                     Ranks = 0,
@@ -122,7 +122,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Disguise",
                     Ranks = 0,
@@ -131,7 +131,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Escape Artist",
                     Ranks = 0,
@@ -140,7 +140,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Fly",
                     Ranks = 0,
@@ -149,7 +149,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Handle Animal",
                     Ranks = 0,
@@ -158,7 +158,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Heal",
                     Ranks = 0,
@@ -167,7 +167,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Intimidate",
                     Ranks = 0,
@@ -176,7 +176,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Linguistics",
                     Ranks = 0,
@@ -185,7 +185,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Perception",
                     Ranks = 0,
@@ -194,7 +194,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Ride",
                     Ranks = 0,
@@ -203,7 +203,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Sense Motive",
                     Ranks = 0,
@@ -212,7 +212,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Sleight of Hand",
                     Ranks = 0,
@@ -221,7 +221,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Spellcraft",
                     Ranks = 0,
@@ -230,7 +230,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Stealth",
                     Ranks = 0,
@@ -239,7 +239,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Survival",
                     Ranks = 0,
@@ -248,7 +248,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Swim",
                     Ranks = 0,
@@ -257,7 +257,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Use Magic Device",
                     Ranks = 0,
@@ -266,7 +266,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (arcana)",
                     Ranks = 0,
@@ -275,7 +275,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (dungeoneering)",
                     Ranks = 0,
@@ -284,7 +284,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (engineering)",
                     Ranks = 0,
@@ -293,7 +293,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (geography)",
                     Ranks = 0,
@@ -302,7 +302,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (history)",
                     Ranks = 0,
@@ -311,7 +311,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (local)",
                     Ranks = 0,
@@ -320,7 +320,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (nature)",
                     Ranks = 0,
@@ -329,7 +329,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (nobility)",
                     Ranks = 0,
@@ -338,7 +338,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (planes)",
                     Ranks = 0,
@@ -347,7 +347,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Knowledge (religion)",
                     Ranks = 0,
@@ -356,7 +356,7 @@ namespace UIModel
                     UseUntrained = true,
                     Trained = false
                 },
-                new Skill()
+                new UiSkill()
                 {
                     Name = "Profession",
                     Ranks = 0,

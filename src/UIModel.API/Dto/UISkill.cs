@@ -1,7 +1,7 @@
 ﻿
 namespace UIModel.API.Dto
 {
-    public class Skill
+    public class UiSkill
     {
         public int Total { get; set; }
 
@@ -17,8 +17,6 @@ namespace UIModel.API.Dto
 
         public bool Trained { get; set; }
 
-        public AbilityModifier Modifier { get; set; }
+        public string Modifier { get; set; }
     }
-
-    public enum AbilityModifier { Str, Dex, Con, Int, Wis, Cha };
 }

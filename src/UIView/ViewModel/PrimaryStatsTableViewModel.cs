@@ -13,9 +13,9 @@ namespace UIView.ViewModel
 
     public class PrimaryStatsTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<PrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<PrimaryStat>();
+        public ObservableCollection<UiPrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<UiPrimaryStat>();
 
-        private IAsyncTaskRunner<IEnumerable<PrimaryStat>> _primaryStatRequestTaskRunner;
+        private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
         private readonly ILogger _logger;
 

@@ -8,10 +8,10 @@ namespace UIModel.API
 
     public interface ISkillTableModel : INotifyPropertyChanged
     {
-        Task<IEnumerable<Skill>> RequestSkillsAsync();
+        Task<IEnumerable<UiSkill>> RequestSkillsAsync();
 
         Task AddSkillAsync();
 
-        Task RemoveSkillAsync(Skill skill);
+        Task RemoveSkillAsync(UiSkill uiSkill);
     }
 }

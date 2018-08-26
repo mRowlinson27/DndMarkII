@@ -84,7 +84,7 @@ namespace UIView.UnitTests
         public void RemoveSkill_RequestsFromModel()
         {
             //Arrange
-            var skill = new Skill();
+            var skill = new UiSkill();
 
             //Act
             _skillTableViewModel.RemoveSkill.Execute(skill);

@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dto\PrimaryStat.cs" />
-    <Compile Include="Dto\Skill.cs" />
+    <Compile Include="Dto\UiPrimaryStat.cs" />
+    <Compile Include="Dto\UiSkill.cs" />
     <Compile Include="IMainPageModel.cs" />
     <Compile Include="IPrimaryStatsTableModel.cs" />
     <Compile Include="ISkillTableModel.cs" />

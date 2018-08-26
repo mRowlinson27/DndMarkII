@@ -15,9 +15,9 @@ namespace UIView.ViewModel
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<Skill> Skills { get; set; } = new ObservableCollection<Skill>();
+        public ObservableCollection<UiSkill> Skills { get; set; } = new ObservableCollection<UiSkill>();
 
-        private IAsyncTaskRunner<IEnumerable<Skill>> _skillsRequestTaskRunner;
+        private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
 
         public ICommand AddSkill { get; private set; }
@@ -61,7 +61,7 @@ namespace UIView.ViewModel
             AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
             AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
 
-            RemoveSkill = asyncCommandFactory.Create<Skill>(RemoveSkillCommandAsync);
+            RemoveSkill = asyncCommandFactory.Create<UiSkill>(RemoveSkillCommandAsync);
             RemoveSkill.CanExecuteChanged += RemoveSkillOnCanExecuteChanged;
         }
 
@@ -75,9 +75,9 @@ namespace UIView.ViewModel
             await _model.AddSkillAsync();
         }
 
-        private async Task RemoveSkillCommandAsync(Skill skill)
+        private async Task RemoveSkillCommandAsync(UiSkill uiSkill)
         {
-            await _model.RemoveSkillAsync(skill);
+            await _model.RemoveSkillAsync(uiSkill);
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)

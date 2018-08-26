@@ -1,7 +1,7 @@
 ﻿
 namespace UIModel.API.Dto
 {
-    public class PrimaryStat
+    public class UiPrimaryStat
     {
         public string Name { get; set; }
 

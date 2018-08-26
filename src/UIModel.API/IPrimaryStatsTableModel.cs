@@ -8,7 +8,7 @@ namespace UIModel.API
 
     public interface IPrimaryStatsTableModel : INotifyPropertyChanged
     {
-        Task<IEnumerable<PrimaryStat>> RequestPrimaryStatsAsync();
+        Task<IEnumerable<UiPrimaryStat>> RequestPrimaryStatsAsync();
 
         Task AddPrimaryStatAsync();
     }

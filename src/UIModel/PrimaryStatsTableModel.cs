@@ -13,7 +13,7 @@ namespace UIModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly List<PrimaryStat> _primaryStats;
+        private readonly List<UiPrimaryStat> _primaryStats;
 
         private readonly ILogger _logger;
 
@@ -25,7 +25,7 @@ namespace UIModel
             _primaryStats = GenerateStats();
         }
 
-        public async Task<IEnumerable<PrimaryStat>> RequestPrimaryStatsAsync()
+        public async Task<IEnumerable<UiPrimaryStat>> RequestPrimaryStatsAsync()
         {
             _logger.LogEntry();
             await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(true);
@@ -38,41 +38,41 @@ namespace UIModel
             throw new System.NotImplementedException();
         }
 
-        private List<PrimaryStat> GenerateStats()
+        private List<UiPrimaryStat> GenerateStats()
         {
-            return new List<PrimaryStat>
+            return new List<UiPrimaryStat>
             {
-                new PrimaryStat
+                new UiPrimaryStat
                 {
                     Name = "Str",
                     AbilityScore = 16,
                     AbilityModifier = 3
                 },
-                new PrimaryStat
+                new UiPrimaryStat
                 {
                     Name = "Con",
                     AbilityScore = 10,
                     AbilityModifier = 0
                 },
-                new PrimaryStat
+                new UiPrimaryStat
                 {
                     Name = "Dex",
                     AbilityScore = 18,
                     AbilityModifier = 4
                 }
-                ,new PrimaryStat
+                ,new UiPrimaryStat
                 {
                     Name = "Wis",
                     AbilityScore = 8,
                     AbilityModifier = -1
                 },
-                new PrimaryStat
+                new UiPrimaryStat
                 {
                     Name = "Cha",
                     AbilityScore = 16,
                     AbilityModifier = 3
                 },
-                new PrimaryStat
+                new UiPrimaryStat
                 {
                     Name = "Int",
                     AbilityScore = 14,

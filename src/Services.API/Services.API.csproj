@@ -40,7 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPrimaryStatsService.cs" />
+    <Compile Include="ISkillsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Database.API\Database.API.csproj">
+      <Project>{2C3A4AF0-6E8C-4DCC-9429-9A2B88AF0EB5}</Project>
+      <Name>Database.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

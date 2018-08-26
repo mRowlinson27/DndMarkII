@@ -40,6 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto\AbilityModifier.cs" />
+    <Compile Include="Dto\Model.cs" />
+    <Compile Include="Dto\PrimaryStat.cs" />
+    <Compile Include="Dto\Skill.cs" />
+    <Compile Include="IMetadataRepo.cs" />
+    <Compile Include="IPrimaryStatsRepo.cs" />
+    <Compile Include="ISkillsRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
