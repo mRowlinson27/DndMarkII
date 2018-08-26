@@ -22,7 +22,7 @@ namespace UIModel
         public PrimaryStatsTableModel(ILogger logger)
         {
             _logger = logger;
-            _primaryStats = GenerateStats();
+//            _primaryStats = GenerateStats();
         }
 
         public async Task<IEnumerable<UiPrimaryStat>> RequestPrimaryStatsAsync()
@@ -36,49 +36,6 @@ namespace UIModel
         public async Task AddPrimaryStatAsync()
         {
             throw new System.NotImplementedException();
-        }
-
-        private List<UiPrimaryStat> GenerateStats()
-        {
-            return new List<UiPrimaryStat>
-            {
-                new UiPrimaryStat
-                {
-                    Name = "Str",
-                    AbilityScore = 16,
-                    AbilityModifier = 3
-                },
-                new UiPrimaryStat
-                {
-                    Name = "Con",
-                    AbilityScore = 10,
-                    AbilityModifier = 0
-                },
-                new UiPrimaryStat
-                {
-                    Name = "Dex",
-                    AbilityScore = 18,
-                    AbilityModifier = 4
-                }
-                ,new UiPrimaryStat
-                {
-                    Name = "Wis",
-                    AbilityScore = 8,
-                    AbilityModifier = -1
-                },
-                new UiPrimaryStat
-                {
-                    Name = "Cha",
-                    AbilityScore = 16,
-                    AbilityModifier = 3
-                },
-                new UiPrimaryStat
-                {
-                    Name = "Int",
-                    AbilityScore = 14,
-                    AbilityModifier = 2
-                }
-            };
         }
     }
 }

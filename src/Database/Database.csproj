@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DummyJsonFile.cs" />
     <Compile Include="ModelJsonRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -47,6 +48,10 @@
     <ProjectReference Include="..\Database.API\Database.API.csproj">
       <Project>{2c3a4af0-6e8c-4dcc-9429-9a2b88af0eb5}</Project>
       <Name>Database.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities.API\Utilities.API.csproj">
+      <Project>{cf0e9721-c68b-4f37-9242-f18f9bed25fe}</Project>
+      <Name>Utilities.API</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

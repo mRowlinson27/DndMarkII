@@ -5,35 +5,49 @@ namespace Database
     using System.Threading.Tasks;
     using API;
     using API.Dto;
+    using Utilities.API.DAL;
 
     public class ModelJsonRepo : IMetadataRepo, IPrimaryStatsRepo, ISkillsRepo
     {
+        private readonly IJsonFile<Model> _databaseFile;
+
         private Model _model;
 
-        public ModelJsonRepo()
+        public ModelJsonRepo(IJsonFile<Model> databaseFile)
         {
-
+            _databaseFile = databaseFile;
         }
 
-        public Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync()
+        public async Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync()
         {
-            throw new System.NotImplementedException();
+            var model = await GetModel();
+            return model.PrimaryStats;
         }
 
-        public Task UpdateSkillsAsync(IEnumerable<Skill> skills)
+        public async Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats)
         {
-            throw new System.NotImplementedException();
+            await Task.Delay(1);
         }
 
-        public Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats)
+        public async Task<IEnumerable<Skill>> GetSkillsAsync()
         {
-            throw new System.NotImplementedException();
+            var model = await GetModel();
+            return model.Skills;
         }
 
-        public Task<IEnumerable<Skill>> GetSkillsAsync()
+        public async Task UpdateSkillsAsync(IEnumerable<Skill> skills)
         {
-            throw new System.NotImplementedException();
+            await Task.Delay(1);
         }
 
+        private async Task<Model> GetModel()
+        {
+            return _model; // ?? (_model = await _databaseFile.ReadAsync());
+        }
+
+        private async Task SaveModelAsync()
+        {
+            await _databaseFile.WriteAsync(_model);
+        }
     }
 }

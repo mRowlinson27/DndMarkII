@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DAL\IFileReader.cs" />
     <Compile Include="DAL\IFileWriter.cs" />
+    <Compile Include="DAL\IJsonFile.cs" />
     <Compile Include="DAL\IStreamWriterWrapper.cs" />
     <Compile Include="DAL\IStreamWriterWrapperFactory.cs" />
     <Compile Include="IDateTimeWrapper.cs" />
