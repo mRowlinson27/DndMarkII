@@ -4,19 +4,68 @@ namespace UIModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using API;
     using API.Dto;
+    using Utilities.API;
 
     public class SkillTableModel : ISkillTableModel
     {
-        public IList<Skill> Skills => _skills;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly ObservableCollection<Skill> _skills;
+        private readonly List<Skill> _skills;
 
-        public SkillTableModel()
+        private readonly ILogger _logger;
+
+        private readonly Random _generator = new Random(DateTime.Now.Millisecond);
+
+        public SkillTableModel(ILogger logger)
         {
-            _skills = new ObservableCollection<Skill>
+            _logger = logger;
+            _skills = GenerateSkills();
+        }
+
+        public async Task<IEnumerable<Skill>> RequestSkillsAsync()
+        {
+            _logger.LogEntry();
+            await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(true);
+            _logger.LogExit();
+            return _skills;
+        }
+
+        public async Task AddSkillAsync()
+        {
+            _skills.Clear();
+            _skills.Add(await Task.Run(() => GetBlankSkill()));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
+        }
+
+        public async Task RemoveSkillAsync(Skill skill)
+        {
+            await Task.Run(() => UpdateBackEnd());
+            _skills.Remove(skill);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
+        }
+
+        private Skill GetBlankSkill()
+        {
+            return new Skill
+            {
+                Name = "New Skill",
+                Modifier = AbilityModifier.Con,
+                Total = _generator.Next(0, 20)
+            };
+        }
+
+        private void UpdateBackEnd()
+        {
+
+        }
+
+        private List<Skill> GenerateSkills()
+        {
+            var result = new List<Skill>
             {
                 new Skill()
                 {
@@ -318,38 +367,12 @@ namespace UIModel
                 }
             };
 
-            foreach (var skill in _skills)
+            foreach (var skill in result)
             {
-                skill.Total = Generator.Next(0, 20);
+                skill.Total = _generator.Next(0, 20);
             }
-        }
 
-        public async Task AddSkillAsync()
-        {
-            _skills.Add(await Task.Run(() => GetBlankSkill()));
-        }
-
-        public async Task RemoveSkillAsync(Skill skill)
-        {
-            await Task.Run(() => UpdateBackEnd());
-            _skills.Remove(skill);
-        }
-
-        static readonly Random Generator = new Random(DateTime.Now.Millisecond);
-
-        private Skill GetBlankSkill()
-        {
-            return new Skill
-            {
-                Name = "New Skill",
-                Modifier = AbilityModifier.Con,
-                Total = Generator.Next(0, 20)
-            };
-        }
-
-        private void UpdateBackEnd()
-        {
-
+            return result;
         }
     }
 }

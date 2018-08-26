@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7476CE24-8486-4DFB-BF5A-A0DF872678B0}</ProjectGuid>
+    <ProjectGuid>{8F2CDED3-BF7D-4FA6-A319-392B92406DDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UIModel.API</RootNamespace>
-    <AssemblyName>UIModel.API</AssemblyName>
+    <RootNamespace>UIUtilities</RootNamespace>
+    <AssemblyName>UIUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Neutronium.MVVMComponents, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Neutronium.MVVMComponents.1.2.0\lib\Neutronium.MVVMComponents.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,13 +44,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dto\PrimaryStat.cs" />
-    <Compile Include="Dto\Skill.cs" />
-    <Compile Include="IMainPageModel.cs" />
-    <Compile Include="IPrimaryStatsTableModel.cs" />
-    <Compile Include="ISkillTableModel.cs" />
-    <Compile Include="ITitleZoneModel.cs" />
+    <Compile Include="AsyncCommands\AsyncCommandBase.cs" />
+    <Compile Include="AsyncCommands\AsyncCommandFactory.cs" />
+    <Compile Include="AsyncCommands\AsyncCommandWithInput.cs" />
+    <Compile Include="AsyncCommands\AsyncResultCommand.cs" />
+    <Compile Include="AsyncCommands\AsyncSimpleCommand.cs" />
+    <Compile Include="AsyncCommands\CancellableAsyncCommand.cs" />
+    <Compile Include="AsyncTaskRunner.cs" />
+    <Compile Include="AsyncTaskRunnerBase.cs" />
+    <Compile Include="AsyncTaskRunnerFactory.cs" />
+    <Compile Include="NotifyTaskCompletion.cs" />
+    <Compile Include="NotifyTaskCompletionFactory.cs" />
+    <Compile Include="ObservableHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UIUtilities.API\UIUtilities.API.csproj">
+      <Project>{555437f8-52e3-4334-a544-18c3fba803b3}</Project>
+      <Name>UIUtilities.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities.API\Utilities.API.csproj">
+      <Project>{cf0e9721-c68b-4f37-9242-f18f9bed25fe}</Project>
+      <Name>Utilities.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

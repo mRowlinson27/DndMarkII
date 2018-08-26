@@ -2,12 +2,13 @@
 namespace UIModel.API
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using Dto;
 
-    public interface ISkillTableModel
+    public interface ISkillTableModel : INotifyPropertyChanged
     {
-        IList<Skill> Skills { get; }
+        Task<IEnumerable<Skill>> RequestSkillsAsync();
 
         Task AddSkillAsync();
 
