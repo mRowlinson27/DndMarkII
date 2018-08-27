@@ -55,10 +55,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrimaryStatsServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillsServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Database.API\Database.API.csproj">
+      <Project>{2C3A4AF0-6E8C-4DCC-9429-9A2B88AF0EB5}</Project>
+      <Name>Database.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Services\Services.csproj">
+      <Project>{86784C7E-C229-433E-B0AD-83E6FEEBD911}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Utilities.API\Utilities.API.csproj">
+      <Project>{CF0E9721-C68B-4F37-9242-F18F9BED25FE}</Project>
+      <Name>Utilities.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

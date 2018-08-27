@@ -40,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrimaryStatsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database.API\Database.API.csproj">
@@ -50,6 +52,10 @@
     <ProjectReference Include="..\Services.API\Services.API.csproj">
       <Project>{c58a08aa-84d4-44b0-a93c-9a6ba781e410}</Project>
       <Name>Services.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities.API\Utilities.API.csproj">
+      <Project>{CF0E9721-C68B-4F37-9242-F18F9BED25FE}</Project>
+      <Name>Utilities.API</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

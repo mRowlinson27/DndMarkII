@@ -17,9 +17,7 @@ namespace Database.UnitTests
         private IJsonFile<Model> _jsonFile;
 
         private Model _model;
-
         private List<PrimaryStat> _primaryStats;
-
         private List<Skill> _skills;
 
         [SetUp]
