@@ -26,7 +26,8 @@ namespace Database
 
         public async Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats)
         {
-            await Task.Delay(1);
+            var model = await GetModel();
+            model.PrimaryStats = stats;
         }
 
         public async Task<IEnumerable<Skill>> GetSkillsAsync()
@@ -37,12 +38,13 @@ namespace Database
 
         public async Task UpdateSkillsAsync(IEnumerable<Skill> skills)
         {
-            await Task.Delay(1);
+            var model = await GetModel();
+            model.Skills = skills;
         }
 
         private async Task<Model> GetModel()
         {
-            return _model; // ?? (_model = await _databaseFile.ReadAsync());
+            return _model ?? (_model = await _databaseFile.ReadAsync());
         }
 
         private async Task SaveModelAsync()
