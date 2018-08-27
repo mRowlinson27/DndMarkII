@@ -3,10 +3,11 @@ namespace Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using API;
+    using API.Dto;
     using Database.API;
-    using Database.API.Dto;
     using Utilities.API;
 
     public class PrimaryStatsService : IPrimaryStatsService
@@ -24,12 +25,20 @@ namespace Services
 
         public async Task<IEnumerable<PrimaryStat>> GetAllPrimaryStatsAsync()
         {
-            return await _primaryStatsRepo.GetPrimaryStatsAsync();
+            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync();
+
+            return CalculatePrimaryStats(dbPrimaryStats);
         }
 
         public Task AddOrUpdatePrimaryStatAsync(PrimaryStat skill)
         {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<PrimaryStat> CalculatePrimaryStats(IEnumerable<Database.API.Dto.PrimaryStat> dbPrimaryStats)
+        {
+            var svcPrimaryStats = dbPrimaryStats.Select(p => new PrimaryStat(p));
+            return svcPrimaryStats;
         }
     }
 }

@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{069529B0-E8B0-45A7-8A0A-44C8CA39A148}</ProjectGuid>
+    <ProjectGuid>{1F39A9D4-FB2F-4AAD-9D62-307F80DD2710}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Services.UnitTests</RootNamespace>
-    <AssemblyName>Services.UnitTests</AssemblyName>
+    <RootNamespace>UIModel.UnitTests</RootNamespace>
+    <AssemblyName>UIModel.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -55,25 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrimaryStatsServiceTests.cs" />
+    <Compile Include="PrimaryStatsTableModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SkillsServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Database.API\Database.API.csproj">
-      <Project>{2C3A4AF0-6E8C-4DCC-9429-9A2B88AF0EB5}</Project>
-      <Name>Database.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Services.API\Services.API.csproj">
-      <Project>{c58a08aa-84d4-44b0-a93c-9a6ba781e410}</Project>
-      <Name>Services.API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Services\Services.csproj">
-      <Project>{86784C7E-C229-433E-B0AD-83E6FEEBD911}</Project>
-      <Name>Services</Name>
+    <ProjectReference Include="..\..\src\UIModel\UIModel.csproj">
+      <Project>{E5C63301-F8AC-4365-9B68-AB5DD6DE3825}</Project>
+      <Name>UIModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Utilities.API\Utilities.API.csproj">
       <Project>{CF0E9721-C68B-4F37-9242-F18F9BED25FE}</Project>

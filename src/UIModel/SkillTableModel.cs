@@ -23,7 +23,15 @@ namespace UIModel
         public SkillTableModel(ILogger logger)
         {
             _logger = logger;
-//            _skills = GenerateSkills();
+            _skills = new List<UiSkill>
+            {
+                new UiSkill
+                {
+                    Name = "New UiSkill",
+                    Modifier = "Con",
+                    Total = _generator.Next(0, 20)
+                }
+            };
         }
 
         public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()

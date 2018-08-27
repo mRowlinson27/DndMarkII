@@ -38,8 +38,7 @@ namespace Database
                     Name = "Acrobatics",
                     Ranks = 0,
                     HasArmourCheckPenalty = true,
-                    ArmourCheckPenalty = 0,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = true
                 },
@@ -48,7 +47,7 @@ namespace Database
                     Name = "Appraise",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -57,7 +56,7 @@ namespace Database
                     Name = "Bluff",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -66,7 +65,7 @@ namespace Database
                     Name = "Climb",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Str,
+                    PrimaryStatId = AbilityModifier.Str,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -75,7 +74,7 @@ namespace Database
                     Name = "Diplomacy",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -84,7 +83,7 @@ namespace Database
                     Name = "Disable Device",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -93,7 +92,7 @@ namespace Database
                     Name = "Disguise",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -102,7 +101,7 @@ namespace Database
                     Name = "Escape Artist",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -111,7 +110,7 @@ namespace Database
                     Name = "Fly",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -120,7 +119,7 @@ namespace Database
                     Name = "Handle Animal",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -129,7 +128,7 @@ namespace Database
                     Name = "Heal",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Wis,
+                    PrimaryStatId = AbilityModifier.Wis,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -138,7 +137,7 @@ namespace Database
                     Name = "Intimidate",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -147,7 +146,7 @@ namespace Database
                     Name = "Linguistics",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -156,7 +155,7 @@ namespace Database
                     Name = "Perception",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Wis,
+                    PrimaryStatId = AbilityModifier.Wis,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -165,7 +164,7 @@ namespace Database
                     Name = "Ride",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -174,7 +173,7 @@ namespace Database
                     Name = "Sense Motive",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Wis,
+                    PrimaryStatId = AbilityModifier.Wis,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -183,7 +182,7 @@ namespace Database
                     Name = "Sleight of Hand",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -192,7 +191,7 @@ namespace Database
                     Name = "Spellcraft",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -201,7 +200,7 @@ namespace Database
                     Name = "Stealth",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Dex,
+                    PrimaryStatId = AbilityModifier.Dex,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -210,7 +209,7 @@ namespace Database
                     Name = "Survival",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Wis,
+                    PrimaryStatId = AbilityModifier.Wis,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -219,7 +218,7 @@ namespace Database
                     Name = "Swim",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Str,
+                    PrimaryStatId = AbilityModifier.Str,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -228,7 +227,7 @@ namespace Database
                     Name = "Use Magic Device",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Cha,
+                    PrimaryStatId = AbilityModifier.Cha,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -237,7 +236,7 @@ namespace Database
                     Name = "Knowledge (arcana)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -246,7 +245,7 @@ namespace Database
                     Name = "Knowledge (dungeoneering)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -255,7 +254,7 @@ namespace Database
                     Name = "Knowledge (engineering)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -264,7 +263,7 @@ namespace Database
                     Name = "Knowledge (geography)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -273,7 +272,7 @@ namespace Database
                     Name = "Knowledge (history)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -282,7 +281,7 @@ namespace Database
                     Name = "Knowledge (local)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -291,7 +290,7 @@ namespace Database
                     Name = "Knowledge (nature)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -300,7 +299,7 @@ namespace Database
                     Name = "Knowledge (nobility)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -309,7 +308,7 @@ namespace Database
                     Name = "Knowledge (planes)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -318,7 +317,7 @@ namespace Database
                     Name = "Knowledge (religion)",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Int,
+                    PrimaryStatId = AbilityModifier.Int,
                     UseUntrained = true,
                     Trained = false
                 },
@@ -327,7 +326,7 @@ namespace Database
                     Name = "Profession",
                     Ranks = 0,
                     HasArmourCheckPenalty = false,
-                    Modifier = AbilityModifier.Wis,
+                    PrimaryStatId = AbilityModifier.Wis,
                     UseUntrained = true,
                     Trained = false,
                 }
@@ -343,44 +342,38 @@ namespace Database
                 new PrimaryStat
                 {
                     Name = "Strength",
-                    Modifier = AbilityModifier.Str,
+                    Id = AbilityModifier.Str,
                     AbilityScore = 16,
-                    AbilityModifier = 3
                 },
                 new PrimaryStat
                 {
                     Name = "Constitution",
-                    Modifier = AbilityModifier.Con,
+                    Id = AbilityModifier.Con,
                     AbilityScore = 10,
-                    AbilityModifier = 0
                 },
                 new PrimaryStat
                 {
                     Name = "Dexterity",
-                    Modifier = AbilityModifier.Dex,
+                    Id = AbilityModifier.Dex,
                     AbilityScore = 18,
-                    AbilityModifier = 4
                 }
                 ,new PrimaryStat
                 {
                     Name = "Wisdom",
-                    Modifier = AbilityModifier.Wis,
+                    Id = AbilityModifier.Wis,
                     AbilityScore = 8,
-                    AbilityModifier = -1
                 },
                 new PrimaryStat
                 {
                     Name = "Charisma",
-                    Modifier = AbilityModifier.Cha,
+                    Id = AbilityModifier.Cha,
                     AbilityScore = 16,
-                    AbilityModifier = 3
                 },
                 new PrimaryStat
                 {
                     Name = "Intelligence",
-                    Modifier = AbilityModifier.Int,
+                    Id = AbilityModifier.Int,
                     AbilityScore = 14,
-                    AbilityModifier = 2
                 }
             };
         }

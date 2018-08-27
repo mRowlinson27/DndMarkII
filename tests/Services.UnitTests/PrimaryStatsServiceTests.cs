@@ -18,8 +18,6 @@ namespace Services.UnitTests
         private ILogger _logger;
         private IPrimaryStatsRepo _primaryStatsRepo;
 
-        private List<PrimaryStat> _primaryStats;
-
         [SetUp]
         public void Setup()
         {
@@ -33,21 +31,33 @@ namespace Services.UnitTests
         public async Task GetAllPrimaryStatsAsync_GetsFromDatabase()
         {
             //Arrange
-            A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(_primaryStats);
+            var dbPrimaryStats = new List<PrimaryStat>
+            {
+                new PrimaryStat
+                {
+                    Id = AbilityModifier.Cha,
+                    Name = "PrimaryStat1",
+                    AbilityScore = 12,
+                }
+            };
+
+            var correctSvcPrimaryStats = new List<Services.API.Dto.PrimaryStat>
+            {
+                new API.Dto.PrimaryStat
+                {
+                    Id = API.Dto.AbilityModifier.Cha,
+                    Name =  "PrimaryStat1",
+                    AbilityScore = 12
+                }
+            };
+
+            A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
 
             //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
 
             //Assert
-            result.Should().BeEquivalentTo(_primaryStats);
-        }
-
-        private void GenerateBasicModel()
-        {
-            _primaryStats = new List<PrimaryStat>
-            {
-                new PrimaryStat {Name = "PrimaryStat1"}
-            };
+            result.Should().BeEquivalentTo(dbPrimaryStats);
         }
     }
 }

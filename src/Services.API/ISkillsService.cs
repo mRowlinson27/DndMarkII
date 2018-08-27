@@ -4,7 +4,7 @@ namespace Services.API
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Database.API.Dto;
+    using Dto;
 
     public interface ISkillsService
     {

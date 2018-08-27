@@ -3,11 +3,13 @@ namespace Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using API;
+    using API.Dto;
     using Database.API;
-    using Database.API.Dto;
     using Utilities.API;
+
 
     public class SkillsService : ISkillsService
     {
@@ -24,12 +26,19 @@ namespace Services
 
         public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
         {
-            return await _skillsRepo.GetSkillsAsync();
+            var dbSkills = await _skillsRepo.GetSkillsAsync();
+            return CalculateSkills(dbSkills);
         }
 
         public async Task AddOrUpdateSkillAsync(Skill skill)
         {
             throw new NotImplementedException();
+        }
+
+        private IEnumerable<Skill> CalculateSkills(IEnumerable<Database.API.Dto.Skill> dbSkills)
+        {
+            var svcSkills = dbSkills.Select(dbSkill => new Skill(dbSkill));
+            return svcSkills;
         }
     }
 }

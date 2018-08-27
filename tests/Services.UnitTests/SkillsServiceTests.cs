@@ -1,6 +1,7 @@
 ﻿
 namespace Services.UnitTests
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Database.API;
@@ -18,8 +19,6 @@ namespace Services.UnitTests
         private ILogger _logger;
         private ISkillsRepo _skillsRepo;
 
-        private List<Skill> _skills;
-
         [SetUp]
         public void Setup()
         {
@@ -33,21 +32,43 @@ namespace Services.UnitTests
         public async Task GetAllSkillsAsync_GetsFromDatabase()
         {
             //Arrange
-            A.CallTo(() => _skillsRepo.GetSkillsAsync()).Returns(_skills);
+            var skillId = new Guid();
+
+            var dbSkills = new List<Skill>
+            {
+                new Skill
+                {
+                    Id = skillId,
+                    Name = "Skill1",
+                    PrimaryStatId  = AbilityModifier.Cha,
+                    HasArmourCheckPenalty = true,
+                    Ranks = 5,
+                    Trained = true,
+                    UseUntrained = true
+                }
+            };
+
+            var correctSvcSkills = new List<Services.API.Dto.Skill>
+            {
+                new API.Dto.Skill
+                {
+                    Id = skillId,
+                    Name = "Skill1",
+                    PrimaryStatId = API.Dto.AbilityModifier.Cha,
+                    HasArmourCheckPenalty = true,
+                    Ranks = 5,
+                    Trained = true,
+                    UseUntrained = true
+                }
+            };
+
+            A.CallTo(() => _skillsRepo.GetSkillsAsync()).Returns(dbSkills);
 
             //Act
             var result = await _skillsService.GetAllSkillsAsync();
 
             //Assert
-            result.Should().BeEquivalentTo(_skills);
-        }
-
-        private void GenerateBasicModel()
-        {
-            _skills = new List<Skill>
-            {
-                new Skill {Name = "Skill1"}
-            };
+            result.Should().BeEquivalentTo(correctSvcSkills);
         }
     }
 }
