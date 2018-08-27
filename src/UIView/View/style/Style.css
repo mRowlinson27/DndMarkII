@@ -117,16 +117,15 @@
 .primaryStatsEntryAbilityScore {
     padding: 3px 10px;
     position: relative;
-    right: 20px;
+    right: 0px;
     float: right;
     cursor: cell
 }
 
-
 .primaryStatsEntryAbilityModifier {
     padding: 3px 10px;
     position: relative;
-    right: 40px;
+    right: 0px;
     float: right;
     cursor: cell
 }

@@ -4,9 +4,11 @@ namespace BootStrapper
     using System;
     using Chromium;
     using Chromium.Event;
+    using Database;
     using Neutronium.JavascriptFramework.Knockout;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
+    using Services;
     using UIModel;
     using UIUtilities;
     using UIUtilities.AsyncCommands;
@@ -42,9 +44,14 @@ namespace BootStrapper
 
             var titleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel());
 
-            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
+            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, 
+                asyncCommandFactory, asyncTaskRunnerFactory);
 
-            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, new PrimaryStatsTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
+            var primaryStatsService = new PrimaryStatsService(_logger, new ModelJsonRepo(new DummyJsonFile()));
+            var primaryStatsTableModel = new PrimaryStatsTableModel(_logger, primaryStatsService, new AutoMapper());
+
+            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, primaryStatsTableModel, observableBinder, 
+                asyncCommandFactory, asyncTaskRunnerFactory);
 
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {

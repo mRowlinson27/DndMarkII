@@ -27,7 +27,8 @@ namespace UIUtilities.AsyncCommands
 
             Task<object> wrappedTask = WrapTaskWithReturnValue();
 
-            Execution = _notifyTaskCompletionFactory.Create(wrappedTask);
+            Execution = _notifyTaskCompletionFactory.Create<object>();
+            Execution.Start(wrappedTask);
 
             RaiseCanExecuteChanged();
 

@@ -27,8 +27,10 @@ namespace UIUtilities
                 NotifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create(WrapTaskWithReturnValue());
+            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create<object>();
             NotifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+            NotifyTaskCompletion.Start(WrapTaskWithReturnValue());
+
 
             HasStarted = true;
         }
@@ -69,8 +71,9 @@ namespace UIUtilities
                 NotifyTaskCompletion.PropertyChanged -= NotifyTaskCompletionOnPropertyChanged;
             }
 
-            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create(_taskFunc());
+            NotifyTaskCompletion = _notifyTaskCompletionFactory.Create<TReturn>();
             NotifyTaskCompletion.PropertyChanged += NotifyTaskCompletionOnPropertyChanged;
+            NotifyTaskCompletion.Start(_taskFunc());
 
             HasStarted = true;
         }

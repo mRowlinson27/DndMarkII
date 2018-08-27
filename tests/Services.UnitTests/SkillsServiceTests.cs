@@ -40,7 +40,7 @@ namespace Services.UnitTests
                 {
                     Id = skillId,
                     Name = "Skill1",
-                    PrimaryStatId  = AbilityModifier.Cha,
+                    PrimaryStatId  = AbilityType.Cha,
                     HasArmourCheckPenalty = true,
                     Ranks = 5,
                     Trained = true,
@@ -54,7 +54,7 @@ namespace Services.UnitTests
                 {
                     Id = skillId,
                     Name = "Skill1",
-                    PrimaryStatId = API.Dto.AbilityModifier.Cha,
+                    PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = true,
                     Ranks = 5,
                     Trained = true,

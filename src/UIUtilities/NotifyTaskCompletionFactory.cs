@@ -14,9 +14,9 @@ namespace UIUtilities
             _logger = logger;
         }
 
-        public INotifyTaskCompletion<TResult> Create<TResult>(Task<TResult> task)
+        public INotifyTaskCompletion<TResult> Create<TResult>()
         {
-            return new NotifyTaskCompletion<TResult>(task, _logger);
+            return new NotifyTaskCompletion<TResult>(_logger);
         }
     }
 }

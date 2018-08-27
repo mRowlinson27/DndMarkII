@@ -17,6 +17,6 @@ namespace Database.API.Dto
 
         public bool Trained { get; set; }
 
-        public AbilityModifier PrimaryStatId { get; set; }
+        public AbilityType PrimaryStatId { get; set; }
     }
 }

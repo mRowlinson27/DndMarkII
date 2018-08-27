@@ -4,33 +4,43 @@ namespace UIModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading.Tasks;
     using API;
     using API.Dto;
+    using Services.API;
     using Utilities.API;
 
     public class PrimaryStatsTableModel : IPrimaryStatsTableModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private readonly List<UiPrimaryStat> _primaryStats;
+        public event EventHandler PrimaryStatsUpdated
+        {
+            add => _primaryStatsService.PrimaryStatsUpdated += value;
+            remove => _primaryStatsService.PrimaryStatsUpdated -= value;
+        }
 
         private readonly ILogger _logger;
 
-        private readonly Random _generator = new Random(DateTime.Now.Millisecond);
+        private readonly IPrimaryStatsService _primaryStatsService;
 
-        public PrimaryStatsTableModel(ILogger logger)
+        private readonly IAutoMapper _autoMapper;
+
+        public PrimaryStatsTableModel(ILogger logger, IPrimaryStatsService primaryStatsService, IAutoMapper autoMapper)
         {
             _logger = logger;
-//            _primaryStats = GenerateStats();
+            _primaryStatsService = primaryStatsService;
+            _autoMapper = autoMapper;
         }
 
         public async Task<IEnumerable<UiPrimaryStat>> RequestPrimaryStatsAsync()
         {
             _logger.LogEntry();
-            await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(true);
+
+            var svcPrimaryStats = await _primaryStatsService.GetAllPrimaryStatsAsync().ConfigureAwait(true);
+            var uiPrimaryStats = _autoMapper.Map(svcPrimaryStats);
+
             _logger.LogExit();
-            return _primaryStats;
+            return uiPrimaryStats;
         }
 
         public async Task AddPrimaryStatAsync()

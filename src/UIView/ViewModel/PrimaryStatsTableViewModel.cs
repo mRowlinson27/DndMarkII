@@ -29,7 +29,7 @@ namespace UIView.ViewModel
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
-            _model.PropertyChanged += ModelOnPropertyChanged;
+            _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
             SetupTaskRunners(asyncTaskRunnerFactory);
         }
@@ -64,7 +64,7 @@ namespace UIView.ViewModel
             _logger.LogExit();
         }
 
-        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ModelOnPrimaryStatsUpdated(object sender, EventArgs e)
         {
             MakePrimaryStatRequest();
         }
@@ -73,7 +73,7 @@ namespace UIView.ViewModel
         {
             _primaryStatRequestTaskRunner.PropertyChanged -= PrimaryStatRequestTaskRunnerOnPropertyChanged;
             _primaryStatRequestTaskRunner.Dispose();
-            _model.PropertyChanged -= ModelOnPropertyChanged;
+            _model.PrimaryStatsUpdated -= ModelOnPrimaryStatsUpdated;
         }
     }
 }

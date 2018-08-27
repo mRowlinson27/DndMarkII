@@ -19,7 +19,7 @@ namespace Services.API.Dto
 
         public bool Trained { get; set; }
 
-        public Services.API.Dto.AbilityModifier PrimaryStatId { get; set; }
+        public Services.API.Dto.AbilityType PrimaryStatId { get; set; }
 
         public Skill()
         {
@@ -34,7 +34,7 @@ namespace Services.API.Dto
             HasArmourCheckPenalty = dbSkill.HasArmourCheckPenalty;
             UseUntrained = dbSkill.UseUntrained;
             Trained = dbSkill.Trained;
-            PrimaryStatId = (AbilityModifier) dbSkill.PrimaryStatId;
+            PrimaryStatId = (AbilityType) dbSkill.PrimaryStatId;
         }
     }
 }

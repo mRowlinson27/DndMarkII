@@ -15,6 +15,7 @@ namespace Services
         public event EventHandler PrimaryStatsUpdated;
 
         private readonly ILogger _logger;
+
         private readonly IPrimaryStatsRepo _primaryStatsRepo;
 
         public PrimaryStatsService(ILogger logger, IPrimaryStatsRepo primaryStatsRepo)

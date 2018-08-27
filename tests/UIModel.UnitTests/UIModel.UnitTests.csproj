@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperTests.cs" />
     <Compile Include="PrimaryStatsTableModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,6 +63,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Services.API\Services.API.csproj">
+      <Project>{c58a08aa-84d4-44b0-a93c-9a6ba781e410}</Project>
+      <Name>Services.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\UIModel.API\UIModel.API.csproj">
+      <Project>{7476ce24-8486-4dfb-bf5a-a0df872678b0}</Project>
+      <Name>UIModel.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\UIModel\UIModel.csproj">
       <Project>{E5C63301-F8AC-4365-9B68-AB5DD6DE3825}</Project>
       <Name>UIModel</Name>

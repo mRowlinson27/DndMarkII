@@ -3,7 +3,7 @@ namespace Services.API.Dto
 {
     public class PrimaryStat
     {
-        public AbilityModifier Id { get; set; }
+        public AbilityType Id { get; set; }
 
         public string Name { get; set; }
 
@@ -18,7 +18,7 @@ namespace Services.API.Dto
 
         public PrimaryStat(Database.API.Dto.PrimaryStat primaryStat)
         {
-            Id = (AbilityModifier) primaryStat.Id;
+            Id = (AbilityType) primaryStat.Id;
             Name = primaryStat.Name;
             AbilityScore = primaryStat.AbilityScore;
         }

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapper.cs" />
     <Compile Include="MainPageModel.cs" />
     <Compile Include="PrimaryStatsTableModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -47,6 +48,10 @@
     <Compile Include="TitleZoneModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Services.API\Services.API.csproj">
+      <Project>{C58A08AA-84D4-44B0-A93C-9A6BA781E410}</Project>
+      <Name>Services.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UIModel.API\UIModel.API.csproj">
       <Project>{7476ce24-8486-4dfb-bf5a-a0df872678b0}</Project>
       <Name>UIModel.API</Name>

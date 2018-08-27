@@ -34,7 +34,7 @@ namespace Services.UnitTests
             //Arrange
             var dbPrimaryStat = new PrimaryStat
             {
-                Id = AbilityModifier.Cha,
+                Id = AbilityType.Cha,
                 Name = "PrimaryStat1",
                 AbilityScore = 12,
             };
@@ -49,7 +49,7 @@ namespace Services.UnitTests
 
             //Assert
             firstResult.Should().NotBe(null);
-            firstResult.Id.Should().Be(API.Dto.AbilityModifier.Cha);
+            firstResult.Id.Should().Be(API.Dto.AbilityType.Cha);
             firstResult.Name.Should().Be(dbPrimaryStat.Name);
             firstResult.AbilityScore.Should().Be(dbPrimaryStat.AbilityScore);
         }
@@ -68,7 +68,7 @@ namespace Services.UnitTests
             {
                 new PrimaryStat
                 {
-                    Id = AbilityModifier.Cha,
+                    Id = AbilityType.Cha,
                     Name = "PrimaryStat1",
                     AbilityScore = abilityScore,
                 }
