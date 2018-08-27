@@ -2,6 +2,7 @@
 namespace Services.UnitTests
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Database.API;
     using Database.API.Dto;
@@ -31,33 +32,56 @@ namespace Services.UnitTests
         public async Task GetAllPrimaryStatsAsync_GetsFromDatabase()
         {
             //Arrange
+            var dbPrimaryStat = new PrimaryStat
+            {
+                Id = AbilityModifier.Cha,
+                Name = "PrimaryStat1",
+                AbilityScore = 12,
+            };
+
+            var dbPrimaryStats = new List<PrimaryStat> {dbPrimaryStat};
+
+            A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
+
+            //Act
+            var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
+            var firstResult = result.FirstOrDefault();
+
+            //Assert
+            firstResult.Should().NotBe(null);
+            firstResult.Id.Should().Be(API.Dto.AbilityModifier.Cha);
+            firstResult.Name.Should().Be(dbPrimaryStat.Name);
+            firstResult.AbilityScore.Should().Be(dbPrimaryStat.AbilityScore);
+        }
+
+        [TestCase(1, -5)]
+        [TestCase(8, -1)]
+        [TestCase(9, -1)]
+        [TestCase(10, 0)]
+        [TestCase(11, 0)]
+        [TestCase(12, 1)]
+        [TestCase(16, 3)]
+        public async Task GetAllPrimaryStatsAsync_CorrectModifier(int abilityScore, int correctAbilityModifier)
+        {
+            //Arrange
             var dbPrimaryStats = new List<PrimaryStat>
             {
                 new PrimaryStat
                 {
                     Id = AbilityModifier.Cha,
                     Name = "PrimaryStat1",
-                    AbilityScore = 12,
-                }
-            };
-
-            var correctSvcPrimaryStats = new List<Services.API.Dto.PrimaryStat>
-            {
-                new API.Dto.PrimaryStat
-                {
-                    Id = API.Dto.AbilityModifier.Cha,
-                    Name =  "PrimaryStat1",
-                    AbilityScore = 12
+                    AbilityScore = abilityScore,
                 }
             };
 
             A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
 
-            //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
+            var firstResult = result.FirstOrDefault();
 
             //Assert
-            result.Should().BeEquivalentTo(dbPrimaryStats);
+            firstResult.Should().NotBe(null);
+            firstResult.AbilityModifier.Should().Be(correctAbilityModifier);
         }
     }
 }

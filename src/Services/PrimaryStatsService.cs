@@ -37,7 +37,12 @@ namespace Services
 
         private IEnumerable<PrimaryStat> CalculatePrimaryStats(IEnumerable<Database.API.Dto.PrimaryStat> dbPrimaryStats)
         {
-            var svcPrimaryStats = dbPrimaryStats.Select(p => new PrimaryStat(p));
+            var svcPrimaryStats = dbPrimaryStats.Select(p => new PrimaryStat(p)).ToList();
+            foreach (var stat in svcPrimaryStats)
+            {
+                stat.AbilityModifier = (stat.AbilityScore / 2) - 5;
+            }
+
             return svcPrimaryStats;
         }
     }
