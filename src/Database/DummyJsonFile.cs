@@ -1,6 +1,7 @@
 ﻿
 namespace Database
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using API.Dto;
@@ -8,6 +9,8 @@ namespace Database
 
     public class DummyJsonFile : IJsonFile<Model>
     {
+        private readonly Random _generator = new Random(DateTime.Now.Millisecond);
+
         public async Task<Model> ReadAsync()
         {
             return await Task.FromResult(GenerateDummyModel());
@@ -36,299 +39,299 @@ namespace Database
                 new Skill()
                 {
                     Name = "Acrobatics",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = true,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = true
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Appraise",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Bluff",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Climb",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Str,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Diplomacy",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Disable Device",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Disguise",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Escape Artist",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Fly",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Handle Animal",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Heal",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Wis,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Intimidate",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Linguistics",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Perception",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Wis,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Ride",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Sense Motive",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Wis,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Sleight of Hand",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Spellcraft",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Stealth",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Dex,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Survival",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Wis,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Swim",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Str,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Use Magic Device",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Cha,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (arcana)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (dungeoneering)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (engineering)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (geography)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (history)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (local)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (nature)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (nobility)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (planes)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Knowledge (religion)",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Int,
-                    UseUntrained = true,
-                    Trained = false
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0
                 },
                 new Skill()
                 {
                     Name = "Profession",
-                    Ranks = 0,
-                    HasArmourCheckPenalty = false,
+                    Ranks = _generator.Next(0, 11),
+                    HasArmourCheckPenalty = _generator.Next(0, 2) > 0,
                     PrimaryStatId = AbilityType.Wis,
-                    UseUntrained = true,
-                    Trained = false,
+                    UseUntrained = _generator.Next(0, 2) > 0,
+                    Trained = _generator.Next(0, 2) > 0,
                 }
             };
 
@@ -343,37 +346,37 @@ namespace Database
                 {
                     Name = "Strength",
                     Id = AbilityType.Str,
-                    AbilityScore = 16,
+                    AbilityScore = _generator.Next(4, 21),
                 },
                 new PrimaryStat
                 {
                     Name = "Constitution",
                     Id = AbilityType.Con,
-                    AbilityScore = 10,
+                    AbilityScore = _generator.Next(4, 21),
                 },
                 new PrimaryStat
                 {
                     Name = "Dexterity",
                     Id = AbilityType.Dex,
-                    AbilityScore = 18,
+                    AbilityScore = _generator.Next(4, 21),
                 }
                 ,new PrimaryStat
                 {
                     Name = "Wisdom",
                     Id = AbilityType.Wis,
-                    AbilityScore = 8,
+                    AbilityScore = _generator.Next(4, 21),
                 },
                 new PrimaryStat
                 {
                     Name = "Charisma",
                     Id = AbilityType.Cha,
-                    AbilityScore = 16,
+                    AbilityScore = _generator.Next(4, 21),
                 },
                 new PrimaryStat
                 {
                     Name = "Intelligence",
                     Id = AbilityType.Int,
-                    AbilityScore = 14,
+                    AbilityScore = _generator.Next(4, 21),
                 }
             };
         }

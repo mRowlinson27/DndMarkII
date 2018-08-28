@@ -4,6 +4,7 @@ namespace Services.UnitTests
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using API;
     using Database.API;
     using Database.API.Dto;
     using FakeItEasy;
@@ -18,40 +19,51 @@ namespace Services.UnitTests
 
         private ILogger _logger;
         private IPrimaryStatsRepo _primaryStatsRepo;
+        private ISvcAutoMapper _svcAutoMapper;
 
         [SetUp]
         public void Setup()
         {
             _logger = A.Fake<ILogger>();
             _primaryStatsRepo = A.Fake<IPrimaryStatsRepo>();
+            _svcAutoMapper = A.Fake<ISvcAutoMapper>();
 
-            _primaryStatsService = new PrimaryStatsService(_logger, _primaryStatsRepo);
+            _primaryStatsService = new PrimaryStatsService(_logger, _primaryStatsRepo, _svcAutoMapper);
         }
 
         [Test]
-        public async Task GetAllPrimaryStatsAsync_GetsFromDatabase()
+        public async Task GetAllPrimaryStatsAsync_GetsFromDatabase_TransformsMundaneAttributes()
         {
             //Arrange
-            var dbPrimaryStat = new PrimaryStat
+            var dbPrimaryStats = new List<PrimaryStat>
             {
-                Id = AbilityType.Cha,
-                Name = "PrimaryStat1",
-                AbilityScore = 12,
+                new PrimaryStat
+                {
+                    Id = AbilityType.Cha,
+                    Name = "PrimaryStat1",
+                    AbilityScore = 12,
+                }
             };
 
-            var dbPrimaryStats = new List<PrimaryStat> {dbPrimaryStat};
+            var svcPrimaryStats = new List<API.Dto.PrimaryStat>
+            {
+                new API.Dto.PrimaryStat
+                {
+                    Id = API.Dto.AbilityType.Cha,
+                    Name = "PrimaryStat1",
+                    AbilityScore = 12
+                }
+            };
+
 
             A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
+            A.CallTo(() => _svcAutoMapper.Map(dbPrimaryStats)).Returns(svcPrimaryStats);
 
             //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
-            var firstResult = result.FirstOrDefault();
 
             //Assert
-            firstResult.Should().NotBe(null);
-            firstResult.Id.Should().Be(API.Dto.AbilityType.Cha);
-            firstResult.Name.Should().Be(dbPrimaryStat.Name);
-            firstResult.AbilityScore.Should().Be(dbPrimaryStat.AbilityScore);
+            result.Should().BeEquivalentTo(svcPrimaryStats);
         }
 
         [TestCase(1, -5)]
@@ -64,18 +76,19 @@ namespace Services.UnitTests
         public async Task GetAllPrimaryStatsAsync_CorrectModifier(int abilityScore, int correctAbilityModifier)
         {
             //Arrange
-            var dbPrimaryStats = new List<PrimaryStat>
+            var svcPrimaryStats = new List<API.Dto.PrimaryStat>
             {
-                new PrimaryStat
+                new API.Dto.PrimaryStat
                 {
-                    Id = AbilityType.Cha,
+                    Id = API.Dto.AbilityType.Cha,
                     Name = "PrimaryStat1",
-                    AbilityScore = abilityScore,
+                    AbilityScore = abilityScore
                 }
             };
 
-            A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
+            A.CallTo(() => _svcAutoMapper.Map(A<IEnumerable<PrimaryStat>>.Ignored)).Returns(svcPrimaryStats);
 
+            //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
             var firstResult = result.FirstOrDefault();
 

@@ -41,7 +41,6 @@ namespace BootStrapper
         private IPrimaryStatsService _primaryStatsService;
 
         //UI Model
-        private IAutoMapper _uiModelAutoMapper;
         private ITitleZoneModel _titleZoneModel;
         private ISkillTableModel _skillTableModel;
         private IPrimaryStatsTableModel _primaryStatsTableModel;
@@ -112,16 +111,17 @@ namespace BootStrapper
 
         private void SetupServices()
         {
-            _skillsService = new SkillsService(_logger, _masterRepo);
-            _primaryStatsService = new PrimaryStatsService(_logger, _masterRepo);
+            var svcAutoMapper = new SvcAutoMapper();
+            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper);
+            _primaryStatsService = new PrimaryStatsService(_logger, _masterRepo, svcAutoMapper);
         }
 
         private void SetupUiModel()
         {
-            _uiModelAutoMapper = new AutoMapper();
+            var autoMapper = new AutoMapper();
             _titleZoneModel = new TitleZoneModel();
-            _skillTableModel = new SkillTableModel(_logger, _skillsService, _uiModelAutoMapper);
-            _primaryStatsTableModel = new PrimaryStatsTableModel(_logger, _primaryStatsService, _uiModelAutoMapper);
+            _skillTableModel = new SkillTableModel(_logger, _skillsService, autoMapper);
+            _primaryStatsTableModel = new PrimaryStatsTableModel(_logger, _primaryStatsService, autoMapper);
 
         }
 

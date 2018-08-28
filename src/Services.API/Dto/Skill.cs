@@ -22,21 +22,5 @@ namespace Services.API.Dto
         public Services.API.Dto.AbilityType PrimaryStatId { get; set; }
 
         public int Total { get; set; }
-
-        public Skill()
-        {
-
-        }
-
-        public Skill(Database.API.Dto.Skill dbSkill)
-        {
-            Id = dbSkill.Id;
-            Name = dbSkill.Name;
-            Ranks = dbSkill.Ranks;
-            HasArmourCheckPenalty = dbSkill.HasArmourCheckPenalty;
-            UseUntrained = dbSkill.UseUntrained;
-            Trained = dbSkill.Trained;
-            PrimaryStatId = (AbilityType) dbSkill.PrimaryStatId;
-        }
     }
 }

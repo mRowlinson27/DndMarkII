@@ -18,17 +18,25 @@ namespace Services
 
         private readonly IPrimaryStatsRepo _primaryStatsRepo;
 
-        public PrimaryStatsService(ILogger logger, IPrimaryStatsRepo primaryStatsRepo)
+        private readonly ISvcAutoMapper _svcAutoMapper;
+
+        public PrimaryStatsService(ILogger logger, IPrimaryStatsRepo primaryStatsRepo, ISvcAutoMapper svcAutoMapper)
         {
             _logger = logger;
             _primaryStatsRepo = primaryStatsRepo;
+            _svcAutoMapper = svcAutoMapper;
         }
 
         public async Task<IEnumerable<PrimaryStat>> GetAllPrimaryStatsAsync()
         {
-            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync().ConfigureAwait(false);
+            _logger.LogEntry();
 
-            return CalculatePrimaryStats(dbPrimaryStats);
+            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync().ConfigureAwait(false);
+            var svcPrimaryStats = _svcAutoMapper.Map(dbPrimaryStats);
+            var svcPrimaryStatsWithModifier = svcPrimaryStats.Select(AddModifierToPrimaryStat);
+
+            _logger.LogExit();
+            return svcPrimaryStatsWithModifier;
         }
 
         public Task AddOrUpdatePrimaryStatAsync(PrimaryStat skill)
@@ -36,15 +44,11 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        private IEnumerable<PrimaryStat> CalculatePrimaryStats(IEnumerable<Database.API.Dto.PrimaryStat> dbPrimaryStats)
+        private PrimaryStat AddModifierToPrimaryStat(PrimaryStat primaryStat)
         {
-            var svcPrimaryStats = dbPrimaryStats.Select(p => new PrimaryStat(p)).ToList();
-            foreach (var stat in svcPrimaryStats)
-            {
-                stat.AbilityModifier = (stat.AbilityScore / 2) - 5;
-            }
+            primaryStat.AbilityModifier = (primaryStat.AbilityScore / 2) - 5;
 
-            return svcPrimaryStats;
+            return primaryStat;
         }
     }
 }

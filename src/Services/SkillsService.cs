@@ -16,18 +16,28 @@ namespace Services
         public event EventHandler SkillsUpdated;
 
         private readonly ILogger _logger;
+
         private readonly ISkillsRepo _skillsRepo;
 
-        public SkillsService(ILogger logger, ISkillsRepo skillsRepo)
+        private readonly ISvcAutoMapper _svcAutoMapper;
+
+        public SkillsService(ILogger logger, ISkillsRepo skillsRepo, ISvcAutoMapper svcAutoMapper)
         {
             _logger = logger;
             _skillsRepo = skillsRepo;
+            _svcAutoMapper = svcAutoMapper;
         }
 
         public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
         {
+            _logger.LogEntry();
+
             var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
-            return CalculateSkills(dbSkills);
+            var svcSkills = _svcAutoMapper.Map(dbSkills);
+            var svcSkillsWithTotal = svcSkills.Select(AddTotalToSkill);
+
+            _logger.LogExit();
+            return svcSkillsWithTotal;
         }
 
         public async Task AddOrUpdateSkillAsync(Skill skill)
@@ -35,10 +45,15 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        private IEnumerable<Skill> CalculateSkills(IEnumerable<Database.API.Dto.Skill> dbSkills)
+        private Skill AddTotalToSkill(Skill skill)
         {
-            var svcSkills = dbSkills.Select(dbSkill => new Skill(dbSkill));
-            return svcSkills;
+            skill.Total = skill.Ranks;
+            if (skill.Trained && skill.Ranks > 0)
+            {
+                skill.Total += 3;
+            }
+
+            return skill;
         }
     }
 }
