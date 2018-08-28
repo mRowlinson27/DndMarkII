@@ -3,6 +3,7 @@ namespace UIView
 {
     using System;
     using System.Windows;
+    using UIUtilities.API;
     using Utilities.API;
     using ViewModel;
 
@@ -15,10 +16,13 @@ namespace UIView
 
         private readonly MainPageViewModel _mainPageViewModel;
 
-        public MainWindow(ILogger logger, MainPageViewModel mainPageViewModel)
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
+        public MainWindow(ILogger logger, MainPageViewModel mainPageViewModel, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
             _mainPageViewModel = mainPageViewModel;
+            _uiThreadInvoker = uiThreadInvoker;
             InitializeComponent();
             DataContext = mainPageViewModel;
         }
@@ -26,6 +30,7 @@ namespace UIView
         public void Init()
         {
             _mainPageViewModel.Init();
+            _uiThreadInvoker.Init();
         }
 
         protected override void OnClosed(EventArgs e)

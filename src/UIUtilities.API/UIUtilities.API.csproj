@@ -47,6 +47,7 @@
     <Compile Include="INotifyTaskCompletionFactory.cs" />
     <Compile Include="IObservableHelper.cs" />
     <Compile Include="IAsyncTaskRunner.cs" />
+    <Compile Include="IUiThreadInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

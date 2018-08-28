@@ -37,6 +37,7 @@ namespace BootStrapper
         public MainWindow CreateMainWindow()
         {
             var observableBinder = new ObservableHelper();
+            var uiThreadInvoker = new UiThreadInvoker(_logger);
 
             var notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
             var asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
@@ -45,7 +46,7 @@ namespace BootStrapper
             var titleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel());
 
             var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, 
-                asyncCommandFactory, asyncTaskRunnerFactory);
+                asyncCommandFactory, asyncTaskRunnerFactory, uiThreadInvoker);
 
             var primaryStatsService = new PrimaryStatsService(_logger, new ModelJsonRepo(new DummyJsonFile()));
             var primaryStatsTableModel = new PrimaryStatsTableModel(_logger, primaryStatsService, new AutoMapper());
@@ -60,7 +61,7 @@ namespace BootStrapper
                 PrimaryStatsTableViewModel = primaryStatsTableViewModel
             };
 
-            return new MainWindow(_logger, mainPageViewModel);
+            return new MainWindow(_logger, mainPageViewModel, uiThreadInvoker);
         }
 
         public void Dispose()

@@ -35,7 +35,7 @@ namespace UIView.UnitTests
             _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, null);
         }
 
         [TearDown]

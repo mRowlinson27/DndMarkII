@@ -5,6 +5,7 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using UIModel.API;
@@ -36,11 +37,14 @@ namespace UIView.ViewModel
 
         private readonly IObservableHelper _observableHelper;
 
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
         public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
             _observableHelper = observableHelper;
+            _uiThreadInvoker = uiThreadInvoker;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -98,9 +102,14 @@ namespace UIView.ViewModel
                 return;
             }
 
-            _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
+            _uiThreadInvoker.Dispatch(() =>
+            {
+                _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
 
-            DataAvailable = true;
+                DataAvailable = true;
+                _logger.LogExit();
+            });
+            
             _logger.LogExit();
         }
 
