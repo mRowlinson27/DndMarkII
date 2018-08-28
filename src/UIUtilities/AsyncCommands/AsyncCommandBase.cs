@@ -34,7 +34,7 @@ namespace UIUtilities.AsyncCommands
 
         public async void Execute(object parameter)
         {
-            await ExecuteAsync(parameter);
+            await ExecuteAsync(parameter).ConfigureAwait(false);
         }
 
         public event EventHandler CanExecuteChanged;

@@ -37,7 +37,7 @@ namespace UIModel
         public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()
         {
             _logger.LogEntry();
-            await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(true);
+            await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(false);
             _logger.LogExit();
             return _skills;
         }
@@ -45,13 +45,13 @@ namespace UIModel
         public async Task AddSkillAsync()
         {
             _skills.Clear();
-            _skills.Add(await Task.Run(() => GetBlankSkill()));
+            _skills.Add(await Task.Run(() => GetBlankSkill()).ConfigureAwait(false));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 
         public async Task RemoveSkillAsync(UiSkill uiSkill)
         {
-            await Task.Run(() => UpdateBackEnd());
+            await Task.Run(() => UpdateBackEnd()).ConfigureAwait(false);
             _skills.Remove(uiSkill);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }

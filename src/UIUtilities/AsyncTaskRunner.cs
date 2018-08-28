@@ -42,7 +42,7 @@ namespace UIUtilities
 
         private async Task<object> WrapTaskWithReturnValue()
         {
-            await _taskFunc();
+            await _taskFunc().ConfigureAwait(false);
             return null;
         }
     }

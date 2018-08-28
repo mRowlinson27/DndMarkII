@@ -20,25 +20,25 @@ namespace Database
 
         public async Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync()
         {
-            var model = await GetModel();
+            var model = await GetModel().ConfigureAwait(false);
             return model.PrimaryStats;
         }
 
         public async Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats)
         {
-            var model = await GetModel();
+            var model = await GetModel().ConfigureAwait(false);
             model.PrimaryStats = stats;
         }
 
         public async Task<IEnumerable<Skill>> GetSkillsAsync()
         {
-            var model = await GetModel();
+            var model = await GetModel().ConfigureAwait(false);
             return model.Skills;
         }
 
         public async Task UpdateSkillsAsync(IEnumerable<Skill> skills)
         {
-            var model = await GetModel();
+            var model = await GetModel().ConfigureAwait(false);
             model.Skills = skills;
         }
 

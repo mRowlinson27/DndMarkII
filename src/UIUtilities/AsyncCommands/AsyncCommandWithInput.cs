@@ -31,14 +31,14 @@ namespace UIUtilities.AsyncCommands
 
             RaiseCanExecuteChanged();
 
-            await Execution.TaskCompletion;
+            await Execution.TaskCompletion.ConfigureAwait(false);
 
             RaiseCanExecuteChanged();
         }
 
         private async Task<object> WrapTaskWithReturnValue(TIn param)
         {
-            await _command(param);
+            await _command(param).ConfigureAwait(false);
             return null;
         }
     }

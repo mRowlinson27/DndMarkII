@@ -26,7 +26,7 @@ namespace Services
 
         public async Task<IEnumerable<PrimaryStat>> GetAllPrimaryStatsAsync()
         {
-            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync();
+            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync().ConfigureAwait(false);
 
             return CalculatePrimaryStats(dbPrimaryStats);
         }

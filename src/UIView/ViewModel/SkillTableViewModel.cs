@@ -72,12 +72,12 @@ namespace UIView.ViewModel
 
         private async Task AddSkillCommandAsync()
         {
-            await _model.AddSkillAsync();
+            await _model.AddSkillAsync().ConfigureAwait(false);
         }
 
         private async Task RemoveSkillCommandAsync(UiSkill uiSkill)
         {
-            await _model.RemoveSkillAsync(uiSkill);
+            await _model.RemoveSkillAsync(uiSkill).ConfigureAwait(false);;
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)

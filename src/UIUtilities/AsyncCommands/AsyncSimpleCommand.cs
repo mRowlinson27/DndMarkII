@@ -34,7 +34,7 @@ namespace UIUtilities.AsyncCommands
 
             if (Execution != null)
             {
-                await Execution.TaskCompletion;
+                await Execution.TaskCompletion.ConfigureAwait(false);
             }
 
             RaiseCanExecuteChanged();
@@ -42,7 +42,7 @@ namespace UIUtilities.AsyncCommands
 
         private async Task<object> WrapTaskWithReturnValue()
         {
-            await _command();
+            await _command().ConfigureAwait(false);
             return null;
         }
     }

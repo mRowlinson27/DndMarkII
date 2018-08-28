@@ -26,7 +26,7 @@ namespace Services
 
         public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
         {
-            var dbSkills = await _skillsRepo.GetSkillsAsync();
+            var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
             return CalculateSkills(dbSkills);
         }
 

@@ -36,7 +36,7 @@ namespace UIModel
         {
             _logger.LogEntry();
 
-            var svcPrimaryStats = await _primaryStatsService.GetAllPrimaryStatsAsync().ConfigureAwait(true);
+            var svcPrimaryStats = await _primaryStatsService.GetAllPrimaryStatsAsync().ConfigureAwait(false);
             var uiPrimaryStats = _autoMapper.Map(svcPrimaryStats);
 
             _logger.LogExit();

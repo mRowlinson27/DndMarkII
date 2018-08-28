@@ -52,7 +52,7 @@ namespace UIUtilities
         {
             try
             {
-                await task;
+                await task.ConfigureAwait(false);
                 _logger.LogMessage("Finished watching task");
             }
             catch (Exception e)
