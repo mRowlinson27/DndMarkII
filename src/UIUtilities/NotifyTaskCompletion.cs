@@ -53,7 +53,6 @@ namespace UIUtilities
             try
             {
                 await task.ConfigureAwait(false);
-                _logger.LogMessage("Finished watching task");
             }
             catch (Exception e)
             {
@@ -88,7 +87,6 @@ namespace UIUtilities
             {
                 propertyChanged(this, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
                 propertyChanged(this, new PropertyChangedEventArgs("Result"));
-                _logger.LogMessage("task.IsSuccessfullyCompleted");
             }
         }
     }

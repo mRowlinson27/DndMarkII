@@ -29,8 +29,9 @@ namespace UIView
 
         public void Init()
         {
-            _mainPageViewModel.Init();
             _uiThreadInvoker.Init();
+
+            _mainPageViewModel.Init();
         }
 
         protected override void OnClosed(EventArgs e)

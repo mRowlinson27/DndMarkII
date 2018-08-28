@@ -91,25 +91,25 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
-            DataAvailable = false;
+            _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _skillsRequestTaskRunner.StartTask();
         }
 
         private void SkillsRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsSuccessfullyCompleted")
+            if (e.PropertyName == "IsSuccessfullyCompleted")
             {
-                return;
+                _uiThreadInvoker.Dispatch(RebindSkillsToResult);
             }
+        }
 
-            _uiThreadInvoker.Dispatch(() =>
-            {
-                _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
+        private void RebindSkillsToResult()
+        {
+            _logger.LogEntry();
 
-                DataAvailable = true;
-                _logger.LogExit();
-            });
-            
+            _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
+            DataAvailable = true;
+
             _logger.LogExit();
         }
 

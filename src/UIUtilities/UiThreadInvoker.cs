@@ -24,14 +24,7 @@ namespace UIUtilities
 
         public void Dispatch(Action action)
         {
-            _syncContext.Post(o => Target(o, action), null);
-        }
-
-        private void Target(object state, Action action)
-        {
-            _logger.LogEntry();
-            action();
-            _logger.LogExit();
+            _syncContext.Post(o => action(), null);
         }
     }
 }

@@ -23,12 +23,15 @@ namespace UIView.ViewModel
 
         private readonly IObservableHelper _observableHelper;
 
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
+            _uiThreadInvoker = uiThreadInvoker;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
             SetupTaskRunners(asyncTaskRunnerFactory);
@@ -47,20 +50,25 @@ namespace UIView.ViewModel
 
         private void MakePrimaryStatRequest()
         {
+            _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _primaryStatRequestTaskRunner.StartTask();
-            DataAvailable = false;
         }
 
         private void PrimaryStatRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsSuccessfullyCompleted")
+            if (e.PropertyName == "IsSuccessfullyCompleted")
             {
-                return;
+                _uiThreadInvoker.Dispatch(RebindPrimaryStatsToResult);
             }
+        }
+
+        private void RebindPrimaryStatsToResult()
+        {
+            _logger.LogEntry();
 
             _observableHelper.Rebind(PrimaryStats, _primaryStatRequestTaskRunner.Result);
-
             DataAvailable = true;
+
             _logger.LogExit();
         }
 

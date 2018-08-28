@@ -52,7 +52,7 @@ namespace BootStrapper
             var primaryStatsTableModel = new PrimaryStatsTableModel(_logger, primaryStatsService, new AutoMapper());
 
             var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, primaryStatsTableModel, observableBinder, 
-                asyncCommandFactory, asyncTaskRunnerFactory);
+                asyncCommandFactory, asyncTaskRunnerFactory, uiThreadInvoker);
 
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {

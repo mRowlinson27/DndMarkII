@@ -24,6 +24,7 @@ namespace UIView.UnitTests
         private IObservableHelper _observableHelper;
         private IAsyncCommandFactory _asyncCommandFactory;
         private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+        private IUiThreadInvoker _uiThreadInvoker;
 
         [SetUp]
         public void Setup()
@@ -34,8 +35,9 @@ namespace UIView.UnitTests
             var notifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
             _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
+            _uiThreadInvoker = new UiThreadInvoker(_logger);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, null);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker);
         }
 
         [TearDown]
