@@ -21,10 +21,15 @@ namespace UIModel
 
         public IEnumerable<UiPrimaryStat> Map(IEnumerable<PrimaryStat> svcPrimaryStats)
         {
-            return svcPrimaryStats.Select(MapInternal);
+            return svcPrimaryStats.Select(MapPrimaryStat);
         }
 
-        private UiPrimaryStat MapInternal(PrimaryStat svcPrimaryStat)
+        public IEnumerable<UiSkill> Map(IEnumerable<Skill> svcSkill)
+        {
+            return svcSkill.Select(MapSkill);
+        }
+
+        private UiPrimaryStat MapPrimaryStat(PrimaryStat svcPrimaryStat)
         {
             var result = new UiPrimaryStat()
             {
@@ -43,6 +48,21 @@ namespace UIModel
             }
 
             return result;
+        }
+
+        public UiSkill MapSkill(Skill svcPrimaryStat)
+        {
+            return new UiSkill
+            {
+                ArmourCheckPenalty = svcPrimaryStat.ArmourCheckPenalty,
+                HasArmourCheckPenalty = svcPrimaryStat.HasArmourCheckPenalty,
+                Name = svcPrimaryStat.Name,
+                PrimaryStatName = IdToStringMapping[svcPrimaryStat.PrimaryStatId],
+                Ranks = svcPrimaryStat.Ranks,
+                Trained = svcPrimaryStat.Trained,
+                UseUntrained = svcPrimaryStat.UseUntrained,
+                Total = svcPrimaryStat.Total
+            };
         }
     }
 }

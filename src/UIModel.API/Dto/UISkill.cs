@@ -9,6 +9,8 @@ namespace UIModel.API.Dto
 
         public int Ranks { get; set; }
 
+        public string PrimaryStatName { get; set; }
+
         public bool HasArmourCheckPenalty { get; set; }
 
         public int ArmourCheckPenalty { get; set; }
@@ -16,7 +18,5 @@ namespace UIModel.API.Dto
         public bool UseUntrained { get; set; }
 
         public bool Trained { get; set; }
-
-        public string Modifier { get; set; }
     }
 }

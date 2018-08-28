@@ -58,6 +58,7 @@
     <Compile Include="AutoMapperTests.cs" />
     <Compile Include="PrimaryStatsTableModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillTableModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -3,7 +3,6 @@ namespace UIModel
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Threading.Tasks;
     using API;
@@ -15,59 +14,42 @@ namespace UIModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly List<UiSkill> _skills;
-
         private readonly ILogger _logger;
 
         private readonly ISkillsService _skillsService;
 
+        private readonly IAutoMapper _autoMapper;
+
         private readonly Random _generator = new Random(DateTime.Now.Millisecond);
 
-        public SkillTableModel(ILogger logger, ISkillsService skillsService)
+        public SkillTableModel(ILogger logger, ISkillsService skillsService, IAutoMapper autoMapper)
         {
             _logger = logger;
             _skillsService = skillsService;
-            _skills = new List<UiSkill>
-            {
-                new UiSkill
-                {
-                    Name = "New UiSkill",
-                    Modifier = "Con",
-                    Total = _generator.Next(0, 20)
-                }
-            };
+            _autoMapper = autoMapper;
         }
 
         public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()
         {
             _logger.LogEntry();
-            await Task.Delay(_generator.Next(0, 4000)).ConfigureAwait(false);
+            var svcSkills = await _skillsService.GetAllSkillsAsync().ConfigureAwait(false);
+            var uiSkills = _autoMapper.Map(svcSkills);
             _logger.LogExit();
-            return _skills;
+            return uiSkills;
         }
 
         public async Task AddSkillAsync()
         {
-            _skills.Clear();
-            _skills.Add(await Task.Run(() => GetBlankSkill()).ConfigureAwait(false));
+//            _skills.Clear();
+//            _skills.Add(await Task.Run(() => GetBlankSkill()).ConfigureAwait(false));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 
         public async Task RemoveSkillAsync(UiSkill uiSkill)
         {
             await Task.Run(() => UpdateBackEnd()).ConfigureAwait(false);
-            _skills.Remove(uiSkill);
+//            _skills.Remove(uiSkill);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
-        }
-
-        private UiSkill GetBlankSkill()
-        {
-            return new UiSkill
-            {
-                Name = "New UiSkill",
-                Modifier = "Con",
-                Total = _generator.Next(0, 20)
-            };
         }
 
         private void UpdateBackEnd()

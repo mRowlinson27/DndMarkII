@@ -8,5 +8,7 @@ namespace UIModel.API
     public interface IAutoMapper
     {
         IEnumerable<UiPrimaryStat> Map(IEnumerable<PrimaryStat> svcPrimaryStat);
+
+        IEnumerable<UiSkill> Map(IEnumerable<Skill> svcSkill);
     }
 }

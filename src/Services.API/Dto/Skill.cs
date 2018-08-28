@@ -21,6 +21,8 @@ namespace Services.API.Dto
 
         public Services.API.Dto.AbilityType PrimaryStatId { get; set; }
 
+        public int Total { get; set; }
+
         public Skill()
         {
 

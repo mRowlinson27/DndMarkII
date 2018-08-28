@@ -1,11 +1,9 @@
 ﻿
 namespace UIModel.UnitTests
 {
+    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using API.Dto;
-    using FakeItEasy;
     using FluentAssertions;
     using NUnit.Framework;
     using Services.API.Dto;
@@ -26,7 +24,7 @@ namespace UIModel.UnitTests
         [TestCase(1, "+1")]
         [TestCase(-1, "-1")]
         [TestCase(6, "+6")]
-        public void RequestPrimaryStatsAsync_TransformsDataProperly(int abilityMod, string uiAbilityMod)
+        public void MapPrimaryStat_TransformsDataProperly(int abilityMod, string uiAbilityMod)
         {
             //Arrange
             var inputData = new List<PrimaryStat>
@@ -56,6 +54,48 @@ namespace UIModel.UnitTests
 
             //Assert
             result.Should().BeEquivalentTo(correctUiPrimaryStats);
+        }
+
+        [Test]
+        public void MapSkill_TransformsRegularDataProperly()
+        {
+            //Arrange
+            var inputData = new List<Skill>
+            {
+                new Skill
+                {
+                    Id = new Guid(),
+                    ArmourCheckPenalty = 1,
+                    HasArmourCheckPenalty = true,
+                    Name = "Acro",
+                    PrimaryStatId = AbilityType.Cha,
+                    Ranks = 1,
+                    Trained = true,
+                    UseUntrained = true,
+                    Total = 3
+                }
+            };
+
+            var correctUiSkills = new List<UiSkill>
+            {
+                new UiSkill
+                {
+                    ArmourCheckPenalty = 1,
+                    HasArmourCheckPenalty = true,
+                    Name = "Acro",
+                    PrimaryStatName = "CHA",
+                    Ranks = 1,
+                    Trained = true,
+                    UseUntrained = true,
+                    Total = 3
+                }
+            };
+
+            //Act
+            var result = _autoMapper.Map(inputData);
+
+            //Assert
+            result.Should().BeEquivalentTo(correctUiSkills);
         }
     }
 }
