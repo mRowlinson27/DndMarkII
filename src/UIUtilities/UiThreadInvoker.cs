@@ -24,7 +24,15 @@ namespace UIUtilities
 
         public void Dispatch(Action action)
         {
-            _syncContext.Post(o => action(), null);
+            if (_syncContext == null)
+            {
+                action();
+                _logger.LogMessage("SYNC CONTEXT IS NULL");
+            }
+            else
+            {
+                _syncContext.Post(o => action(), null);
+            }
         }
     }
 }

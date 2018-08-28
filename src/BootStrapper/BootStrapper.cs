@@ -38,6 +38,7 @@ namespace BootStrapper
         {
             var observableBinder = new ObservableHelper();
             var uiThreadInvoker = new UiThreadInvoker(_logger);
+            var masterRepo = new ModelJsonRepo(new DummyJsonFile());
 
             var notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
             var asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
@@ -45,10 +46,11 @@ namespace BootStrapper
 
             var titleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel());
 
-            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, 
+            var skillsService = new SkillsService(_logger, masterRepo);
+            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger, skillsService), observableBinder, 
                 asyncCommandFactory, asyncTaskRunnerFactory, uiThreadInvoker);
 
-            var primaryStatsService = new PrimaryStatsService(_logger, new ModelJsonRepo(new DummyJsonFile()));
+            var primaryStatsService = new PrimaryStatsService(_logger, masterRepo);
             var primaryStatsTableModel = new PrimaryStatsTableModel(_logger, primaryStatsService, new AutoMapper());
 
             var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, primaryStatsTableModel, observableBinder, 

@@ -35,7 +35,8 @@ namespace UIView.UnitTests
             _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
 
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory);
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger));
         }
 
         [TearDown]

@@ -8,6 +8,7 @@ namespace UIModel
     using System.Threading.Tasks;
     using API;
     using API.Dto;
+    using Services.API;
     using Utilities.API;
 
     public class SkillTableModel : ISkillTableModel
@@ -18,11 +19,14 @@ namespace UIModel
 
         private readonly ILogger _logger;
 
+        private readonly ISkillsService _skillsService;
+
         private readonly Random _generator = new Random(DateTime.Now.Millisecond);
 
-        public SkillTableModel(ILogger logger)
+        public SkillTableModel(ILogger logger, ISkillsService skillsService)
         {
             _logger = logger;
+            _skillsService = skillsService;
             _skills = new List<UiSkill>
             {
                 new UiSkill
