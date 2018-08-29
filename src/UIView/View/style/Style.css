@@ -171,7 +171,7 @@
     border: 1px solid black;
     color: black;
     width: 100%;
-    height: 24px;
+    height: 100%;
     cursor: cell
 }
 
@@ -185,7 +185,7 @@
 
     .skillEntry:hover {
         border: 2px solid white;
-        height: 22px;
+        height: calc(100% - 2px);
         width: calc(100% - 2px);
     }
 
@@ -215,15 +215,8 @@
     color: black;
     margin: 0px 20px;
     font-size: 12px;
+    background-color: rebeccapurple;
 }
-
-    .skillSpecifics:nth-of-type(odd) {
-        background-color: #5e7e85;
-    }
-
-    .skillSpecifics:nth-of-type(even) {
-        background-color: #334d85;
-    }
 
 .skillSpecificsStatName {
     display: inline-block;

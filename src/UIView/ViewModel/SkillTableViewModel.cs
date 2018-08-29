@@ -6,10 +6,9 @@ namespace UIView.ViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using Neutronium.MVVMComponents.Relay;
+    using API;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -18,23 +17,12 @@ namespace UIView.ViewModel
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
-        public IList<UiSkill> Skills { get; set; } = new ObservableCollection<UiSkill>();
+        public IList<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
 
         private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
-
         public ICommand AddSkill { get; private set; }
-
         public bool AddSkillCanExecute => AddSkill.CanExecute(null);
-
-
-        public ICommand RemoveSkill { get; private set; }
-
-        public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
-
-
-        public ICommand ShowDetail { get; private set; }
-
 
         private readonly ILogger _logger;
 
@@ -44,12 +32,15 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
+        private readonly ISkillViewModelFactory _skillViewModelFactory;
+
         public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory)
         {
             _logger = logger;
             _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
+            _skillViewModelFactory = skillViewModelFactory;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -69,11 +60,6 @@ namespace UIView.ViewModel
         {
             AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
             AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
-
-            RemoveSkill = asyncCommandFactory.Create<UiSkill>(RemoveSkillCommandAsync);
-            RemoveSkill.CanExecuteChanged += RemoveSkillOnCanExecuteChanged;
-
-            ShowDetail = new RelaySimpleCommand<UiSkill>(ShowDetailsCommand);
         }
 
         public override void Init()
@@ -84,18 +70,6 @@ namespace UIView.ViewModel
         private async Task AddSkillCommandAsync()
         {
             await _model.AddSkillAsync().ConfigureAwait(false);
-        }
-
-        private async Task RemoveSkillCommandAsync(UiSkill uiSkill)
-        {
-            await _model.RemoveSkillAsync(uiSkill).ConfigureAwait(false);;
-        }
-
-        private void ShowDetailsCommand(UiSkill s)
-        {
-            s.ShowDetails = !s.ShowDetails;
-            _observableHelper.RefreshElement(Skills, s);
-            _logger.LogExit();
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -121,7 +95,9 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
+            var newSkillModelList = _skillsRequestTaskRunner.Result.Select(s => _skillViewModelFactory.Create(s));
+            _observableHelper.Rebind(SkillViewModels, newSkillModelList);
+
             DataAvailable = true;
 
             _logger.LogExit();
@@ -132,15 +108,9 @@ namespace UIView.ViewModel
             OnPropertyChanged("AddSkillCanExecute");
         }
 
-        private void RemoveSkillOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("RemoveSkillCanExecute");
-        }
-
         public void Dispose()
         {
             AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
-            RemoveSkill.CanExecuteChanged -= RemoveSkillOnCanExecuteChanged;
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _skillsRequestTaskRunner.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;

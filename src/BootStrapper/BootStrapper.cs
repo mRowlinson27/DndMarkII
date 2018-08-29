@@ -17,6 +17,7 @@ namespace BootStrapper
     using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using UIView;
+    using UIView.Factories;
     using UIView.ViewModel;
     using Utilities.API;
 
@@ -127,10 +128,13 @@ namespace BootStrapper
 
         private void SetupUiView()
         {
+            var skillViewModelFactory = new SkillViewModelFactory(_logger, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory,
+                _uiThreadInvoker);
+
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
 
             _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, _uiThreadInvoker);
+                _asyncTaskRunnerFactory, _uiThreadInvoker, skillViewModelFactory);
 
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper,
                 _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker);

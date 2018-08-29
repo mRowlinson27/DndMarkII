@@ -75,6 +75,10 @@
       <Project>{8F2CDED3-BF7D-4FA6-A319-392B92406DDE}</Project>
       <Name>UIUtilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\UIView.API\UIView.API.csproj">
+      <Project>{D5AA345E-E28F-485B-A28D-890D810E92FD}</Project>
+      <Name>UIView.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\UIView\UIView.csproj">
       <Project>{13a28907-569b-430a-a2c0-4959f784e354}</Project>
       <Name>UIView</Name>

@@ -37,7 +37,7 @@ namespace UIView.UnitTests
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
             _uiThreadInvoker = new UiThreadInvoker(_logger);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, null);
         }
 
         [TearDown]
@@ -64,7 +64,7 @@ namespace UIView.UnitTests
             //Arrange
 
             //Act
-            _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("Skills"));
+            _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
 
             //Assert
             A.CallTo(() => _skillTableModel.RequestSkillsAsync()).MustHaveHappened();
@@ -89,7 +89,7 @@ namespace UIView.UnitTests
             var skill = new UiSkill();
 
             //Act
-            _skillTableViewModel.RemoveSkill.Execute(skill);
+//            _skillTableViewModel.RemoveSkill.Execute(skill);
 
             //Assert
             A.CallTo(() => _skillTableModel.RemoveSkillAsync(skill)).MustHaveHappened();
