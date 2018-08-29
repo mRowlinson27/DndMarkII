@@ -175,19 +175,19 @@
     cursor: cell
 }
 
-.skillEntry:nth-child(even) {
-    background-color: #71979f;
-}
+    .skillEntry:nth-of-type(even) {
+        background-color: #71979f;
+    }
 
-.skillEntry:nth-child(odd) {
-    background-color: #3f5ea3;
-}
+    .skillEntry:nth-of-type(odd) {
+        background-color: #3f5ea3;
+    }
 
-.skillEntry:hover {
-    border: 2px solid white;
-    height: 22px;
-    width: calc(100% - 2px);
-}
+    .skillEntry:hover {
+        border: 2px solid white;
+        height: 22px;
+        width: calc(100% - 2px);
+    }
 
 .skillEntryName {
     display: inline-block;
@@ -198,6 +198,42 @@
 }
 
 .skillEntryTotal {
+    padding: 3px 10px;
+    position: relative;
+    right: 20px;
+    float: right;
+    cursor: cell
+}
+
+/***********************************
+    SkillSpecifics Table Styling
+************************************/
+
+.skillSpecifics {
+    border-radius: 5px;
+    border: 1px solid black;
+    color: black;
+    margin: 0px 20px;
+    font-size: 12px;
+}
+
+    .skillSpecifics:nth-of-type(odd) {
+        background-color: #5e7e85;
+    }
+
+    .skillSpecifics:nth-of-type(even) {
+        background-color: #334d85;
+    }
+
+.skillSpecificsStatName {
+    display: inline-block;
+    padding: 3px 10px;
+    position: relative;
+    left: 20px;
+    cursor: cell
+}
+
+.skillSpecificsRanks {
     padding: 3px 10px;
     position: relative;
     right: 20px;

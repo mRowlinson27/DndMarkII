@@ -18,5 +18,7 @@ namespace UIModel.API.Dto
         public bool UseUntrained { get; set; }
 
         public bool Trained { get; set; }
+
+        public bool ShowDetails { get; set; }
     }
 }

@@ -5,9 +5,11 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
+    using Neutronium.MVVMComponents.Relay;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -16,7 +18,7 @@ namespace UIView.ViewModel
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<UiSkill> Skills { get; set; } = new ObservableCollection<UiSkill>();
+        public IList<UiSkill> Skills { get; set; } = new ObservableCollection<UiSkill>();
 
         private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
@@ -29,6 +31,9 @@ namespace UIView.ViewModel
         public ICommand RemoveSkill { get; private set; }
 
         public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
+
+
+        public ICommand ShowDetail { get; private set; }
 
 
         private readonly ILogger _logger;
@@ -67,6 +72,8 @@ namespace UIView.ViewModel
 
             RemoveSkill = asyncCommandFactory.Create<UiSkill>(RemoveSkillCommandAsync);
             RemoveSkill.CanExecuteChanged += RemoveSkillOnCanExecuteChanged;
+
+            ShowDetail = new RelaySimpleCommand<UiSkill>(ShowDetailsCommand);
         }
 
         public override void Init()
@@ -82,6 +89,13 @@ namespace UIView.ViewModel
         private async Task RemoveSkillCommandAsync(UiSkill uiSkill)
         {
             await _model.RemoveSkillAsync(uiSkill).ConfigureAwait(false);;
+        }
+
+        private void ShowDetailsCommand(UiSkill s)
+        {
+            s.ShowDetails = !s.ShowDetails;
+            _observableHelper.RefreshElement(Skills, s);
+            _logger.LogExit();
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)

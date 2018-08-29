@@ -40,8 +40,6 @@ namespace UIModel
 
         public async Task AddSkillAsync()
         {
-//            _skills.Clear();
-//            _skills.Add(await Task.Run(() => GetBlankSkill()).ConfigureAwait(false));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 
