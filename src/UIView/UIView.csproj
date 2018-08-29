@@ -151,6 +151,9 @@
     <Content Include="View\tpl\primaryStatsTableTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\tpl\skillTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="View\tpl\titleZoneTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

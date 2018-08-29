@@ -24,5 +24,7 @@ namespace UIView.API
         bool Trained { get; }
 
         bool ShowDetails { get; }
+
+        string BackGroundColour { get; set; }
     }
 }

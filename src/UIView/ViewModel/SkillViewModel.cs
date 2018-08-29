@@ -32,12 +32,17 @@ namespace UIView.ViewModel
         }
         private bool _showDetails;
 
+        public string BackGroundColour
+        {
+            get => _backGroundColour;
+            set => Set(ref _backGroundColour, value, "BackGroundColour");
+        }
+        private string _backGroundColour;
+
         public ICommand Delete { get; private set; }
         public bool DeleteSkillCanExecute => Delete.CanExecute(null);
 
-
         public ICommand ShowDetail { get; private set; }
-
 
         private readonly ILogger _logger;
 
