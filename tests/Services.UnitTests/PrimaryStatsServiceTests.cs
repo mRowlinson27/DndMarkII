@@ -57,7 +57,7 @@ namespace Services.UnitTests
 
 
             A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
-            A.CallTo(() => _svcAutoMapper.Map(dbPrimaryStats)).Returns(svcPrimaryStats);
+            A.CallTo(() => _svcAutoMapper.MapToSvc(dbPrimaryStats)).Returns(svcPrimaryStats);
 
             //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
@@ -86,7 +86,7 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _svcAutoMapper.Map(A<IEnumerable<PrimaryStat>>.Ignored)).Returns(svcPrimaryStats);
+            A.CallTo(() => _svcAutoMapper.MapToSvc(A<IEnumerable<PrimaryStat>>.Ignored)).Returns(svcPrimaryStats);
 
             //Act
             var result = await _primaryStatsService.GetAllPrimaryStatsAsync();

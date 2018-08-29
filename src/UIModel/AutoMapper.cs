@@ -50,18 +50,18 @@ namespace UIModel
             return result;
         }
 
-        public UiSkill MapSkill(Skill svcPrimaryStat)
+        public UiSkill MapSkill(Skill svcSkill)
         {
             return new UiSkill
             {
-                ArmourCheckPenalty = svcPrimaryStat.ArmourCheckPenalty,
-                HasArmourCheckPenalty = svcPrimaryStat.HasArmourCheckPenalty,
-                Name = svcPrimaryStat.Name,
-                PrimaryStatName = IdToStringMapping[svcPrimaryStat.PrimaryStatId],
-                Ranks = svcPrimaryStat.Ranks,
-                Trained = svcPrimaryStat.Trained,
-                UseUntrained = svcPrimaryStat.UseUntrained,
-                Total = svcPrimaryStat.Total
+                ArmourCheckPenalty = svcSkill.ArmourCheckPenalty,
+                HasArmourCheckPenalty = svcSkill.HasArmourCheckPenalty,
+                Name = svcSkill.Name,
+                PrimaryStatName = IdToStringMapping[svcSkill.PrimaryStatId],
+                Ranks = svcSkill.Ranks,
+                Trained = svcSkill.Trained,
+                UseUntrained = svcSkill.UseUntrained,
+                Total = svcSkill.Total
             };
         }
     }

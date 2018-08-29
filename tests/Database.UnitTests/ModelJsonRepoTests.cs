@@ -1,7 +1,9 @@
 ﻿
 namespace Database.UnitTests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using API.Dto;
     using FakeItEasy;
@@ -19,6 +21,9 @@ namespace Database.UnitTests
         private Model _model;
         private List<PrimaryStat> _primaryStats;
         private List<Skill> _skills;
+
+        private Skill _skill1;
+        private Skill _skill2;
 
         [SetUp]
         public void Setup()
@@ -110,6 +115,38 @@ namespace Database.UnitTests
             skills.Should().BeEquivalentTo(newSkills);
         }
 
+        [Test]
+        public async Task AddSkillAsync_AddsUniqueKeys()
+        {
+            //Arrange
+            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+
+            var correctResult = new List<Skill>
+            {
+                _skill1,
+                _skill2
+            };
+
+            //Act
+            await _modelJsonRepo.AddSkillAsync(_skill2);
+            var skills = await _modelJsonRepo.GetSkillsAsync();
+
+            //Assert
+            skills.Should().BeEquivalentTo(correctResult);
+        }
+
+        [Test]
+        public void AddSkillAsync_CannotAddSameKey()
+        {
+            //Arrange
+            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+
+            //Act
+            Assert.ThrowsAsync<ArgumentException>(async () => await _modelJsonRepo.AddSkillAsync(_skill1));
+
+            //Assert
+        }
+
         private void GenerateBasicModel()
         {
             _primaryStats = new List<PrimaryStat>
@@ -117,15 +154,24 @@ namespace Database.UnitTests
                 new PrimaryStat {Name = "PrimaryStat1"}
             };
 
-            _skills = new List<Skill>
+            _skill1 = new Skill
             {
-                new Skill {Name = "Skill1"}
+                Id = Guid.NewGuid()
             };
+
+            _skill2 = new Skill
+            {
+                Id = Guid.NewGuid()
+            };
+
+            _skills = new List<Skill> {_skill1};
+
+            var skillDict = _skills.ToDictionary(skill => skill.Id);
 
             _model = new Model
             {
                 PrimaryStats = _primaryStats,
-                Skills = _skills
+                Skills = skillDict
             };
         }
     }

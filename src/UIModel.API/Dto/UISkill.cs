@@ -1,8 +1,12 @@
 ﻿
 namespace UIModel.API.Dto
 {
+    using System;
+
     public class UiSkill
     {
+        public Guid Id { get; set; }
+
         public int Total { get; set; }
 
         public string Name { get; set; }

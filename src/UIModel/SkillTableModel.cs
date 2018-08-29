@@ -8,6 +8,7 @@ namespace UIModel
     using API;
     using API.Dto;
     using Services.API;
+    using Services.API.Dto;
     using Utilities.API;
 
     public class SkillTableModel : ISkillTableModel
@@ -20,13 +21,13 @@ namespace UIModel
 
         private readonly IAutoMapper _autoMapper;
 
-        private readonly Random _generator = new Random(DateTime.Now.Millisecond);
-
         public SkillTableModel(ILogger logger, ISkillsService skillsService, IAutoMapper autoMapper)
         {
             _logger = logger;
             _skillsService = skillsService;
             _autoMapper = autoMapper;
+
+            _skillsService.SkillsUpdated += SkillsServiceOnSkillsUpdated;
         }
 
         public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()
@@ -40,7 +41,17 @@ namespace UIModel
 
         public async Task AddSkillAsync()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
+            await _skillsService.AddSkillAsync(new Skill
+            {
+                Id = Guid.NewGuid(),
+                ArmourCheckPenalty = 0,
+                HasArmourCheckPenalty = false,
+                Name = "",
+                PrimaryStatId = AbilityType.Str,
+                Ranks = 0,
+                Trained = false,
+                UseUntrained = true
+            });
         }
 
         public async Task RemoveSkillAsync(UiSkill uiSkill)
@@ -55,5 +66,14 @@ namespace UIModel
 
         }
 
+        private void SkillsServiceOnSkillsUpdated(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
+        }
+
+        public void Dispose()
+        {
+            _skillsService.SkillsUpdated -= SkillsServiceOnSkillsUpdated;
+        }
     }
 }

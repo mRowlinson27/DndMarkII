@@ -6,8 +6,20 @@ namespace Services.API
         
     public interface ISvcAutoMapper
     {
-        IEnumerable<PrimaryStat> Map(IEnumerable<Database.API.Dto.PrimaryStat> dbPrimaryStats);
+        IEnumerable<PrimaryStat> MapToSvc(IEnumerable<Database.API.Dto.PrimaryStat> dbPrimaryStats);
 
-        IEnumerable<Skill> Map(IEnumerable<Database.API.Dto.Skill> dbSkills);
+        PrimaryStat MapToSvc(Database.API.Dto.PrimaryStat dbPrimaryStat);
+
+        IEnumerable<Skill> MapToSvc(IEnumerable<Database.API.Dto.Skill> dbSkills);
+
+        Skill MapToSvc(Database.API.Dto.Skill dbSkill);
+
+        IEnumerable<Database.API.Dto.PrimaryStat> MapToDb(IEnumerable<PrimaryStat> svcPrimaryStats);
+
+        Database.API.Dto.PrimaryStat MapToDb(PrimaryStat svcPrimaryStat);
+
+        IEnumerable<Database.API.Dto.Skill> MapToDb(IEnumerable<Skill> svcSkills);
+
+        Database.API.Dto.Skill MapToDb(Skill svcSkill);
     }
 }

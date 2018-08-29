@@ -2,14 +2,10 @@
 namespace UIView.ViewModel
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using API;
     using Neutronium.MVVMComponents.Relay;
-    using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -17,6 +13,7 @@ namespace UIView.ViewModel
 
     public class SkillViewModel : ViewModelBase, ISkillViewModel
     {
+        public Guid Id => Skill.Id;
         public int Total => Skill.Total;
         public string Name => Skill.Name;
         public int Ranks => Skill.Ranks;
@@ -36,7 +33,6 @@ namespace UIView.ViewModel
         private bool _showDetails;
 
         public ICommand Delete { get; private set; }
-
         public bool DeleteSkillCanExecute => Delete.CanExecute(null);
 
 
@@ -61,7 +57,7 @@ namespace UIView.ViewModel
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            Delete = asyncCommandFactory.Create<UiSkill>(RemoveSkillCommandAsync);
+            Delete = asyncCommandFactory.Create<UiSkill>(DeleteCommandAsync);
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
 
             ShowDetail = new RelaySimpleCommand(ShowDetailsCommand);
@@ -71,7 +67,7 @@ namespace UIView.ViewModel
         {
         }
 
-        private async Task RemoveSkillCommandAsync(UiSkill uiSkill)
+        private async Task DeleteCommandAsync(UiSkill uiSkill)
         {
             
         }
@@ -96,7 +92,5 @@ namespace UIView.ViewModel
         {
             Delete.CanExecuteChanged -= DeleteOnCanExecuteChanged;
         }
-
-        
     }
 }

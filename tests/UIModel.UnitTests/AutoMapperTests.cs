@@ -60,11 +60,12 @@ namespace UIModel.UnitTests
         public void MapSkill_TransformsRegularDataProperly()
         {
             //Arrange
+            var skillId = Guid.NewGuid();
             var inputData = new List<Skill>
             {
                 new Skill
                 {
-                    Id = new Guid(),
+                    Id = skillId,
                     ArmourCheckPenalty = 1,
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
@@ -80,6 +81,7 @@ namespace UIModel.UnitTests
             {
                 new UiSkill
                 {
+                    Id = skillId,
                     ArmourCheckPenalty = 1,
                     HasArmourCheckPenalty = true,
                     Name = "Acro",

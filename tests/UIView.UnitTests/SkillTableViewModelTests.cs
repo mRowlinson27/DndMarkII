@@ -81,18 +81,5 @@ namespace UIView.UnitTests
             //Assert
             A.CallTo(() => _skillTableModel.AddSkillAsync()).MustHaveHappened();
         }
-
-        [Test]
-        public void RemoveSkill_RequestsFromModel()
-        {
-            //Arrange
-            var skill = new UiSkill();
-
-            //Act
-//            _skillTableViewModel.RemoveSkill.Execute(skill);
-
-            //Assert
-            A.CallTo(() => _skillTableModel.RemoveSkillAsync(skill)).MustHaveHappened();
-        }
     }
 }

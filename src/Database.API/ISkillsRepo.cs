@@ -9,6 +9,12 @@ namespace Database.API
     {
         Task<IEnumerable<Skill>> GetSkillsAsync();
 
+        Task AddSkillAsync(Skill skill);
+
+        Task AddSkillsAsync(IEnumerable<Skill> skills);
+
+        Task UpdateSkillAsync(Skill skill);
+
         Task UpdateSkillsAsync(IEnumerable<Skill> skills);
     }
 }

@@ -12,6 +12,6 @@ namespace Services.API
 
         Task<IEnumerable<Skill>> GetAllSkillsAsync();
 
-        Task AddOrUpdateSkillAsync(Skill skill);
+        Task AddSkillAsync(Skill skill);
     }
 }

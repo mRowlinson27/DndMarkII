@@ -1,6 +1,7 @@
 ﻿
 namespace Database.API.Dto
 {
+    using System;
     using System.Collections.Generic;
 
     public class Model
@@ -9,8 +10,8 @@ namespace Database.API.Dto
 
         public int Level { get; set; }
 
-        public IEnumerable<PrimaryStat> PrimaryStats { get; set; }
+        public List<PrimaryStat> PrimaryStats { get; set; }
 
-        public IEnumerable<Skill> Skills { get; set; }
+        public Dictionary<Guid, Skill> Skills { get; set; }
     }
 }

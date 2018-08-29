@@ -32,7 +32,7 @@ namespace Services
             _logger.LogEntry();
 
             var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync().ConfigureAwait(false);
-            var svcPrimaryStats = _svcAutoMapper.Map(dbPrimaryStats);
+            var svcPrimaryStats = _svcAutoMapper.MapToSvc(dbPrimaryStats);
             var svcPrimaryStatsWithModifier = svcPrimaryStats.Select(AddModifierToPrimaryStat);
 
             _logger.LogExit();

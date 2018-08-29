@@ -33,19 +33,24 @@ namespace Services
             _logger.LogEntry();
 
             var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
-            var svcSkills = _svcAutoMapper.Map(dbSkills);
+            var svcSkills = _svcAutoMapper.MapToSvc(dbSkills);
             var svcSkillsWithTotal = svcSkills.Select(AddTotalToSkill);
 
             _logger.LogExit();
             return svcSkillsWithTotal;
         }
 
-        public async Task AddOrUpdateSkillAsync(Skill skill)
+        public async Task AddSkillAsync(Skill skill)
         {
-            throw new NotImplementedException();
+            _logger.LogEntry();
+
+            await _skillsRepo.AddSkillAsync(_svcAutoMapper.MapToDb(skill));
+            SkillsUpdated?.Invoke(this, EventArgs.Empty);
+
+            _logger.LogExit();
         }
 
-        private Skill AddTotalToSkill(Skill skill)
+        private Skill AddTotalToSkill(Skill skill)  
         {
             skill.Total = skill.Ranks;
             if (skill.Trained && skill.Ranks > 0)

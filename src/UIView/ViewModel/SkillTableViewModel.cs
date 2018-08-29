@@ -114,6 +114,7 @@ namespace UIView.ViewModel
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _skillsRequestTaskRunner.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;
+            _model.Dispose();
         }
     }
 }

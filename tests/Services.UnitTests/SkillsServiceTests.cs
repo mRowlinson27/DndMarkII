@@ -10,6 +10,7 @@ namespace Services.UnitTests
     using Database.API.Dto;
     using FakeItEasy;
     using FluentAssertions;
+    using FluentAssertions.Common;
     using NUnit.Framework;
     using Utilities.API;
 
@@ -36,7 +37,7 @@ namespace Services.UnitTests
         public async Task GetAllSkillsAsync_GetsFromDatabase()
         {
             //Arrange
-            var skillId = new Guid();
+            var skillId = Guid.NewGuid();
 
             var dbSkills = new List<Skill>
             {
@@ -52,7 +53,7 @@ namespace Services.UnitTests
                 }
             };
 
-            var correctSvcSkills = new List<Services.API.Dto.Skill>
+            var correctSvcSkills = new List<global::Services.API.Dto.Skill>
             {
                 new API.Dto.Skill
                 {
@@ -67,7 +68,7 @@ namespace Services.UnitTests
             };
 
             A.CallTo(() => _skillsRepo.GetSkillsAsync()).Returns(dbSkills);
-            A.CallTo(() => _svcAutoMapper.Map(dbSkills)).Returns(correctSvcSkills);
+            A.CallTo(() => _svcAutoMapper.MapToSvc(dbSkills)).Returns(correctSvcSkills);
 
             //Act
             var result = await _skillsService.GetAllSkillsAsync();
@@ -80,11 +81,11 @@ namespace Services.UnitTests
         public async Task GetAllSkillsAsync_CalculatesTotal_AddsRanks()
         {
             //Arrange
-            var correctSvcSkills = new List<Services.API.Dto.Skill>
+            var correctSvcSkills = new List<global::Services.API.Dto.Skill>
             {
                 new API.Dto.Skill
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Skill1",
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = false,
@@ -94,7 +95,7 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _svcAutoMapper.Map(A<IEnumerable<Skill>>.Ignored)).Returns(correctSvcSkills);
+            A.CallTo(() => _svcAutoMapper.MapToSvc(A<IEnumerable<Skill>>.Ignored)).Returns(correctSvcSkills);
 
             //Act
             var result = await _skillsService.GetAllSkillsAsync();
@@ -111,11 +112,11 @@ namespace Services.UnitTests
         public async Task GetAllSkillsAsync_CalculatesTotal_Adds3ForTrainedWithAtLeastOneRank(bool trained, int ranks, int total)
         {
             //Arrange
-            var correctSvcSkills = new List<Services.API.Dto.Skill>
+            var correctSvcSkills = new List<global::Services.API.Dto.Skill>
             {
                 new API.Dto.Skill
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     Name = "Skill1",
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = false,
@@ -125,7 +126,7 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _svcAutoMapper.Map(A<IEnumerable<Skill>>.Ignored)).Returns(correctSvcSkills);
+            A.CallTo(() => _svcAutoMapper.MapToSvc(A<IEnumerable<Skill>>.Ignored)).Returns(correctSvcSkills);
 
             //Act
             var result = await _skillsService.GetAllSkillsAsync();
@@ -133,6 +134,56 @@ namespace Services.UnitTests
 
             //Assert
             firstResult.Total.Should().Be(total);
+        }
+
+        [Test]
+        public async Task AddSkillAsync_GetsCurrentDb_AppendsNewSkill()
+        {
+            //Arrange
+            var skillId = Guid.NewGuid();
+            var newSkill = new API.Dto.Skill
+            {
+                Id = skillId,
+                Name = "Skill1",
+                PrimaryStatId = API.Dto.AbilityType.Cha,
+                HasArmourCheckPenalty = true,
+                Ranks = 5,
+                Trained = true,
+                UseUntrained = true
+            };
+
+            var autoMapperResult = new Skill
+            {
+                Id = skillId,
+                Name = "Skill1",
+                PrimaryStatId = AbilityType.Cha,
+                HasArmourCheckPenalty = true,
+                Ranks = 5,
+                Trained = true,
+                UseUntrained = true
+            };
+
+            A.CallTo(() => _svcAutoMapper.MapToDb(newSkill)).Returns(autoMapperResult);
+            
+            //Act
+            await _skillsService.AddSkillAsync(newSkill);
+
+            //Assert
+            A.CallTo(() => _skillsRepo.AddSkillAsync(autoMapperResult)).MustHaveHappened();
+        }
+
+        [Test]
+        public async Task AddSkillAsync_RaisesSkillsUpdated()
+        {
+            //Arrange
+            var wasCalled = false;
+            _skillsService.SkillsUpdated += (o, e) => wasCalled = true;
+
+            //Act
+            await _skillsService.AddSkillAsync(new API.Dto.Skill());
+
+            //Assert
+            wasCalled.Should().BeTrue();
         }
     }
 }

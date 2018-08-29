@@ -40,7 +40,7 @@ namespace UIModel.UnitTests
             {
                 new Skill
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     ArmourCheckPenalty = 1,
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
@@ -75,6 +75,48 @@ namespace UIModel.UnitTests
 
             //Assert
             result.Should().BeEquivalentTo(uiSkills);
+        }
+
+        [Test]
+        public async Task AddSkillAsync_AddsBlankSkill()
+        {
+            //Arrange
+            var blankSkill = new Skill
+            {
+                ArmourCheckPenalty = 0,
+                HasArmourCheckPenalty = false,
+                Name = "",
+                PrimaryStatId = AbilityType.Str,
+                Ranks = 0,
+                Trained = false,
+                UseUntrained = true
+            };
+
+            //Act
+            await _skillTableModel.AddSkillAsync();
+
+            //Assert
+            A.CallTo(() => _skillsService.AddSkillAsync(A<Skill>.That.Matches(s =>
+                s.ArmourCheckPenalty == blankSkill.ArmourCheckPenalty &&
+                s.HasArmourCheckPenalty == blankSkill.HasArmourCheckPenalty &&
+                s.Name == blankSkill.Name &&
+                s.PrimaryStatId == blankSkill.PrimaryStatId &&
+                s.Ranks == blankSkill.Ranks &&
+                s.UseUntrained == blankSkill.UseUntrained))).MustHaveHappened();
+        }
+
+        [Test]
+        public void SkillsUpdated_PropertyChangedInvoked()
+        {
+            //Arrange
+            var wasCalled = false;
+            _skillTableModel.PropertyChanged += (o, e) => wasCalled = true;
+
+            //Act
+            _skillsService.SkillsUpdated += Raise.WithEmpty();
+
+            //Assert
+            wasCalled.Should().BeTrue();
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿
 namespace UIView.API
 {
+    using System;
+
     public interface ISkillViewModel
     {
+        Guid Id { get; }
+
         int Total { get; }
 
         string Name { get; }
