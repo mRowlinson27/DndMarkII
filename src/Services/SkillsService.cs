@@ -21,11 +21,14 @@ namespace Services
 
         private readonly ISvcAutoMapper _svcAutoMapper;
 
-        public SkillsService(ILogger logger, ISkillsRepo skillsRepo, ISvcAutoMapper svcAutoMapper)
+        private readonly ISkillTotalCalculator _skillTotalCalculator;
+
+        public SkillsService(ILogger logger, ISkillsRepo skillsRepo, ISvcAutoMapper svcAutoMapper, ISkillTotalCalculator skillTotalCalculator)
         {
             _logger = logger;
             _skillsRepo = skillsRepo;
             _svcAutoMapper = svcAutoMapper;
+            _skillTotalCalculator = skillTotalCalculator;
         }
 
         public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
@@ -34,7 +37,7 @@ namespace Services
 
             var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
             var svcSkills = _svcAutoMapper.MapToSvc(dbSkills);
-            var svcSkillsWithTotal = svcSkills.Select(AddTotalToSkill);
+            var svcSkillsWithTotal = await _skillTotalCalculator.AddTotalsAsync(svcSkills);
 
             _logger.LogExit();
             return svcSkillsWithTotal;
@@ -48,17 +51,6 @@ namespace Services
             SkillsUpdated?.Invoke(this, EventArgs.Empty);
 
             _logger.LogExit();
-        }
-
-        private Skill AddTotalToSkill(Skill skill)  
-        {
-            skill.Total = skill.Ranks;
-            if (skill.Trained && skill.Ranks > 0)
-            {
-                skill.Total += 3;
-            }
-
-            return skill;
         }
     }
 }

@@ -61,7 +61,8 @@ namespace UIModel
                 Ranks = svcSkill.Ranks,
                 Trained = svcSkill.Trained,
                 UseUntrained = svcSkill.UseUntrained,
-                Total = svcSkill.Total
+                Total = svcSkill.Total,
+                Id = svcSkill.Id
             };
         }
     }

@@ -113,8 +113,8 @@ namespace BootStrapper
         private void SetupServices()
         {
             var svcAutoMapper = new SvcAutoMapper();
-            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper);
             _primaryStatsService = new PrimaryStatsService(_logger, _masterRepo, svcAutoMapper);
+            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper, new SkillTotalCalculator(_primaryStatsService));
         }
 
         private void SetupUiModel()
