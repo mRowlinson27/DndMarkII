@@ -95,7 +95,11 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            var newSkillModelList = _skillsRequestTaskRunner.Result.Select(s => _skillViewModelFactory.Create(s));
+            var newSkillModelList = _skillsRequestTaskRunner.Result.Select(s => _skillViewModelFactory.Create(s)).ToList();
+            for (int i = 0; i < newSkillModelList.Count; i++)
+            {
+                newSkillModelList[i].BackGroundColour = i % 2 == 0 ? Constants.SkillModelEvenIndexBackGroundColour : Constants.SkillModelOddIndexBackGroundColour;
+            }
             _observableHelper.Rebind(SkillViewModels, newSkillModelList);
 
             DataAvailable = true;
