@@ -5,8 +5,10 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
+    using API;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -15,20 +17,12 @@ namespace UIView.ViewModel
 
     public class SkillTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<Skill> Skills { get; set; } = new ObservableCollection<Skill>();
+        public IList<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
 
-        private IAsyncTaskRunner<IEnumerable<Skill>> _skillsRequestTaskRunner;
-
+        private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
         public ICommand AddSkill { get; private set; }
-
         public bool AddSkillCanExecute => AddSkill.CanExecute(null);
-
-
-        public ICommand RemoveSkill { get; private set; }
-
-        public bool RemoveSkillCanExecute => RemoveSkill.CanExecute(null);
-
 
         private readonly ILogger _logger;
 
@@ -36,11 +30,17 @@ namespace UIView.ViewModel
 
         private readonly IObservableHelper _observableHelper;
 
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
+        private readonly ISkillViewModelFactory _skillViewModelFactory;
+
         public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory)
         {
             _logger = logger;
             _observableHelper = observableHelper;
+            _uiThreadInvoker = uiThreadInvoker;
+            _skillViewModelFactory = skillViewModelFactory;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -60,9 +60,6 @@ namespace UIView.ViewModel
         {
             AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
             AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
-
-            RemoveSkill = asyncCommandFactory.Create<Skill>(RemoveSkillCommandAsync);
-            RemoveSkill.CanExecuteChanged += RemoveSkillOnCanExecuteChanged;
         }
 
         public override void Init()
@@ -72,12 +69,7 @@ namespace UIView.ViewModel
 
         private async Task AddSkillCommandAsync()
         {
-            await _model.AddSkillAsync();
-        }
-
-        private async Task RemoveSkillCommandAsync(Skill skill)
-        {
-            await _model.RemoveSkillAsync(skill);
+            await _model.AddSkillAsync().ConfigureAwait(false);
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -87,20 +79,31 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
-            DataAvailable = false;
+            _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _skillsRequestTaskRunner.StartTask();
         }
 
         private void SkillsRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsSuccessfullyCompleted")
+            if (e.PropertyName == "IsSuccessfullyCompleted")
             {
-                return;
+                _uiThreadInvoker.Dispatch(RebindSkillsToResult);
             }
+        }
 
-            _observableHelper.Rebind(Skills, _skillsRequestTaskRunner.Result);
+        private void RebindSkillsToResult()
+        {
+            _logger.LogEntry();
+
+            var newSkillModelList = _skillsRequestTaskRunner.Result.Select(s => _skillViewModelFactory.Create(s)).ToList();
+            for (int i = 0; i < newSkillModelList.Count; i++)
+            {
+                newSkillModelList[i].BackGroundColour = i % 2 == 0 ? Constants.SkillModelEvenIndexBackGroundColour : Constants.SkillModelOddIndexBackGroundColour;
+            }
+            _observableHelper.Rebind(SkillViewModels, newSkillModelList);
 
             DataAvailable = true;
+
             _logger.LogExit();
         }
 
@@ -109,18 +112,13 @@ namespace UIView.ViewModel
             OnPropertyChanged("AddSkillCanExecute");
         }
 
-        private void RemoveSkillOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("RemoveSkillCanExecute");
-        }
-
         public void Dispose()
         {
             AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
-            RemoveSkill.CanExecuteChanged -= RemoveSkillOnCanExecuteChanged;
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _skillsRequestTaskRunner.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;
+            _model.Dispose();
         }
     }
 }

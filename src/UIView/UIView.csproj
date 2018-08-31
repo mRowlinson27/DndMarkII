@@ -89,9 +89,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factories\SkillViewModelFactory.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\PrimaryStatsTableViewModel.cs" />
     <Compile Include="ViewModel\SkillTableViewModel.cs" />
+    <Compile Include="ViewModel\SkillViewModel.cs" />
     <Compile Include="ViewModel\TitleZoneViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
@@ -149,6 +151,9 @@
     <Content Include="View\tpl\primaryStatsTableTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\tpl\skillTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="View\tpl\titleZoneTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -172,6 +177,10 @@
     <ProjectReference Include="..\UIUtilities.API\UIUtilities.API.csproj">
       <Project>{555437f8-52e3-4334-a544-18c3fba803b3}</Project>
       <Name>UIUtilities.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIView.API\UIView.API.csproj">
+      <Project>{D5AA345E-E28F-485B-A28D-890D810E92FD}</Project>
+      <Name>UIView.API</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities.API\Utilities.API.csproj">
       <Project>{cf0e9721-c68b-4f37-9242-f18f9bed25fe}</Project>

@@ -33,13 +33,17 @@ namespace UIUtilities
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Task TaskCompletion { get; }
+        public Task TaskCompletion { get; private set; }
 
         private readonly ILogger _logger;
 
-        public NotifyTaskCompletion(Task<TResult> task, ILogger logger)
+        public NotifyTaskCompletion(ILogger logger)
         {
             _logger = logger;
+        }
+
+        public void Start(Task<TResult> task)
+        {
             Task = task;
             TaskCompletion = WatchTaskAsync(task);
         }
@@ -48,8 +52,7 @@ namespace UIUtilities
         {
             try
             {
-                await task;
-                _logger.LogMessage("Finished watching task");
+                await task.ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -70,6 +73,7 @@ namespace UIUtilities
             if (task.IsCanceled)
             {
                 propertyChanged(this, new PropertyChangedEventArgs("IsCanceled"));
+                _logger.LogMessage("task.IsCanceled");
             }
             else if (task.IsFaulted)
             {
@@ -77,6 +81,7 @@ namespace UIUtilities
                 propertyChanged(this, new PropertyChangedEventArgs("Exception"));
                 propertyChanged(this, new PropertyChangedEventArgs("InnerException"));
                 propertyChanged(this, new PropertyChangedEventArgs("ErrorMessage"));
+                _logger.LogMessage("task.IsFaulted");
             }
             else
             {

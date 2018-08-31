@@ -27,13 +27,14 @@ namespace UIUtilities.AsyncCommands
 
             Task<object> wrappedTask = WrapTaskWithReturnValue();
 
-            Execution = _notifyTaskCompletionFactory.Create(wrappedTask);
+            Execution = _notifyTaskCompletionFactory.Create<object>();
+            Execution.Start(wrappedTask);
 
             RaiseCanExecuteChanged();
 
             if (Execution != null)
             {
-                await Execution.TaskCompletion;
+                await Execution.TaskCompletion.ConfigureAwait(false);
             }
 
             RaiseCanExecuteChanged();
@@ -41,7 +42,7 @@ namespace UIUtilities.AsyncCommands
 
         private async Task<object> WrapTaskWithReturnValue()
         {
-            await _command();
+            await _command().ConfigureAwait(false);
             return null;
         }
     }

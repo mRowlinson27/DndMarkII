@@ -26,18 +26,19 @@ namespace UIUtilities.AsyncCommands
             }
 
             Task<object> wrappedTask = WrapTaskWithReturnValue((TIn) parameter);
-            Execution = _notifyTaskCompletionFactory.Create(wrappedTask);
+            Execution = _notifyTaskCompletionFactory.Create<object>();
+            Execution.Start(wrappedTask);
 
             RaiseCanExecuteChanged();
 
-            await Execution.TaskCompletion;
+            await Execution.TaskCompletion.ConfigureAwait(false);
 
             RaiseCanExecuteChanged();
         }
 
         private async Task<object> WrapTaskWithReturnValue(TIn param)
         {
-            await _command(param);
+            await _command(param).ConfigureAwait(false);
             return null;
         }
     }

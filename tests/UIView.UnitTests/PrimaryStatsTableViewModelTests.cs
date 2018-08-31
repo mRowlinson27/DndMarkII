@@ -1,6 +1,7 @@
 ﻿
 namespace UIView.UnitTests
 {
+    using System;
     using System.ComponentModel;
     using FakeItEasy;
     using NUnit.Framework;
@@ -34,7 +35,8 @@ namespace UIView.UnitTests
             _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
 
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory);
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger));
         }
 
         [TearDown]
@@ -61,7 +63,7 @@ namespace UIView.UnitTests
             //Arrange
 
             //Act
-            _primaryStatsTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_primaryStatsTableModel, new PropertyChangedEventArgs("Skills"));
+            _primaryStatsTableModel.PrimaryStatsUpdated += Raise.With(_primaryStatsTableModel, new EventArgs());
 
             //Assert
             A.CallTo(() => _primaryStatsTableModel.RequestPrimaryStatsAsync()).MustHaveHappened();

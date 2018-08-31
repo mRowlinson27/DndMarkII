@@ -4,19 +4,53 @@ namespace BootStrapper
     using System;
     using Chromium;
     using Chromium.Event;
+    using Database;
     using Neutronium.JavascriptFramework.Knockout;
     using Neutronium.WebBrowserEngine.ChromiumFx;
     using Neutronium.WPF;
+    using Services;
+    using Services.API;
     using UIModel;
+    using UIModel.API;
     using UIUtilities;
+    using UIUtilities.API;
+    using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using UIView;
+    using UIView.Factories;
     using UIView.ViewModel;
     using Utilities.API;
 
     public class BootStrapper : IDisposable
     {
         private readonly ILogger _logger;
+
+        //Utilities
+        private IObservableHelper _observableHelper;
+        private IUiThreadInvoker _uiThreadInvoker;
+
+        //UI Utilities
+        private INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
+        private IAsyncCommandFactory _asyncCommandFactory;
+        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+
+        //Database
+        private ModelJsonRepo _masterRepo;
+
+        //Services
+        private ISkillsService _skillsService;
+        private IPrimaryStatsService _primaryStatsService;
+
+        //UI Model
+        private ITitleZoneModel _titleZoneModel;
+        private ISkillTableModel _skillTableModel;
+        private IPrimaryStatsTableModel _primaryStatsTableModel;
+
+        //UI ViewModel
+        private TitleZoneViewModel _titleZoneViewModel;
+        private SkillTableViewModel _skillTableViewModel;
+        private PrimaryStatsTableViewModel _primaryStatsTableViewModel;
+
 
         public BootStrapper(ILogger logger)
         {
@@ -34,26 +68,76 @@ namespace BootStrapper
 
         public MainWindow CreateMainWindow()
         {
-            var observableBinder = new ObservableHelper();
+            SetupUtilities();
 
-            var notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
-            var asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
-            var asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
+            SetupUiUtilities();
 
-            var titleZoneViewModel = new TitleZoneViewModel(new TitleZoneModel());
+            SetupDatabase();
 
-            var skillTableViewModel = new SkillTableViewModel(_logger, new SkillTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
+            SetupServices();
 
-            var primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, new PrimaryStatsTableModel(_logger), observableBinder, asyncCommandFactory, asyncTaskRunnerFactory);
+            SetupUiModel();
+
+            SetupUiView();
 
             var mainPageViewModel = new MainPageViewModel(new MainPageModel())
             {
-                TitleZoneViewModel = titleZoneViewModel,
-                SkillTableViewModel = skillTableViewModel,
-                PrimaryStatsTableViewModel = primaryStatsTableViewModel
+                TitleZoneViewModel = _titleZoneViewModel,
+                SkillTableViewModel = _skillTableViewModel,
+                PrimaryStatsTableViewModel = _primaryStatsTableViewModel
             };
 
-            return new MainWindow(_logger, mainPageViewModel);
+            return new MainWindow(_logger, mainPageViewModel, _uiThreadInvoker);
+        }
+
+        private void SetupUtilities()
+        {
+
+        }
+
+        private void SetupUiUtilities()
+        {
+            _observableHelper = new ObservableHelper();
+            _uiThreadInvoker = new UiThreadInvoker(_logger);
+
+            _notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
+            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory);
+            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_notifyTaskCompletionFactory);
+        }
+
+        private void SetupDatabase()
+        {
+            _masterRepo = new ModelJsonRepo(new DummyJsonFile());
+        }
+
+        private void SetupServices()
+        {
+            var svcAutoMapper = new SvcAutoMapper();
+            _primaryStatsService = new PrimaryStatsService(_logger, _masterRepo, svcAutoMapper);
+            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper, new SkillTotalCalculator(_primaryStatsService));
+        }
+
+        private void SetupUiModel()
+        {
+            var autoMapper = new AutoMapper();
+            _titleZoneModel = new TitleZoneModel();
+            _skillTableModel = new SkillTableModel(_logger, _skillsService, autoMapper);
+            _primaryStatsTableModel = new PrimaryStatsTableModel(_logger, _primaryStatsService, autoMapper);
+
+        }
+
+        private void SetupUiView()
+        {
+            var skillViewModelFactory = new SkillViewModelFactory(_logger, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory,
+                _uiThreadInvoker);
+
+            _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
+
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncTaskRunnerFactory, _uiThreadInvoker, skillViewModelFactory);
+
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper,
+                _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker);
         }
 
         public void Dispose()

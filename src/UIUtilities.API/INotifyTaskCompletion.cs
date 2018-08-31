@@ -30,5 +30,7 @@ namespace UIUtilities.API
         string ErrorMessage { get; }
 
         Task TaskCompletion { get; }
+
+        void Start(Task<TResult> task);
     }
 }

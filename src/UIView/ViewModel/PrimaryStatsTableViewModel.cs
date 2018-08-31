@@ -13,9 +13,9 @@ namespace UIView.ViewModel
 
     public class PrimaryStatsTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<PrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<PrimaryStat>();
+        public ObservableCollection<UiPrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<UiPrimaryStat>();
 
-        private IAsyncTaskRunner<IEnumerable<PrimaryStat>> _primaryStatRequestTaskRunner;
+        private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
         private readonly ILogger _logger;
 
@@ -23,13 +23,16 @@ namespace UIView.ViewModel
 
         private readonly IObservableHelper _observableHelper;
 
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
-            _model.PropertyChanged += ModelOnPropertyChanged;
+            _uiThreadInvoker = uiThreadInvoker;
+            _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
             SetupTaskRunners(asyncTaskRunnerFactory);
         }
@@ -47,24 +50,29 @@ namespace UIView.ViewModel
 
         private void MakePrimaryStatRequest()
         {
+            _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _primaryStatRequestTaskRunner.StartTask();
-            DataAvailable = false;
         }
 
         private void PrimaryStatRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsSuccessfullyCompleted")
+            if (e.PropertyName == "IsSuccessfullyCompleted")
             {
-                return;
+                _uiThreadInvoker.Dispatch(RebindPrimaryStatsToResult);
             }
+        }
+
+        private void RebindPrimaryStatsToResult()
+        {
+            _logger.LogEntry();
 
             _observableHelper.Rebind(PrimaryStats, _primaryStatRequestTaskRunner.Result);
-
             DataAvailable = true;
+
             _logger.LogExit();
         }
 
-        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ModelOnPrimaryStatsUpdated(object sender, EventArgs e)
         {
             MakePrimaryStatRequest();
         }
@@ -73,7 +81,7 @@ namespace UIView.ViewModel
         {
             _primaryStatRequestTaskRunner.PropertyChanged -= PrimaryStatRequestTaskRunnerOnPropertyChanged;
             _primaryStatRequestTaskRunner.Dispose();
-            _model.PropertyChanged -= ModelOnPropertyChanged;
+            _model.PrimaryStatsUpdated -= ModelOnPrimaryStatsUpdated;
         }
     }
 }

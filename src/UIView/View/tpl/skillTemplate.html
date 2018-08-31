@@ -1,0 +1,17 @@
+﻿<div class="maxContainer">
+
+    <div class="skillEntry" data-bind="style: { backgroundColor: $data.BackGroundColour }, execute: $data.ShowDetail, executeoption: { callback : function(){} }">
+        <div class="skillEntryName" data-bind="text:Name"></div>
+        <div class="skillEntryTotal" data-bind="text:Total"></div>
+    </div>
+
+    <!-- ko if: ShowDetails -->
+    <div class="skillSpecifics">
+        <div class="skillSpecificsStatName" data-bind="text:PrimaryStatName"></div>
+        <div class="skillSpecificsRanks" data-bind="text:Ranks"></div>
+    </div>
+    <!-- /ko -->
+
+    <!--<div class="skillTableCell"><button data-bind="enable:$parent.RemoveSkillCanExecute, execute: $parent.RemoveSkill, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button></div> -->
+
+</div>

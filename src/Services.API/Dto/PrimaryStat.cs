@@ -1,8 +1,10 @@
 ﻿
-namespace UIModel.API.Dto
+namespace Services.API.Dto
 {
     public class PrimaryStat
     {
+        public AbilityType Id { get; set; }
+
         public string Name { get; set; }
 
         public int AbilityScore { get; set; }

@@ -112,6 +112,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Database.API\Database.API.csproj">
+      <Project>{2c3a4af0-6e8c-4dcc-9429-9a2b88af0eb5}</Project>
+      <Name>Database.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{BFAF7B47-FA80-4838-9EA6-1B14E94A382B}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services.API\Services.API.csproj">
+      <Project>{c58a08aa-84d4-44b0-a93c-9a6ba781e410}</Project>
+      <Name>Services.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{86784C7E-C229-433E-B0AD-83E6FEEBD911}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UIModel.API\UIModel.API.csproj">
       <Project>{7476ce24-8486-4dfb-bf5a-a0df872678b0}</Project>
       <Name>UIModel.API</Name>
@@ -127,6 +143,10 @@
     <ProjectReference Include="..\UIUtilities\UIUtilities.csproj">
       <Project>{8f2cded3-bf7d-4fa6-a319-392b92406dde}</Project>
       <Name>UIUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIView.API\UIView.API.csproj">
+      <Project>{D5AA345E-E28F-485B-A28D-890D810E92FD}</Project>
+      <Name>UIView.API</Name>
     </ProjectReference>
     <ProjectReference Include="..\UIView\UIView.csproj">
       <Project>{13a28907-569b-430a-a2c0-4959f784e354}</Project>
