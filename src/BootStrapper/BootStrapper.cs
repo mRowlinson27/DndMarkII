@@ -129,6 +129,7 @@ namespace BootStrapper
         private void SetupUiView()
         {
             var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
+            var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
 
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
 
@@ -136,7 +137,7 @@ namespace BootStrapper
                 _asyncTaskRunnerFactory, _uiThreadInvoker, skillViewModelFactory);
 
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper,
-                _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker);
+                _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, primaryStatViewModelFactory);
         }
 
         public void Dispose()

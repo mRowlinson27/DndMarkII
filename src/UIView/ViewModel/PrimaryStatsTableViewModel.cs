@@ -5,6 +5,8 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
+    using API;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -13,7 +15,9 @@ namespace UIView.ViewModel
 
     public class PrimaryStatsTableViewModel : ViewModelBase, IDisposable
     {
-        public ObservableCollection<UiPrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<UiPrimaryStat>();
+        public ObservableCollection<IPrimaryStatViewModel> PrimaryStats { get; set; } = new ObservableCollection<IPrimaryStatViewModel>();
+
+        public bool True { get; set; } = false;
 
         private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
@@ -25,13 +29,16 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
+        private readonly IPrimaryStatViewModelFactory _primaryStatViewModelFactory;
+
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory)
         {
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
+            _primaryStatViewModelFactory = primaryStatViewModelFactory;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
             SetupTaskRunners(asyncTaskRunnerFactory);
@@ -66,7 +73,8 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            _observableHelper.Rebind(PrimaryStats, _primaryStatRequestTaskRunner.Result);
+            var primaryStatViewModels = _primaryStatRequestTaskRunner.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
+            _observableHelper.Rebind(PrimaryStats, primaryStatViewModels);
             DataAvailable = true;
 
             _logger.LogExit();
