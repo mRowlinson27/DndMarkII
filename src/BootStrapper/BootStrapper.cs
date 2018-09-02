@@ -128,8 +128,7 @@ namespace BootStrapper
 
         private void SetupUiView()
         {
-            var skillViewModelFactory = new SkillViewModelFactory(_logger, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory,
-                _uiThreadInvoker);
+            var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
 
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
 

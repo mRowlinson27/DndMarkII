@@ -8,24 +8,25 @@ namespace UIView.Factories
     using Utilities.API;
     using ViewModel;
 
-    public class SkillViewModelFactory : ISkillViewModelFactory
+    public class PrimaryStatViewModelFactory : IPrimaryStatViewModelFactory
     {
         private readonly ILogger _logger;
+
         private readonly IAsyncCommandFactory _asyncCommandFactory;
+
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModelFactory(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
+        public PrimaryStatViewModelFactory(ILogger logger, IAsyncCommandFactory asyncCommandFactory,
+            IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
             _asyncCommandFactory = asyncCommandFactory;
             _uiThreadInvoker = uiThreadInvoker;
         }
 
-        public ISkillViewModel Create(UiSkill skill)
+        public IPrimaryStatViewModel Create(UiPrimaryStat primaryStat)
         {
-            var skillViewModel = new SkillViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) {Skill = skill};
-            skillViewModel.Init();
-            return skillViewModel;
+            return new PrimaryStatViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
         }
     }
 }

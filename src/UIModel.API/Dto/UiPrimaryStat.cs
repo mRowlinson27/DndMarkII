@@ -1,9 +1,6 @@
 ﻿
 namespace UIModel.API.Dto
 {
-    using System.Collections.Generic;
-    using Services.API.Dto;
-
     public class UiPrimaryStat
     {
         public string ShortName { get; set; }

@@ -46,15 +46,11 @@ namespace UIView.ViewModel
 
         private readonly ILogger _logger;
 
-        private readonly IObservableHelper _observableHelper;
-
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModel(ILogger logger, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
-            _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
 
             SetupCommandBindings(asyncCommandFactory);
@@ -66,10 +62,6 @@ namespace UIView.ViewModel
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
 
             ShowDetail = new RelaySimpleCommand(ShowDetailsCommand);
-        }
-
-        public override void Init()
-        {
         }
 
         private async Task DeleteCommandAsync(UiSkill uiSkill)
