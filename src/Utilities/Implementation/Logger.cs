@@ -14,7 +14,7 @@ namespace Utilities.Implementation
 
         private string logFilePath = "C:\\Temp\\CharacterLog.txt";
 
-        private object sync = new object();
+        private readonly object _sync = new object();
 
         private const string EntryMessage = "ENTERING";
 
@@ -38,7 +38,7 @@ namespace Utilities.Implementation
             var finalLog = time.ToString("hh:mm:ss:ffffff tt") + " | " + Thread.CurrentThread.ManagedThreadId + " | " + className + "::" + memberName + ":" + sourceLineNumber +
                            " | " + message + '\n';
 
-            lock (sync)
+            lock (_sync)
             {
                 _fileWriter.Write(logFilePath, finalLog);
             }
