@@ -4,6 +4,7 @@ namespace UIView.UnitTests
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using API;
     using FakeItEasy;
     using FluentAssertions;
@@ -79,12 +80,16 @@ namespace UIView.UnitTests
         }
 
         [Test]
-        public void AddSkill_RequestsFromModel()
+        public async Task AddSkill_RequestsFromModel()
         {
             //Arrange
+            var realNotifyTaskCompletion = new NotifyTaskCompletion<object>(_logger);
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<object>()).Returns(realNotifyTaskCompletion);
 
             //Act
-            _skillTableViewModel.AddSkill.Execute(null);
+            var command = (IAsyncCommand)_skillTableViewModel.AddSkill;
+            await command.ExecuteAsync(null);
+            await realNotifyTaskCompletion.Task;
 
             //Assert
             A.CallTo(() => _skillTableModel.AddSkillAsync()).MustHaveHappened();
