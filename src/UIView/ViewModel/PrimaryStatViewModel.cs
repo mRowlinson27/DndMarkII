@@ -1,6 +1,8 @@
 ﻿
 namespace UIView.ViewModel
 {
+    using System;
+    using System.ComponentModel;
     using API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -16,13 +18,18 @@ namespace UIView.ViewModel
         public string AbilityScore
         {
             get => PrimaryStat.AbilityScore;
-            set => PrimaryStat.AbilityScore = value;
+            set
+            {
+                PrimaryStat.AbilityScore = value;
+                OnPropertyChanged("AbilityScore");
+            }
         }
 
         public string AbilityModifier => PrimaryStat.AbilityModifier;
 
-        public bool InEdit { get; set; } = false;
-
+        public bool InEdit { get; set; } = true;
+        
+        [Bindable(false)]
         public UiPrimaryStat PrimaryStat { get; set; }
 
         private readonly ILogger _logger;
@@ -33,6 +40,12 @@ namespace UIView.ViewModel
         {
             _logger = logger;
             _uiThreadInvoker = uiThreadInvoker;
+            PropertyChanged += OnPropertyChanged;
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            
         }
     }
 }

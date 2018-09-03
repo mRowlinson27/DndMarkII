@@ -31,6 +31,8 @@ namespace UIView.UnitTests
         private IPrimaryStatViewModelFactory _fakePrimaryStatViewModelFactory;
 
         private INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> _fakeNotifyTaskCompletion;
+        private IPrimaryStatViewModel _fakeViewModel0;
+        private IPrimaryStatViewModel _fakeViewModel1;
 
         [SetUp]
         public void Setup()
@@ -82,23 +84,33 @@ namespace UIView.UnitTests
         public void Model_OnPrimaryStatsRequestTaskCompletion_CreatesPrimaryStatsViewModelsAndDataIsAvailable()
         {
             //Arrange
+            SetUpModelToReturnFakeViewModels();
+
+            //Act
+            RaiseModelDataRetrievedSuccessfullyEvents();
+
+            //Assert
+            _primaryStatsTableViewModel.DataAvailable.Should().BeTrue();
+            _primaryStatsTableViewModel.PrimaryStats[0].Should().Be(_fakeViewModel0);
+            _primaryStatsTableViewModel.PrimaryStats[1].Should().Be(_fakeViewModel1);
+        }
+
+        private void SetUpModelToReturnFakeViewModels()
+        {
             _fakeNotifyTaskCompletion = A.Fake<INotifyTaskCompletion<IEnumerable<UiPrimaryStat>>>();
             A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiPrimaryStat>>()).Returns(_fakeNotifyTaskCompletion);
 
             A.CallTo(() => _fakeNotifyTaskCompletion.Result).Returns(new List<UiPrimaryStat> { new UiPrimaryStat(), new UiPrimaryStat() });
 
-            var fakeViewModel0 = A.Fake<IPrimaryStatViewModel>();
-            var fakeViewModel1 = A.Fake<IPrimaryStatViewModel>();
-            A.CallTo(() => _fakePrimaryStatViewModelFactory.Create(A<UiPrimaryStat>.Ignored)).ReturnsNextFromSequence(fakeViewModel0, fakeViewModel1);
+            _fakeViewModel0 = A.Fake<IPrimaryStatViewModel>();
+            _fakeViewModel1 = A.Fake<IPrimaryStatViewModel>();
+            A.CallTo(() => _fakePrimaryStatViewModelFactory.Create(A<UiPrimaryStat>.Ignored)).ReturnsNextFromSequence(_fakeViewModel0, _fakeViewModel1);
+        }
 
-            //Act
+        private void RaiseModelDataRetrievedSuccessfullyEvents()
+        {
             _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.FreeForm<EventHandler>.With(_fakePrimaryStatsTableModel, EventArgs.Empty);
             _fakeNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_fakeNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
-
-            //Assert
-            _primaryStatsTableViewModel.DataAvailable.Should().BeTrue();
-            _primaryStatsTableViewModel.PrimaryStats[0].Should().Be(fakeViewModel0);
-            _primaryStatsTableViewModel.PrimaryStats[1].Should().Be(fakeViewModel1);
         }
     }
 }

@@ -4,7 +4,7 @@
             <div class="primaryStatsEntry">
                 <div class="primaryStatsEntryName" data-bind="text:ShortName"></div>
                 <div class="primaryStatsEntryAbilityModifier" data-bind="text:AbilityModifier"></div>
-                <input type="number" class="primaryStatsEntryAbilityScore" data-bind="value: AbilityScore, valueUpdate:'afterkeydown', enable: $parent.True">
+                <input type="number" class="primaryStatsEntryAbilityScore" data-bind="value: AbilityScore, enable: $parent.InEdit" onfocus="this.oldvalue = this.value;" onchange="ValidateInts(this); this.oldvalue = this.value;">
             </div>
         </div>
     </div>

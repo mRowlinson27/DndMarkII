@@ -26,7 +26,9 @@ namespace UIView.Factories
 
         public IPrimaryStatViewModel Create(UiPrimaryStat primaryStat)
         {
-            return new PrimaryStatViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
+            var primaryStatViewModel = new PrimaryStatViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
+            primaryStatViewModel.Init();
+            return primaryStatViewModel;
         }
     }
 }

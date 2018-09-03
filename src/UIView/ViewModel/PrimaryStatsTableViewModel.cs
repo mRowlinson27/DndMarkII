@@ -17,7 +17,7 @@ namespace UIView.ViewModel
     {
         public ObservableCollection<IPrimaryStatViewModel> PrimaryStats { get; set; } = new ObservableCollection<IPrimaryStatViewModel>();
 
-        public bool True { get; set; } = false;
+        public bool InEdit { get; set; } = true;
 
         private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 

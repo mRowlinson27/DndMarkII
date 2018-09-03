@@ -1,6 +1,8 @@
 ﻿
 namespace UIView.API
 {
+    using UIModel.API.Dto;
+
     public interface IPrimaryStatViewModel
     {
         string ShortName { get; }
