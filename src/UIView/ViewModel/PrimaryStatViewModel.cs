@@ -1,8 +1,10 @@
 ﻿
 namespace UIView.ViewModel
 {
+    using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using System.Windows.Input;
     using API;
     using UIModel.API;
     using UIModel.API.Dto;
@@ -29,7 +31,10 @@ namespace UIView.ViewModel
         public string AbilityModifier => PrimaryStat.AbilityModifier;
 
         public bool InEdit { get; set; } = true;
-        
+
+        public ICommand UpdatePrimaryStat { get; private set; }
+        public bool UpdatePrimaryStatCanExecute => UpdatePrimaryStat.CanExecute(null);
+
         [Bindable(false)]
         public UiPrimaryStat PrimaryStat { get; set; }
 
@@ -44,13 +49,26 @@ namespace UIView.ViewModel
             _logger = logger;
             _model = model;
             _uiThreadInvoker = uiThreadInvoker;
-            PropertyChanged += async (s, e) => await _model.UpdateStatAsync(PrimaryStat);
+
+            SetupCommandBindings(asyncCommandFactory);
         }
 
-        private async Task OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            
+            UpdatePrimaryStat = asyncCommandFactory.Create<PrimaryStatViewModel>(UpdatePrimaryStatCommandAsync);
+            UpdatePrimaryStat.CanExecuteChanged += UpdatePrimaryStatOnCanExecuteChanged;
         }
 
+        private async Task UpdatePrimaryStatCommandAsync(PrimaryStatViewModel primaryStatViewModel)
+        {
+            _logger.LogMessage($"AbilityScore: {primaryStatViewModel.AbilityScore}");
+            await Task.Delay(1);
+            //            await _model.UpdateStatAsync(PrimaryStat).ConfigureAwait(false);
+        }
+
+        private void UpdatePrimaryStatOnCanExecuteChanged(object sender, EventArgs e)
+        {
+            _uiThreadInvoker.Dispatch(() => OnPropertyChanged("UpdatePrimaryStatCanExecute"));
+        }
     }
 }

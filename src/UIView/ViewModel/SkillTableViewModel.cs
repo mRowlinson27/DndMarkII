@@ -109,7 +109,7 @@ namespace UIView.ViewModel
 
         private void AddSkillOnCanExecuteChanged(object sender, EventArgs e)
         {
-            OnPropertyChanged("AddSkillCanExecute");
+            _uiThreadInvoker.Dispatch(() => OnPropertyChanged("AddSkillCanExecute"));
         }
 
         public void Dispose()
