@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AsyncTaskRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UiLockerContextTests.cs" />
     <Compile Include="UiStateControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>

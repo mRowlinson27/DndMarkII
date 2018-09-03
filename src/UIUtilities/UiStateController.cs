@@ -12,18 +12,20 @@ namespace UIUtilities
         public bool UiLocked { get; set; }
 
         private int _uiLockCount = 0;
-        private readonly object _sync = new object();
+        private static readonly object Sync = new object();
 
         private readonly ILogger _logger;
+        private readonly IUiLockerContextFactory _uiLockerContextFactory;
 
-        public UiStateController(ILogger logger)
+        public UiStateController(ILogger logger, IUiLockerContextFactory uiLockerContextFactory)
         {
             _logger = logger;
+            _uiLockerContextFactory = uiLockerContextFactory;
         }
 
         public void IncUiLock()
         {
-            lock (_sync)
+            lock (Sync)
             {
                 _uiLockCount++;
                 CheckLockStatus();
@@ -32,7 +34,7 @@ namespace UIUtilities
 
         public void DecUiLock()
         {
-            lock (_sync)
+            lock (Sync)
             {
                 _uiLockCount--;
 
@@ -43,6 +45,11 @@ namespace UIUtilities
 
                 CheckLockStatus();
             }
+        }
+
+        public IUiLockerContext LockedContext()
+        {
+            return _uiLockerContextFactory.Create(this);
         }
 
         private void CheckLockStatus()

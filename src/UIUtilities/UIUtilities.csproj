@@ -53,10 +53,13 @@
     <Compile Include="AsyncTaskRunner.cs" />
     <Compile Include="AsyncTaskRunnerBase.cs" />
     <Compile Include="AsyncTaskRunnerFactory.cs" />
+    <Compile Include="IUiLockerContextFactory.cs" />
     <Compile Include="NotifyTaskCompletion.cs" />
     <Compile Include="NotifyTaskCompletionFactory.cs" />
     <Compile Include="ObservableHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UiLockerContext.cs" />
+    <Compile Include="UiLockerContextFactory.cs" />
     <Compile Include="UiStateController.cs" />
     <Compile Include="UiThreadInvoker.cs" />
   </ItemGroup>

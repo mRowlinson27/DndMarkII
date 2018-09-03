@@ -48,6 +48,7 @@
     <Compile Include="INotifyTaskCompletionFactory.cs" />
     <Compile Include="IObservableHelper.cs" />
     <Compile Include="IAsyncTaskRunner.cs" />
+    <Compile Include="IUiLockerContext.cs" />
     <Compile Include="IUiStateController.cs" />
     <Compile Include="IUiThreadInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

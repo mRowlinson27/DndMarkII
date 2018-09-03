@@ -12,5 +12,7 @@ namespace UIUtilities.API
         void IncUiLock();
 
         void DecUiLock();
+
+        IUiLockerContext LockedContext();
     }
 }

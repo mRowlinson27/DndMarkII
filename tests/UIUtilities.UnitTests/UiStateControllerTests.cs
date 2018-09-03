@@ -2,6 +2,7 @@
 namespace UIUtilities.UnitTests
 {
     using System;
+    using API;
     using FakeItEasy;
     using FluentAssertions;
     using NUnit.Framework;
@@ -11,13 +12,21 @@ namespace UIUtilities.UnitTests
     public class UiStateControllerTests
     {
         private UiStateController _uiStateController;
+
         private ILogger _logger;
+        private IUiLockerContextFactory _uiLockerContextFactory;
+
+        private IUiLockerContext _uiLockerContext;
 
         [SetUp]
         public void Setup()
         {
             _logger = A.Fake<ILogger>();
-            _uiStateController = new UiStateController(_logger);
+            _uiLockerContextFactory = A.Fake<IUiLockerContextFactory>();
+
+            _uiLockerContext = A.Fake<IUiLockerContext>();
+            
+            _uiStateController = new UiStateController(_logger, _uiLockerContextFactory);
         }
 
         [Test]
@@ -83,6 +92,19 @@ namespace UIUtilities.UnitTests
 
             //Assert
             called.Should().Be(2);
+        }
+
+        [Test]
+        public void LockedContext_PassesItself_ReturnsLockedContext()
+        {
+            //Arrange
+            A.CallTo(() => _uiLockerContextFactory.Create(_uiStateController)).Returns(_uiLockerContext);
+
+            //Act
+            var resultContext = _uiStateController.LockedContext();
+
+            //Assert
+            resultContext.Should().Be(_uiLockerContext);
         }
     }
 }
