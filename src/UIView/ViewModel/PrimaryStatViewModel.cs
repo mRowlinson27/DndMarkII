@@ -55,15 +55,15 @@ namespace UIView.ViewModel
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            UpdatePrimaryStat = asyncCommandFactory.Create<PrimaryStatViewModel>(UpdatePrimaryStatCommandAsync);
+            UpdatePrimaryStat = asyncCommandFactory.Create(UpdatePrimaryStatCommandAsync);
             UpdatePrimaryStat.CanExecuteChanged += UpdatePrimaryStatOnCanExecuteChanged;
         }
 
-        private async Task UpdatePrimaryStatCommandAsync(PrimaryStatViewModel primaryStatViewModel)
+        private async Task UpdatePrimaryStatCommandAsync()
         {
-            _logger.LogMessage($"AbilityScore: {primaryStatViewModel.AbilityScore}");
-            await Task.Delay(1);
-            //            await _model.UpdateStatAsync(PrimaryStat).ConfigureAwait(false);
+            _logger.LogMessage($"AbilityScore: {AbilityScore}");
+            await Task.Delay(1000);
+            await _model.UpdateStatAsync(PrimaryStat).ConfigureAwait(false);
         }
 
         private void UpdatePrimaryStatOnCanExecuteChanged(object sender, EventArgs e)
