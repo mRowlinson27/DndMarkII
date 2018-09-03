@@ -45,6 +45,7 @@ namespace BootStrapper
         private ITitleZoneModel _titleZoneModel;
         private ISkillTableModel _skillTableModel;
         private IPrimaryStatsTableModel _primaryStatsTableModel;
+        private IPrimaryStatModelFactory _primaryStatModelFactory;
 
         //UI ViewModel
         private TitleZoneViewModel _titleZoneViewModel;
@@ -123,13 +124,13 @@ namespace BootStrapper
             _titleZoneModel = new TitleZoneModel();
             _skillTableModel = new SkillTableModel(_logger, _skillsService, autoMapper);
             _primaryStatsTableModel = new PrimaryStatsTableModel(_logger, _primaryStatsService, autoMapper);
-
+            _primaryStatModelFactory = new PrimaryStatModelFactory(_primaryStatsService);
         }
 
         private void SetupUiView()
         {
             var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
-            var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
+            var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker, _primaryStatModelFactory);
 
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
 

@@ -2,6 +2,7 @@
 namespace UIView.Factories
 {
     using API;
+    using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -16,17 +17,20 @@ namespace UIView.Factories
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
+        private readonly IPrimaryStatModelFactory _primaryStatModelFactory;
+
         public PrimaryStatViewModelFactory(ILogger logger, IAsyncCommandFactory asyncCommandFactory,
-            IUiThreadInvoker uiThreadInvoker)
+            IUiThreadInvoker uiThreadInvoker, IPrimaryStatModelFactory primaryStatModelFactory)
         {
             _logger = logger;
             _asyncCommandFactory = asyncCommandFactory;
             _uiThreadInvoker = uiThreadInvoker;
+            _primaryStatModelFactory = primaryStatModelFactory;
         }
 
         public IPrimaryStatViewModel Create(UiPrimaryStat primaryStat)
         {
-            var primaryStatViewModel = new PrimaryStatViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
+            var primaryStatViewModel = new PrimaryStatViewModel(_logger, _primaryStatModelFactory.Create(), _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
             primaryStatViewModel.Init();
             return primaryStatViewModel;
         }

@@ -1,9 +1,10 @@
 ﻿
 namespace UIView.ViewModel
 {
-    using System;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using API;
+    using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -34,18 +35,22 @@ namespace UIView.ViewModel
 
         private readonly ILogger _logger;
 
+        private readonly IPrimaryStatModel _model;
+
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public PrimaryStatViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
+        public PrimaryStatViewModel(ILogger logger, IPrimaryStatModel model, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
+            _model = model;
             _uiThreadInvoker = uiThreadInvoker;
-            PropertyChanged += OnPropertyChanged;
+            PropertyChanged += async (s, e) => await _model.UpdateStatAsync(PrimaryStat);
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async Task OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             
         }
+
     }
 }

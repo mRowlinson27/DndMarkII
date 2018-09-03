@@ -4,6 +4,7 @@ namespace UIView.UnitTests
     using FakeItEasy;
     using FluentAssertions;
     using NUnit.Framework;
+    using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -17,6 +18,8 @@ namespace UIView.UnitTests
 
         private ILogger _logger;
 
+        private IPrimaryStatModel _model;
+
         private IUiThreadInvoker _uiThreadInvoker;
 
         private IAsyncCommandFactory _asyncCommandFactory;
@@ -25,10 +28,11 @@ namespace UIView.UnitTests
         public void Setup()
         {
             _logger = A.Fake<ILogger>();
+            _model = A.Fake<IPrimaryStatModel>();
             _uiThreadInvoker = A.Fake<IUiThreadInvoker>();
             _asyncCommandFactory = A.Fake<IAsyncCommandFactory>();
 
-            _primaryStatViewModel = new PrimaryStatViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker)
+            _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, _asyncCommandFactory, _uiThreadInvoker)
             {
                 PrimaryStat = new UiPrimaryStat()
             };
@@ -45,6 +49,7 @@ namespace UIView.UnitTests
 
             //Assert
             _primaryStatViewModel.PrimaryStat.AbilityScore.Should().Be(newAbilityScore);
+            A.CallTo(() => _model.UpdateStatAsync(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();
         }
     }
 }
