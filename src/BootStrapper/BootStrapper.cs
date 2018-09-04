@@ -31,6 +31,7 @@ namespace BootStrapper
 
         //UI Utilities
         private INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
+        private IUiStateController _uiStateController;
         private IAsyncCommandFactory _asyncCommandFactory;
         private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
 
@@ -100,9 +101,10 @@ namespace BootStrapper
         {
             _observableHelper = new ObservableHelper();
             _uiThreadInvoker = new UiThreadInvoker(_logger);
+            _uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
 
             _notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
-            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory);
+            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, _uiStateController);
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_notifyTaskCompletionFactory);
         }
 

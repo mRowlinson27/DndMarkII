@@ -7,16 +7,12 @@ namespace UIUtilities.AsyncCommands
     using System.Threading.Tasks;
     using API;
     using API.AsyncCommands;
-    using UIUtilities;
 
-    public abstract class AsyncCommandBase : IAsyncCommand, INotifyPropertyChanged
+    public abstract class AsyncCommandBase : IAsyncCommand
     {
-        public abstract Task ExecuteAsync(object parameter);
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual bool CanExecute(object parameter)
-        {
-            return Execution == null || Execution.IsCompleted;
-        }
+        public event EventHandler CanExecuteChanged;
 
         public INotifyTaskCompletion<object> Execution
         {
@@ -27,32 +23,54 @@ namespace UIUtilities.AsyncCommands
                 OnPropertyChanged();
             }
         }
-
         private INotifyTaskCompletion<object> _execution;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly IUiStateController _stateController;
+
+        protected AsyncCommandBase(IUiStateController stateController)
+        {
+            _stateController = stateController;
+            _stateController.UiLockUpdated += StateControllerOnUiLockUpdated;
+        }
+
+        public abstract Task ExecuteAsync(object parameter);
+
+        public virtual bool CanExecute(object parameter)
+        {
+            return (Execution == null || Execution.IsCompleted) && !_stateController.UiLocked;
+        }
 
         public async void Execute(object parameter)
         {
-            await ExecuteAsync(parameter).ConfigureAwait(false);
+            if (!CanExecute(parameter))
+            {
+                return;
+            }
+            using (_stateController.LockedContext())
+            {
+                await ExecuteAsync(parameter).ConfigureAwait(false);
+            }
         }
-
-        public event EventHandler CanExecuteChanged;
-//        {
-//            add => CommandManager.RequerySuggested += value;
-//            remove => CommandManager.RequerySuggested -= value;
-//        }
 
         protected void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-//            CommandManager.InvalidateRequerySuggested();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void StateControllerOnUiLockUpdated(object sender, EventArgs e)
+        {
+            RaiseCanExecuteChanged();
+        }
+
+        public void Dispose()
+        {
+            _stateController.UiLockUpdated -= StateControllerOnUiLockUpdated;
         }
     }
 }

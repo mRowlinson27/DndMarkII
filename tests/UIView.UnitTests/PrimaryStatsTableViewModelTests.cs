@@ -43,7 +43,7 @@ namespace UIView.UnitTests
             _fakePrimaryStatViewModelFactory = A.Fake<IPrimaryStatViewModelFactory>();
 
             _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory);
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()));
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
 
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _fakePrimaryStatsTableModel, _observableHelper, _asyncCommandFactory,

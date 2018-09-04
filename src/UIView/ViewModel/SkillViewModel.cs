@@ -39,10 +39,10 @@ namespace UIView.ViewModel
         }
         private string _backGroundColour;
 
-        public ICommand Delete { get; private set; }
+        public IAsyncCommand Delete { get; private set; }
         public bool DeleteSkillCanExecute => Delete.CanExecute(null);
 
-        public ICommand ShowDetail { get; private set; }
+        public IAsyncCommand ShowDetail { get; private set; }
 
         private readonly ILogger _logger;
 
@@ -61,7 +61,7 @@ namespace UIView.ViewModel
             Delete = asyncCommandFactory.Create<UiSkill>(DeleteCommandAsync);
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
 
-            ShowDetail = new RelaySimpleCommand(ShowDetailsCommand);
+            ShowDetail = asyncCommandFactory.Create(ShowDetailsCommandAsync);
         }
 
         private async Task DeleteCommandAsync(UiSkill uiSkill)
@@ -69,8 +69,10 @@ namespace UIView.ViewModel
             
         }
 
-        private void ShowDetailsCommand()
+        private async Task ShowDetailsCommandAsync()
         {
+            await Task.Delay(1000);
+
             ShowDetails = !ShowDetails;
             _logger.LogExit();
         }

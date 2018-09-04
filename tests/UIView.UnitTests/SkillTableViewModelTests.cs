@@ -41,7 +41,7 @@ namespace UIView.UnitTests
             _skillTableModel = A.Fake<ISkillTableModel>();
             _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
             _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory);
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()));
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
             _uiThreadInvoker = new UiThreadInvoker(_logger);
             _skillViewModelFactory = A.Fake<ISkillViewModelFactory>();

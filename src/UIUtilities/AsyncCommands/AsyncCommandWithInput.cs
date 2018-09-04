@@ -12,7 +12,7 @@ namespace UIUtilities.AsyncCommands
 
         private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
 
-        public AsyncCommandWithInput(Func<TIn, Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
+        public AsyncCommandWithInput(Func<TIn, Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController) : base(stateController)
         {
             _command = command;
             _notifyTaskCompletionFactory = notifyTaskCompletionFactory;

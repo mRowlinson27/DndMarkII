@@ -4,6 +4,7 @@ namespace UIUtilities.AsyncCommands
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using API;
     using Neutronium.MVVMComponents;
 
     class AsyncResultCommand<TIn, TResult> : AsyncCommandBase, INotifyPropertyChanged, IResultCommand<TResult>
@@ -22,13 +23,14 @@ namespace UIUtilities.AsyncCommands
 
         private readonly Func<TIn, Task<TResult>> _command;
 
-        private NotifyTaskCompletion<TResult> _execution;
+        private NotifyTaskCompletion<TResult> _execution; */
 
-        public AsyncCommandWithInput(Func<TIn, Task<TResult>> command)
+        public AsyncResultCommand(Func<TIn, Task<TResult>> command, IUiStateController stateController) : base(stateController)
         {
-            _command = command;
+//            _command = command;
         }
 
+        /*
         public override bool CanExecute(object parameter)
         {
             return Execution == null || Execution.IsCompleted;

@@ -35,7 +35,7 @@ namespace UIView.UnitTests
             _model = A.Fake<IPrimaryStatModel>();
             _uiThreadInvoker = A.Fake<IUiThreadInvoker>();
             _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory);
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()));
 
             _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, _asyncCommandFactory, _uiThreadInvoker);
         }

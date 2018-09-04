@@ -12,7 +12,7 @@ namespace UIUtilities.AsyncCommands
 
         private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
 
-        public AsyncSimpleCommand(Func<Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
+        public AsyncSimpleCommand(Func<Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController) : base(stateController)
         {
             _command = command;
             _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
@@ -20,11 +20,6 @@ namespace UIUtilities.AsyncCommands
 
         public override async Task ExecuteAsync(object parameter)
         {
-            if (!CanExecute(parameter))
-            {
-                return;
-            }
-
             Task<object> wrappedTask = WrapTaskWithReturnValue();
 
             Execution = _notifyTaskCompletionFactory.Create<object>();
