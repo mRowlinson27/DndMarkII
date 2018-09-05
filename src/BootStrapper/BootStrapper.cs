@@ -82,7 +82,7 @@ namespace BootStrapper
 
             SetupUiView();
 
-            var mainPageViewModel = new MainPageViewModel(new MainPageModel())
+            var mainPageViewModel = new MainPageViewModel(_logger, new MainPageModel(), _uiThreadInvoker)
             {
                 TitleZoneViewModel = _titleZoneViewModel,
                 SkillTableViewModel = _skillTableViewModel,
@@ -134,13 +134,13 @@ namespace BootStrapper
             var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
             var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker, _primaryStatModelFactory);
 
-            _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel);
+            _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel, _uiThreadInvoker);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, _uiThreadInvoker, skillViewModelFactory);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory,
+                _uiThreadInvoker, skillViewModelFactory, _uiStateController);
 
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper,
-                _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, primaryStatViewModelFactory);
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncTaskRunnerFactory, _uiThreadInvoker, primaryStatViewModelFactory, _uiStateController);
         }
 
         public void Dispose()

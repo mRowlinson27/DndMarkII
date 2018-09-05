@@ -27,6 +27,7 @@ namespace UIUtilities
         {
             lock (Sync)
             {
+                _logger.LogMessage($"UiLocked incced from {_uiLockCount} to {_uiLockCount + 1}");
                 _uiLockCount++;
                 CheckLockStatus();
             }
@@ -36,10 +37,11 @@ namespace UIUtilities
         {
             lock (Sync)
             {
+                _logger.LogMessage($"UiLocked decced from {_uiLockCount} to {_uiLockCount - 1}");
                 _uiLockCount--;
-
                 if (_uiLockCount < 0)
                 {
+                    _logger.LogMessage($"DecUiLock ArgumentOutOfRangeException");
                     throw new ArgumentOutOfRangeException();
                 }
 

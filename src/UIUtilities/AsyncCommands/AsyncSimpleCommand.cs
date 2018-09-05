@@ -4,7 +4,6 @@ namespace UIUtilities.AsyncCommands
     using System;
     using System.Threading.Tasks;
     using API;
-    using UIUtilities;
 
     public class AsyncSimpleCommand : AsyncCommandBase
     {

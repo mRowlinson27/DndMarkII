@@ -32,7 +32,7 @@ namespace UIView.ViewModel
 
         public bool InEdit { get; set; } = true;
 
-        public ICommand UpdatePrimaryStat { get; private set; }
+        public IAsyncCommand UpdatePrimaryStat { get; private set; }
         public bool UpdatePrimaryStatCanExecute => UpdatePrimaryStat.CanExecute(null);
 
         [Bindable(false)]
@@ -44,7 +44,7 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public PrimaryStatViewModel(ILogger logger, IPrimaryStatModel model, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
+        public PrimaryStatViewModel(ILogger logger, IPrimaryStatModel model, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker): base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
@@ -68,7 +68,13 @@ namespace UIView.ViewModel
 
         private void UpdatePrimaryStatOnCanExecuteChanged(object sender, EventArgs e)
         {
-            _uiThreadInvoker.Dispatch(() => OnPropertyChanged("UpdatePrimaryStatCanExecute"));
+           OnPropertyChanged("UpdatePrimaryStatCanExecute");
+        }
+
+        public override void Dispose()
+        {
+            UpdatePrimaryStat.CanExecuteChanged -= UpdatePrimaryStatOnCanExecuteChanged;
+            UpdatePrimaryStat.Dispose();
         }
     }
 }

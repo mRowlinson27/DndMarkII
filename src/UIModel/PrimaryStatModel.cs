@@ -15,10 +15,9 @@ namespace UIModel
             _primaryStatsService = primaryStatsService;
         }
 
-        public Task UpdateStatAsync(UiPrimaryStat primaryStat)
+        public async Task UpdateStatAsync(UiPrimaryStat primaryStat)
         {
-
-            throw new System.NotImplementedException();
+            await Task.Delay(1);
         }
     }
 }

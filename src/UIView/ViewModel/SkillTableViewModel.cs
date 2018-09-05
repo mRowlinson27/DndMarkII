@@ -15,14 +15,22 @@ namespace UIView.ViewModel
     using UIUtilities.API.AsyncCommands;
     using Utilities.API;
 
-    public class SkillTableViewModel : ViewModelBase, IDisposable
+    public class SkillTableViewModel : ViewModelBase
     {
         public IList<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
 
         private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
-        public ICommand AddSkill { get; private set; }
-        public bool AddSkillCanExecute => AddSkill.CanExecute(null);
+        public IAsyncCommand AddSkill { get; private set; }
+        public bool AddSkillCanExecute
+        {
+            get
+            {
+                var result = AddSkill.CanExecute(null);
+                _logger.LogMessage($"DEBUG {result}");
+                return AddSkill.CanExecute(result);
+            }
+        }
 
         private readonly ILogger _logger;
 
@@ -34,13 +42,16 @@ namespace UIView.ViewModel
 
         private readonly ISkillViewModelFactory _skillViewModelFactory;
 
+        private readonly IUiStateController _uiStateController;
+
         public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
             _skillViewModelFactory = skillViewModelFactory;
+            _uiStateController = uiStateController;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -79,6 +90,8 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
+            _uiStateController.IncUiLock();
+
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _skillsRequestTaskRunner.StartTask();
         }
@@ -103,18 +116,20 @@ namespace UIView.ViewModel
             _observableHelper.Rebind(SkillViewModels, newSkillModelList);
 
             DataAvailable = true;
+            _uiStateController.DecUiLock();
 
             _logger.LogExit();
         }
 
         private void AddSkillOnCanExecuteChanged(object sender, EventArgs e)
         {
-            _uiThreadInvoker.Dispatch(() => OnPropertyChanged("AddSkillCanExecute"));
+            OnPropertyChanged("AddSkillCanExecute");
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
+            AddSkill.Dispose();
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _skillsRequestTaskRunner.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;

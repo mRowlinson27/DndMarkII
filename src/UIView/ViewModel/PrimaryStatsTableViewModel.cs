@@ -6,6 +6,7 @@ namespace UIView.ViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using API;
     using UIModel.API;
     using UIModel.API.Dto;
@@ -13,11 +14,14 @@ namespace UIView.ViewModel
     using UIUtilities.API.AsyncCommands;
     using Utilities.API;
 
-    public class PrimaryStatsTableViewModel : ViewModelBase, IDisposable
+    public class PrimaryStatsTableViewModel : ViewModelBase
     {
         public ObservableCollection<IPrimaryStatViewModel> PrimaryStats { get; set; } = new ObservableCollection<IPrimaryStatViewModel>();
 
         public bool InEdit { get; set; } = true;
+
+        public IAsyncCommand Delete { get; private set; }
+        public bool DeleteCanExecute => Delete.CanExecute(null);
 
         private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
@@ -31,17 +35,23 @@ namespace UIView.ViewModel
 
         private readonly IPrimaryStatViewModelFactory _primaryStatViewModelFactory;
 
+        private readonly IUiStateController _uiStateController;
+
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory)
+            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
             _primaryStatViewModelFactory = primaryStatViewModelFactory;
+            _uiStateController = uiStateController;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
             SetupTaskRunners(asyncTaskRunnerFactory);
+
+            Delete = asyncCommandFactory.Create<PrimaryStatsTableViewModel>(DeleteCommandAsync);
+            Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
         }
 
         public override void Init()
@@ -57,6 +67,8 @@ namespace UIView.ViewModel
 
         private void MakePrimaryStatRequest()
         {
+            _uiStateController.IncUiLock();
+
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _primaryStatRequestTaskRunner.StartTask();
         }
@@ -76,6 +88,7 @@ namespace UIView.ViewModel
             var primaryStatViewModels = _primaryStatRequestTaskRunner.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
             _observableHelper.Rebind(PrimaryStats, primaryStatViewModels);
             DataAvailable = true;
+            _uiStateController.DecUiLock();
 
             _logger.LogExit();
         }
@@ -85,7 +98,21 @@ namespace UIView.ViewModel
             MakePrimaryStatRequest();
         }
 
-        public void Dispose()
+        private async Task DeleteCommandAsync(PrimaryStatsTableViewModel uiSkill)
+        {
+            _logger.LogEntry();
+
+            await Task.Delay(1000);
+
+            _logger.LogExit();
+        }
+
+        private void DeleteOnCanExecuteChanged(object sender, EventArgs e)
+        {
+            OnPropertyChanged("DeleteCanExecute");
+        }
+
+        public override void Dispose()
         {
             _primaryStatRequestTaskRunner.PropertyChanged -= PrimaryStatRequestTaskRunnerOnPropertyChanged;
             _primaryStatRequestTaskRunner.Dispose();

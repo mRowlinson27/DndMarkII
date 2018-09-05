@@ -1,10 +1,11 @@
 ﻿<div class="primaryStatsTableWidgit">
+    <button data-bind="enable:$data.DeleteCanExecute, execute: $data.Delete, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button>
     <div class="primaryStatsTable">
         <div class="primaryStatsTableBody" data-bind="foreach: PrimaryStats()">
             <div class="primaryStatsEntry">
                 <div class="primaryStatsEntryName" data-bind="text:ShortName"></div>
                 <div class="primaryStatsEntryAbilityModifier" data-bind="text:AbilityModifier"></div>
-                <input type="number" class="primaryStatsEntryAbilityScore" data-bind="value: AbilityScore, enable: $parent.InEdit, execute: $data.UpdatePrimaryStat, executeoption: { event:'change', callback : function(){} }" onfocus="this.oldvalue = this.value;" onchange="ValidateInts(this); this.oldvalue = this.value;">
+                <input type="number" class="primaryStatsEntryAbilityScore" data-bind="value: AbilityScore, enable: $parent.InEdit, execute: $data.UpdatePrimaryStat, executeoption: { event:'change', callback : function(){} }" onfocus="this.oldvalue = this.value;" onchange="ValidateInts(this);this.oldvalue = this.value;">
             </div>
         </div>
     </div>

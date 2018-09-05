@@ -4,7 +4,6 @@ namespace UIUtilities.AsyncCommands
     using System;
     using System.Threading.Tasks;
     using API;
-    using UIUtilities;
 
     public class AsyncCommandWithInput<TIn> : AsyncCommandBase
     {
@@ -20,18 +19,17 @@ namespace UIUtilities.AsyncCommands
 
         public override async Task ExecuteAsync(object parameter)
         {
-            if (!CanExecute(parameter))
-            {
-                return;
-            }
-
             Task<object> wrappedTask = WrapTaskWithReturnValue((TIn) parameter);
+
             Execution = _notifyTaskCompletionFactory.Create<object>();
             Execution.Start(wrappedTask);
 
             RaiseCanExecuteChanged();
 
-            await Execution.TaskCompletion.ConfigureAwait(false);
+            if (Execution != null)
+            {
+                await Execution.TaskCompletion.ConfigureAwait(false);
+            }
 
             RaiseCanExecuteChanged();
         }

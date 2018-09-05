@@ -46,7 +46,8 @@ namespace UIView.UnitTests
             _uiThreadInvoker = new UiThreadInvoker(_logger);
             _skillViewModelFactory = A.Fake<ISkillViewModelFactory>();
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, _skillViewModelFactory);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, _skillViewModelFactory,
+                new UiStateController(_logger, new UiLockerContextFactory()));
         }
 
         [TearDown]

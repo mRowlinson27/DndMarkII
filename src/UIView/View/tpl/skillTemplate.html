@@ -5,13 +5,12 @@
         <div class="skillEntryTotal" data-bind="text:Total"></div>
     </div>
 
-    <!-- ko if: ShowDetails -->
+    <!-- ko if: ShowingDetails -->
     <div class="skillSpecifics">
         <div class="skillSpecificsStatName" data-bind="text:PrimaryStatName"></div>
         <div class="skillSpecificsRanks" data-bind="text:Ranks"></div>
     </div>
     <!-- /ko -->
 
-    <!--<div class="skillTableCell"><button data-bind="enable:$parent.RemoveSkillCanExecute, execute: $parent.RemoveSkill, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button></div> -->
-
+    <button data-bind="enable:$data.DeleteCanExecute, execute: $data.Delete, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button>
 </div>

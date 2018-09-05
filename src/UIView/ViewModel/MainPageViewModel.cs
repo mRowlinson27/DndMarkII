@@ -3,8 +3,10 @@ namespace UIView.ViewModel
 {
     using System;
     using UIModel.API;
+    using UIUtilities.API;
+    using Utilities.API;
 
-    public class MainPageViewModel : ViewModelBase, IDisposable
+    public class MainPageViewModel : ViewModelBase
     {
         public TitleZoneViewModel TitleZoneViewModel { get; set; }
 
@@ -12,10 +14,13 @@ namespace UIView.ViewModel
 
         public SkillTableViewModel SkillTableViewModel { get; set; }
 
+        private readonly ILogger _logger;
+
         private readonly IMainPageModel _model;
 
-        public MainPageViewModel(IMainPageModel model)
+        public MainPageViewModel(ILogger logger, IMainPageModel model, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
         {
+            _logger = logger;
             _model = model;
         }
 
@@ -26,9 +31,11 @@ namespace UIView.ViewModel
             SkillTableViewModel.Init();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            _logger.LogEntry();
             SkillTableViewModel?.Dispose();
+            PrimaryStatsTableViewModel?.Dispose();
         }
     }
 }

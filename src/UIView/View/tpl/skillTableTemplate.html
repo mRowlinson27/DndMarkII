@@ -1,7 +1,7 @@
 ﻿<div class="skillTableWidgit">
 
-    <button data-bind="enable: ($data.AddSkillCanExecute), execute: $data.AddSkill, executeoption: { event:'click', callback : function(){} }">Add</button>
-
+    <button data-bind="enable: $data.AddSkillCanExecute, execute: $data.AddSkill, executeoption: { callback : function(){} }">Add</button>
+    
     <div class="skillTable">
         <div class="skillTableBody" data-bind="foreach: SkillViewModels()">
             <div data-bind="component:{name: 'skill-entry', params: $data}"></div>
