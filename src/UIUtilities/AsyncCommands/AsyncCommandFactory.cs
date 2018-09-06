@@ -3,6 +3,7 @@ namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.Threading.Tasks;
+    using System.Windows.Input;
     using API;
     using API.AsyncCommands;
 
@@ -26,6 +27,11 @@ namespace UIUtilities.AsyncCommands
         public IAsyncCommand Create<TIn>(Func<TIn, Task> command)
         {
             return new AsyncCommandWithInput<TIn>(command, _notifyTaskCompletionFactory, _stateController);
+        }
+
+        public IAsyncCommandAdaptor CreateAdaptor(Action execute)
+        {
+            return new AsyncSimpleCommandAdaptor(execute);
         }
 
 //        public static AsyncSimpleCommand<object> Create(Func<CancellationToken, Task> command)

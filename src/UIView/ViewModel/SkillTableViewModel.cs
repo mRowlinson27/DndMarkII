@@ -90,7 +90,7 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
-            _uiStateController.IncUiLock();
+//            _uiStateController.IncUiLock();
 
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _skillsRequestTaskRunner.StartTask();
@@ -116,7 +116,7 @@ namespace UIView.ViewModel
             _observableHelper.Rebind(SkillViewModels, newSkillModelList);
 
             DataAvailable = true;
-            _uiStateController.DecUiLock();
+//            _uiStateController.DecUiLock();
 
             _logger.LogExit();
         }

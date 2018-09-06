@@ -46,10 +46,15 @@ namespace UIUtilities.AsyncCommands
             {
                 return;
             }
+
             using (_stateController.LockedContext())
             {
+                RaiseCanExecuteChanged();
+
                 await ExecuteAsync(parameter).ConfigureAwait(false);
             }
+
+            RaiseCanExecuteChanged();
         }
 
         protected void RaiseCanExecuteChanged()

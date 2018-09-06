@@ -35,7 +35,6 @@ namespace UIView.ViewModel
         {
             _uiThreadInvoker.Dispatch(() =>
             {
-                Console.WriteLine($"DEBUG - {pn}");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pn));
             });
         }

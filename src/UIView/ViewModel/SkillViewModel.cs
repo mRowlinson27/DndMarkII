@@ -5,6 +5,7 @@ namespace UIView.ViewModel
     using System.Threading.Tasks;
     using System.Windows.Input;
     using API;
+    using Neutronium.MVVMComponents.Relay;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -38,8 +39,11 @@ namespace UIView.ViewModel
         }
         private string _backGroundColour;
 
-        public IAsyncCommand Delete { get; private set; }
-        public bool DeleteCanExecute => Delete.CanExecute(null);
+        //        public IAsyncCommand Delete { get; private set; }
+        //        public bool DeleteCanExecute => Delete.CanExecute(null);
+
+        public RelayToogleCommand Delete { get; private set; }
+        public bool DeleteCanExecute => Delete.ShouldExecute;
 
         public IAsyncCommand ShowDetail { get; private set; }
         public bool ShowDetailCanExecute => ShowDetail.CanExecute(null);
@@ -47,22 +51,43 @@ namespace UIView.ViewModel
         private readonly ILogger _logger;
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
+        private readonly IUiStateController _uiStateController;
 
-        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
+        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _uiThreadInvoker = uiThreadInvoker;
+            _uiStateController = uiStateController;
 
             SetupCommandBindings(asyncCommandFactory);
         }
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            Delete = asyncCommandFactory.Create<SkillViewModel>(DeleteCommandAsync);
+//            Delete = asyncCommandFactory.Create<SkillViewModel>(DeleteCommandAsync);
+            Delete = new RelayToogleCommand(DoAction);
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
 
             ShowDetail = asyncCommandFactory.Create(ShowDetailsCommandAsync);
             ShowDetail.CanExecuteChanged += ShowDetailOnCanExecuteChanged;
+        }
+
+        private bool _toggle = true;
+        private void DoAction()
+        {
+            _logger.LogEntry();
+            if (_toggle)
+            {
+                _uiStateController.IncUiLock();
+            }
+            else
+            {
+                _uiStateController.DecUiLock();
+                Delete.ShouldExecute = false;
+            }
+
+            _toggle = !_toggle;
+            _logger.LogExit();
         }
 
         private async Task DeleteCommandAsync(SkillViewModel uiSkill)
@@ -95,7 +120,7 @@ namespace UIView.ViewModel
         public override void Dispose()
         {
             Delete.CanExecuteChanged -= DeleteOnCanExecuteChanged;
-            Delete.Dispose();
+//            Delete.Dispose();
             ShowDetail.CanExecuteChanged -= ShowDetailOnCanExecuteChanged;
             ShowDetail.Dispose();
         }

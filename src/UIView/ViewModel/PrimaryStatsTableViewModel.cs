@@ -7,7 +7,9 @@ namespace UIView.ViewModel
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows.Input;
     using API;
+    using Neutronium.MVVMComponents.Relay;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -20,8 +22,8 @@ namespace UIView.ViewModel
 
         public bool InEdit { get; set; } = true;
 
-        public IAsyncCommand Delete { get; private set; }
-        public bool DeleteCanExecute => Delete.CanExecute(null);
+        public IAsyncCommandAdaptor Delete { get; private set; }
+        public bool DeleteCanExecute => Delete.ShouldExecute;
 
         private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
@@ -50,8 +52,15 @@ namespace UIView.ViewModel
 
             SetupTaskRunners(asyncTaskRunnerFactory);
 
-            Delete = asyncCommandFactory.Create<PrimaryStatsTableViewModel>(DeleteCommandAsync);
+            Delete = asyncCommandFactory.CreateAdaptor(() => { _logger.LogEntry(); });
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
+            _uiStateController.UiLockUpdated += UiStateControllerOnUiLockUpdated;
+        }
+
+        private void UiStateControllerOnUiLockUpdated(object sender, EventArgs e)
+        {
+            Delete.ShouldExecute = !_uiStateController.UiLocked;
+            OnPropertyChanged("DeleteCanExecute");
         }
 
         public override void Init()
@@ -109,7 +118,7 @@ namespace UIView.ViewModel
 
         private void DeleteOnCanExecuteChanged(object sender, EventArgs e)
         {
-            OnPropertyChanged("DeleteCanExecute");
+//            OnPropertyChanged("DeleteCanExecute");
         }
 
         public override void Dispose()
