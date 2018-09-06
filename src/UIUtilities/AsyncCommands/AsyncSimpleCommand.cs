@@ -24,10 +24,14 @@ namespace UIUtilities.AsyncCommands
             Execution = _notifyTaskCompletionFactory.Create<object>();
             Execution.Start(wrappedTask);
 
+            RaiseCanExecuteChanged();
+
             if (Execution != null)
             {
                 await Execution.TaskCompletion.ConfigureAwait(false);
             }
+
+            RaiseCanExecuteChanged();
         }
 
         private async Task<object> WrapTaskWithReturnValue()

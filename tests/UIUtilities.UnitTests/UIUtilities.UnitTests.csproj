@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncCommandBaseTests.cs" />
     <Compile Include="AsyncSimpleCommandAdaptorTests.cs" />
     <Compile Include="AsyncTaskRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
