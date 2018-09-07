@@ -2,7 +2,6 @@
 namespace UIUtilities.AsyncCommands
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
     using API;
     using API.AsyncCommands;
@@ -10,25 +9,21 @@ namespace UIUtilities.AsyncCommands
 
     public class AsyncSimpleCommand : AsyncCommandBase<object>, IAsyncCommand
     {
-        private readonly Func<Task> _command;
+        private readonly Func<Task<object>> _command;
         private readonly INotifyTaskCompletion<object> _notifyTaskCompletion;
-        private readonly ITaskWrapper _taskWrapper;
         private readonly IAsyncCommandWatcher<object> _asyncCommandWatcher;
 
-        public AsyncSimpleCommand(IAsyncCommandWatcher<object> asyncCommandWatcher, Func<Task> command, INotifyTaskCompletion<object> notifyTaskCompletion, ITaskWrapper taskWrapper)
+        public AsyncSimpleCommand(IAsyncCommandWatcher<object> asyncCommandWatcher, Func<Task<object>> command, INotifyTaskCompletion<object> notifyTaskCompletion)
             : base(asyncCommandWatcher)
         {
             _command = command;
             _notifyTaskCompletion = notifyTaskCompletion;
-            _taskWrapper = taskWrapper;
             _asyncCommandWatcher = asyncCommandWatcher;
         }
 
         public async Task ExecuteAsync(object parameter)
         {
-            var wrappedTask =_taskWrapper.WrapTaskWithNullReturnValue(_command);
-
-            await _asyncCommandWatcher.ExecuteAsync(parameter, wrappedTask, _notifyTaskCompletion);
+            await _asyncCommandWatcher.ExecuteAsync(parameter, _command, _notifyTaskCompletion);
         }
     }
 }

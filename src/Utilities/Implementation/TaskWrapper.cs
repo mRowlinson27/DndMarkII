@@ -24,5 +24,14 @@ namespace Utilities.Implementation
                 return null;
             };
         }
+
+        public Func<Task<object>> WrapActionWithNullReturnValue(Action action)
+        {
+            return async () =>
+            {
+                await Task.Run(action);
+                return null;
+            };
+        }
     }
 }

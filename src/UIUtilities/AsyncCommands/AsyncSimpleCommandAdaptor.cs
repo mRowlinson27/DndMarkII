@@ -23,12 +23,12 @@ namespace UIUtilities.AsyncCommands
             }
         }
 
-        private readonly Action _execute;
+        private readonly IAsyncCommand _asyncCommand;
         private bool _shouldExecute = true;
 
-        public AsyncSimpleCommandAdaptor(Action execute)
+        public AsyncSimpleCommandAdaptor( IAsyncCommand asyncCommand)
         {
-            _execute = execute;
+            _asyncCommand = asyncCommand;
         }
 
         bool ICommandWithoutParameter.CanExecute => CanExecute(null);
@@ -41,8 +41,9 @@ namespace UIUtilities.AsyncCommands
         {
             if (!_shouldExecute)
                 return;
-           
-            await Task.Run(() => _execute());
+
+            await _asyncCommand.ExecuteAsync(null);
+//            await Task.Run(() => _execute());
         }
     }
 }

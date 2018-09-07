@@ -3,7 +3,9 @@ namespace UIUtilities.UnitTests
 {
     using System;
     using System.Threading.Tasks;
+    using API.AsyncCommands;
     using AsyncCommands;
+    using FakeItEasy;
     using FluentAssertions;
     using NUnit.Framework;
 
@@ -12,32 +14,39 @@ namespace UIUtilities.UnitTests
     {
         private AsyncSimpleCommandAdaptor _asyncSimpleCommandAdaptor;
 
+        private IAsyncCommand _asyncCommand;
+
+        [SetUp]
+        public void Setup()
+        {
+            _asyncCommand = A.Fake<IAsyncCommand>();
+            _asyncSimpleCommandAdaptor = new AsyncSimpleCommandAdaptor(_asyncCommand);
+        }
+
         [Test]
         public async Task ExecuteAsync_CanExecute_RunsActionAsynchronously()
         {
             //Arrange
-            bool wasCalled = false;
-            _asyncSimpleCommandAdaptor = new AsyncSimpleCommandAdaptor(() => wasCalled = true) {ShouldExecute = true};
+            _asyncSimpleCommandAdaptor.ShouldExecute = true;
 
             //Act
             await _asyncSimpleCommandAdaptor.ExecuteAsync();
 
             //Assert
-            wasCalled.Should().BeTrue();
+            A.CallTo(() => _asyncCommand.ExecuteAsync(null)).MustHaveHappened();
         }
 
         [Test]
-        public async Task ExecuteAsync_CannotExecute_RunsActionAsynchronously()
+        public async Task ExecuteAsync_CannotExecute_DoesNothing()
         {
             //Arrange
-            bool wasCalled = false;
-            _asyncSimpleCommandAdaptor = new AsyncSimpleCommandAdaptor(() => wasCalled = true) { ShouldExecute = false };
+            _asyncSimpleCommandAdaptor.ShouldExecute = false;
 
             //Act
             await _asyncSimpleCommandAdaptor.ExecuteAsync();
 
             //Assert
-            wasCalled.Should().BeFalse();
+            A.CallTo(() => _asyncCommand.ExecuteAsync(null)).MustNotHaveHappened();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Utilities.UnitTests
         [SetUp]
         public void Setup()
         {
+            _wasCalled = false;
             _taskWrapper = new TaskWrapper();
         }
 
@@ -38,6 +39,34 @@ namespace Utilities.UnitTests
             //Arrange
             Func<Task> taskFunc = Call;
             var newFunc = _taskWrapper.WrapTaskWithNullReturnValue(taskFunc);
+
+            //Act
+            var result = await newFunc();
+
+            //Assert
+            result.Should().BeNull();
+            _wasCalled.Should().BeTrue();
+        }
+
+        [Test]
+        public void WrapActionWithNullReturnValue_Called_DoesNotRunAction()
+        {
+            //Arrange
+            void Action() => _wasCalled = true;
+
+            //Act
+            _taskWrapper.WrapActionWithNullReturnValue(Action);
+
+            //Assert
+            _wasCalled.Should().BeFalse();
+        }
+
+        [Test]
+        public async Task WrapActionWithNullReturnValue_ReturnedFunctionCallsOriginalAndReturnsNull()
+        {
+            //Arrange
+            void Action() => _wasCalled = true;
+            var newFunc = _taskWrapper.WrapActionWithNullReturnValue(Action);
 
             //Act
             var result = await newFunc();

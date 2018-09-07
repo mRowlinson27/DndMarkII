@@ -23,7 +23,7 @@ namespace UIUtilities.AsyncCommands
 
         public IAsyncCommand Create(Func<Task> command)
         {
-            return new AsyncSimpleCommand(new AsyncCommandWatcher<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
+            return new AsyncSimpleCommand(new AsyncCommandWatcher<object>(), _taskWrapper.WrapTaskWithNullReturnValue(command), _notifyTaskCompletionFactory.Create<object>());
         }
 
         public IAsyncCommand Create<TIn>(Func<TIn, Task> command)
@@ -31,9 +31,10 @@ namespace UIUtilities.AsyncCommands
             return new AsyncCommandWithInput<TIn>(new AsyncCommandWatcher<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
         }
 
-        public IAsyncCommandAdaptor CreateAdaptor(Action execute)
+        public IAsyncCommandAdaptor CreateAdaptor(Action command)
         {
-            return new AsyncSimpleCommandAdaptor(execute);
+            var asyncCommand = Create(_taskWrapper.WrapActionWithNullReturnValue(command));
+            return new AsyncSimpleCommandAdaptor(asyncCommand);
         }
 
 //        public static AsyncSimpleCommand<object> Create(Func<CancellationToken, Task> command)
