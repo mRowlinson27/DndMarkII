@@ -31,6 +31,6 @@ namespace UIUtilities.API
 
         Task TaskCompletion { get; }
 
-        void Start(Task<TResult> task);
+        void Start(Func<Task<TResult>> task);
     }
 }

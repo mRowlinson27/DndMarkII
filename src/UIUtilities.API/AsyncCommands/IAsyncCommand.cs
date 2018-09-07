@@ -1,12 +1,11 @@
 ﻿
 namespace UIUtilities.API.AsyncCommands
 {
-    using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using System.Windows.Input;
 
-    public interface IAsyncCommand : ICommand, INotifyPropertyChanged, IDisposable
+    public interface IAsyncCommand : IAsyncCommand<object> {}
+
+    public interface IAsyncCommand<TResult> : IWatchableCommandProperties<TResult>
     {
         Task ExecuteAsync(object parameter);
     }

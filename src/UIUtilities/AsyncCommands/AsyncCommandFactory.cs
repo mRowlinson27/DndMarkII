@@ -21,7 +21,7 @@ namespace UIUtilities.AsyncCommands
 
         public IAsyncCommand Create(Func<Task> command)
         {
-            return new AsyncSimpleCommand(command, _notifyTaskCompletionFactory, _stateController);
+            return null;// new AsyncSimpleCommand(command, _notifyTaskCompletionFactory);
         }
 
         public IAsyncCommand Create<TIn>(Func<TIn, Task> command)

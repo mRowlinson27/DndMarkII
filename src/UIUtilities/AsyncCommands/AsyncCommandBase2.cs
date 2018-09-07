@@ -6,8 +6,9 @@ namespace UIUtilities.AsyncCommands
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using API;
+    using API.AsyncCommands;
 
-    public class AsyncCommandBase2<TResult> : IDisposable
+    public class AsyncCommandBase2<TResult> : IAsyncCommandBase<TResult>
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -16,7 +17,7 @@ namespace UIUtilities.AsyncCommands
         public INotifyTaskCompletion<TResult> Execution
         {
             get => _execution;
-            private set
+            set
             {
                 if (_execution != null)
                 {
@@ -30,7 +31,7 @@ namespace UIUtilities.AsyncCommands
         }
         private INotifyTaskCompletion<TResult> _execution;
 
-        public virtual async Task ExecuteAsync(object parameter, Task<TResult> command, INotifyTaskCompletion<TResult> execution)
+        public async Task ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution)
         {
             Execution = execution;
 
@@ -39,7 +40,7 @@ namespace UIUtilities.AsyncCommands
             await Execution.TaskCompletion.ConfigureAwait(false);
         }
 
-        public virtual bool CanExecute(object parameter)
+        public bool CanExecute(object parameter)
         {
             return Execution == null || Execution.IsCompleted;
         }
@@ -52,12 +53,12 @@ namespace UIUtilities.AsyncCommands
             }
         }
 
-        protected void RaiseCanExecuteChanged()
+        private void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -42,7 +42,9 @@
   <ItemGroup>
     <Compile Include="AsyncCommands\IAsyncCommand.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandAdaptor.cs" />
+    <Compile Include="AsyncCommands\IAsyncCommandBase.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandFactory.cs" />
+    <Compile Include="AsyncCommands\IWatchableCommandProperties.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="IAsyncTaskRunnerFactory.cs" />
     <Compile Include="INotifyTaskCompletion.cs" />

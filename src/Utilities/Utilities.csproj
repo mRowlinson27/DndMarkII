@@ -43,6 +43,7 @@
     <Compile Include="Implementation\DateTimeWrapper.cs" />
     <Compile Include="Implementation\DAL\FileReader.cs" />
     <Compile Include="Implementation\DAL\FileWriter.cs" />
+    <Compile Include="Implementation\TaskWrapper.cs" />
     <Compile Include="Implementation\Logger.cs" />
     <Compile Include="Implementation\DAL\StreamWriterWrapper.cs" />
     <Compile Include="Implementation\DAL\StreamWriterWrapperFactory.cs" />

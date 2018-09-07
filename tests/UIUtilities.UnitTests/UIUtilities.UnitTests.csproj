@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AsyncCommandBaseTests.cs" />
     <Compile Include="AsyncSimpleCommandAdaptorTests.cs" />
+    <Compile Include="AsyncSimpleCommandTests.cs" />
     <Compile Include="AsyncTaskRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UiLockerContextTests.cs" />

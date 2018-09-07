@@ -16,14 +16,14 @@ namespace UIUtilities.UnitTests
         private AsyncCommandBase2<object> _asyncCommandBase2;
         private INotifyTaskCompletion<object> _notifyTaskCompletion;
 
-        private Task<object> _command;
+        private Func<Task<object>> _command;
 
         [SetUp]
         public void Setup()
         {
             _notifyTaskCompletion = A.Fake<INotifyTaskCompletion<object>>();
 
-            _command = WrapTaskWithReturnValue(Command);
+            _command = CommandTask;
             _asyncCommandBase2 = new AsyncCommandBase2<object>();
         }
 
@@ -94,13 +94,7 @@ namespace UIUtilities.UnitTests
             called.Should().BeTrue();
         }
 
-        private async Task<object> WrapTaskWithReturnValue(Func<Task> command)
-        {
-            await command().ConfigureAwait(false);
-            return null;
-        }
-
-        private Task Command()
+        private async Task<object> CommandTask()
         {
             throw new NotImplementedException();
         }

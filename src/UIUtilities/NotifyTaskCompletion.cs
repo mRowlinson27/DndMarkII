@@ -42,10 +42,10 @@ namespace UIUtilities
             _logger = logger;
         }
 
-        public void Start(Task<TResult> task)
+        public void Start(Func<Task<TResult>> task)
         {
-            Task = task;
-            TaskCompletion = WatchTaskAsync(task);
+            Task = task();
+            TaskCompletion = WatchTaskAsync(Task);
 
             var propertyChanged = PropertyChanged;
             if (propertyChanged == null)

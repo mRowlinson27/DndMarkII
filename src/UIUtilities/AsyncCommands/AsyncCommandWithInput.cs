@@ -22,7 +22,7 @@ namespace UIUtilities.AsyncCommands
             Task<object> wrappedTask = WrapTaskWithReturnValue((TIn) parameter);
 
             Execution = _notifyTaskCompletionFactory.Create<object>();
-            Execution.Start(wrappedTask);
+//            Execution.Start(wrappedTask);
 
             RaiseCanExecuteChanged();
 

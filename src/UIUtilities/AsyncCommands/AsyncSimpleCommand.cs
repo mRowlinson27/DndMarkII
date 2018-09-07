@@ -2,42 +2,56 @@
 namespace UIUtilities.AsyncCommands
 {
     using System;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using API;
+    using API.AsyncCommands;
+    using Utilities.API;
 
-    public class AsyncSimpleCommand : AsyncCommandBase
+    public class AsyncSimpleCommand : IAsyncCommand
     {
+        public event EventHandler CanExecuteChanged
+        {
+            add => _asyncCommandBase.CanExecuteChanged += value;
+            remove =>  _asyncCommandBase.CanExecuteChanged -= value;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add => _asyncCommandBase.PropertyChanged += value;
+            remove => _asyncCommandBase.PropertyChanged -= value;
+        }
+
+        public INotifyTaskCompletion<object> Execution => _asyncCommandBase.Execution;
+
         private readonly Func<Task> _command;
+        private readonly INotifyTaskCompletion<object> _notifyTaskCompletion;
+        private readonly ITaskWrapper _taskWrapper;
+        private readonly IAsyncCommandBase<object> _asyncCommandBase;
 
-        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
-        public AsyncSimpleCommand(Func<Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController) : base(stateController)
+        public AsyncSimpleCommand(IAsyncCommandBase<object> asyncCommandBase, Func<Task> command, INotifyTaskCompletion<object> notifyTaskCompletion, ITaskWrapper taskWrapper)
         {
             _command = command;
-            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
+            _notifyTaskCompletion = notifyTaskCompletion;
+            _taskWrapper = taskWrapper;
+            _asyncCommandBase = asyncCommandBase;
         }
 
-        public override async Task ExecuteAsync(object parameter)
+        public bool CanExecute(object parameter)
         {
-            Task<object> wrappedTask = WrapTaskWithReturnValue();
-
-            Execution = _notifyTaskCompletionFactory.Create<object>();
-            Execution.Start(wrappedTask);
-
-            RaiseCanExecuteChanged();
-
-            if (Execution != null)
-            {
-                await Execution.TaskCompletion.ConfigureAwait(false);
-            }
-
-            RaiseCanExecuteChanged();
+            return _asyncCommandBase.CanExecute(parameter);
         }
 
-        private async Task<object> WrapTaskWithReturnValue()
+        public async Task ExecuteAsync(object parameter)
         {
-            await _command().ConfigureAwait(false);
-            return null;
+            var wrappedTask =_taskWrapper.WrapTaskWithNullReturnValue(_command);
+
+            await _asyncCommandBase.ExecuteAsync(parameter, wrappedTask, _notifyTaskCompletion);
+        }
+
+        public void Dispose()
+        {
+            _asyncCommandBase.Dispose();
         }
     }
 }
