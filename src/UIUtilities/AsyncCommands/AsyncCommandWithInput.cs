@@ -4,40 +4,30 @@ namespace UIUtilities.AsyncCommands
     using System;
     using System.Threading.Tasks;
     using API;
+    using API.AsyncCommands;
+    using Utilities.API;
 
-    public class AsyncCommandWithInput<TIn> : AsyncCommandBase
+    public class AsyncCommandWithInput<TIn> : AsyncCommandBase<object>, IAsyncCommand
     {
+        private readonly IAsyncCommandWatcher<object> _asyncCommandWatcher;
         private readonly Func<TIn, Task> _command;
+        private readonly INotifyTaskCompletion<object> _notifyTaskCompletion;
+        private readonly ITaskWrapper _taskWrapper;
 
-        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
-        public AsyncCommandWithInput(Func<TIn, Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController) : base(stateController)
+        public AsyncCommandWithInput(IAsyncCommandWatcher<object> asyncCommandWatcher, Func<TIn, Task> command, INotifyTaskCompletion<object> notifyTaskCompletion, ITaskWrapper taskWrapper)
+            : base(asyncCommandWatcher)
         {
+            _asyncCommandWatcher = asyncCommandWatcher;
             _command = command;
-            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
+            _notifyTaskCompletion = notifyTaskCompletion;
+            _taskWrapper = taskWrapper;
         }
 
-        public override async Task ExecuteAsync(object parameter)
+        public async Task ExecuteAsync(object parameter)
         {
-            Task<object> wrappedTask = WrapTaskWithReturnValue((TIn) parameter);
+            var wrappedTask = _taskWrapper.WrapTaskWithNullReturnValue(_command, (TIn) parameter);
 
-            Execution = _notifyTaskCompletionFactory.Create<object>();
-//            Execution.Start(wrappedTask);
-
-            RaiseCanExecuteChanged();
-
-            if (Execution != null)
-            {
-                await Execution.TaskCompletion.ConfigureAwait(false);
-            }
-
-            RaiseCanExecuteChanged();
-        }
-
-        private async Task<object> WrapTaskWithReturnValue(TIn param)
-        {
-            await _command(param).ConfigureAwait(false);
-            return null;
+            await _asyncCommandWatcher.ExecuteAsync(parameter, wrappedTask, _notifyTaskCompletion);
         }
     }
 }

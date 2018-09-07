@@ -55,7 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncCommandBaseTests.cs" />
+    <Compile Include="AsyncCommandWatcherTests.cs" />
+    <Compile Include="AsyncCommandWithInputTests.cs" />
     <Compile Include="AsyncSimpleCommandAdaptorTests.cs" />
     <Compile Include="AsyncSimpleCommandTests.cs" />
     <Compile Include="AsyncTaskRunnerTests.cs" />

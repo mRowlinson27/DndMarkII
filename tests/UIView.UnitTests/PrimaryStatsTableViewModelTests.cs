@@ -15,6 +15,7 @@ namespace UIView.UnitTests
     using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using Utilities.API;
+    using Utilities.Implementation;
     using ViewModel;
 
     [TestFixture]
@@ -30,25 +31,11 @@ namespace UIView.UnitTests
         private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
         private IPrimaryStatViewModelFactory _fakePrimaryStatViewModelFactory;
 
-        private INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> _fakeNotifyTaskCompletion;
+        private INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> _dataRequestNotifyTaskCompletion;
         private IPrimaryStatViewModel _fakeViewModel0;
         private IPrimaryStatViewModel _fakeViewModel1;
 
-        [SetUp]
-        public void Setup()
-        {
-            _logger = A.Fake<ILogger>();
-            _fakePrimaryStatsTableModel = A.Fake<IPrimaryStatsTableModel>();
-            _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
-            _fakePrimaryStatViewModelFactory = A.Fake<IPrimaryStatViewModelFactory>();
-
-            _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()));
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
-
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _fakePrimaryStatsTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger), _fakePrimaryStatViewModelFactory, new UiStateController(_logger, new UiLockerContextFactory()));
-        }
+        
 
         [TearDown]
         public void TearDown()
@@ -60,6 +47,7 @@ namespace UIView.UnitTests
         public void Init_RequestPrimaryStatsAsync()
         {
             //Arrange
+            Setup();
 
             //Act
             _primaryStatsTableViewModel.Init();
@@ -72,6 +60,7 @@ namespace UIView.UnitTests
         public void Model_OnPropertyChanged_RequestPrimaryStatsAsync()
         {
             //Arrange
+            Setup();
 
             //Act
             _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.With(_fakePrimaryStatsTableModel, new EventArgs());
@@ -84,6 +73,7 @@ namespace UIView.UnitTests
         public void Model_OnPrimaryStatsRequestTaskCompletion_CreatesPrimaryStatsViewModelsAndDataIsAvailable()
         {
             //Arrange
+            Setup(A.Fake<INotifyTaskCompletion<IEnumerable<UiPrimaryStat>>>());
             SetUpModelToReturnFakeViewModels();
 
             //Act
@@ -95,12 +85,48 @@ namespace UIView.UnitTests
             _primaryStatsTableViewModel.PrimaryStats[1].Should().Be(_fakeViewModel1);
         }
 
+        public void Setup(INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> dataRequestNotifyTaskCompletion = null)
+        {
+            SetupContantFakes();
+
+            SetupNotifyTaskCompletion(dataRequestNotifyTaskCompletion);
+
+            SetupPrimaryStatsViewModel();
+        }
+
+        public void SetupContantFakes()
+        {
+            _logger = A.Fake<ILogger>();
+            _fakePrimaryStatsTableModel = A.Fake<IPrimaryStatsTableModel>();
+            _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
+            _fakePrimaryStatViewModelFactory = A.Fake<IPrimaryStatViewModelFactory>();
+        }
+
+        private void SetupNotifyTaskCompletion(INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> dataRequestNotifyTaskCompletion)
+        {
+            if (dataRequestNotifyTaskCompletion == null)
+            {
+                dataRequestNotifyTaskCompletion = new NotifyTaskCompletion<IEnumerable<UiPrimaryStat>>(_logger);
+            }
+
+            _dataRequestNotifyTaskCompletion = dataRequestNotifyTaskCompletion;
+
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiPrimaryStat>>()).Returns(_dataRequestNotifyTaskCompletion);
+        }
+
+        public void SetupPrimaryStatsViewModel()
+        {
+            _observableHelper = new ObservableHelper();
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()), new TaskWrapper());
+            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
+
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _fakePrimaryStatsTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger), _fakePrimaryStatViewModelFactory, new UiStateController(_logger, new UiLockerContextFactory()));
+        }
+
         private void SetUpModelToReturnFakeViewModels()
         {
-            _fakeNotifyTaskCompletion = A.Fake<INotifyTaskCompletion<IEnumerable<UiPrimaryStat>>>();
-            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiPrimaryStat>>()).Returns(_fakeNotifyTaskCompletion);
-
-            A.CallTo(() => _fakeNotifyTaskCompletion.Result).Returns(new List<UiPrimaryStat> { new UiPrimaryStat(), new UiPrimaryStat() });
+            A.CallTo(() => _dataRequestNotifyTaskCompletion.Result).Returns(new List<UiPrimaryStat> { new UiPrimaryStat(), new UiPrimaryStat() });
 
             _fakeViewModel0 = A.Fake<IPrimaryStatViewModel>();
             _fakeViewModel1 = A.Fake<IPrimaryStatViewModel>();
@@ -110,7 +136,7 @@ namespace UIView.UnitTests
         private void RaiseModelDataRetrievedSuccessfullyEvents()
         {
             _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.FreeForm<EventHandler>.With(_fakePrimaryStatsTableModel, EventArgs.Empty);
-            _fakeNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_fakeNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
+            _dataRequestNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_dataRequestNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
         }
     }
 }

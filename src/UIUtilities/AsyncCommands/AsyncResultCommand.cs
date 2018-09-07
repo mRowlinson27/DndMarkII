@@ -7,7 +7,7 @@ namespace UIUtilities.AsyncCommands
     using API;
     using Neutronium.MVVMComponents;
 
-    class AsyncResultCommand<TIn, TResult> : AsyncCommandBase, INotifyPropertyChanged, IResultCommand<TResult>
+    class AsyncResultCommand<TIn, TResult> //: AsyncCommandBase, INotifyPropertyChanged, IResultCommand<TResult>
     {
         /*public NotifyTaskCompletion<TResult> Execution
         {
@@ -25,7 +25,7 @@ namespace UIUtilities.AsyncCommands
 
         private NotifyTaskCompletion<TResult> _execution; */
 
-        public AsyncResultCommand(Func<TIn, Task<TResult>> command, IUiStateController stateController) : base(stateController)
+        public AsyncResultCommand(Func<TIn, Task<TResult>> command, IUiStateController stateController)
         {
 //            _command = command;
         }
@@ -62,14 +62,14 @@ namespace UIUtilities.AsyncCommands
         {
             throw new NotImplementedException();
         }*/
-        public override Task ExecuteAsync(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TResult> Execute()
-        {
-            throw new NotImplementedException();
-        }
+//        public override Task ExecuteAsync(object parameter)
+//        {
+//            throw new NotImplementedException();
+//        }
+//
+//        public Task<TResult> Execute()
+//        {
+//            throw new NotImplementedException();
+//        }
     }
 }

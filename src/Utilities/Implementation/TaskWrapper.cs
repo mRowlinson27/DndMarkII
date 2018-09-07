@@ -11,7 +11,16 @@ namespace Utilities.Implementation
         {
            return async () =>
             {
-                await funcTask();
+                await funcTask().ConfigureAwait(false);
+                return null;
+            };
+        }
+
+        public Func<Task<object>> WrapTaskWithNullReturnValue<TIn>(Func<TIn, Task> funcTask, TIn param)
+        {
+            return async () =>
+            {
+                await funcTask(param).ConfigureAwait(false);
                 return null;
             };
         }

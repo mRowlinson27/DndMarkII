@@ -8,7 +8,7 @@ namespace UIUtilities.AsyncCommands
     using API;
     using API.AsyncCommands;
 
-    public class AsyncCommandBase2<TResult> : IAsyncCommandBase<TResult>
+    public class AsyncCommandWatcher<TResult> : IAsyncCommandWatcher<TResult>
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -65,7 +65,10 @@ namespace UIUtilities.AsyncCommands
 
         public void Dispose()
         {
-            Execution.PropertyChanged -= ExecutionOnPropertyChanged;
+            if (Execution != null)
+            {
+                Execution.PropertyChanged -= ExecutionOnPropertyChanged;
+            }
         }
     }
 }

@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncCommands\AsyncCommandBase2.cs" />
+    <Compile Include="AsyncCommands\AsyncCommandWatcher.cs" />
     <Compile Include="AsyncCommands\AsyncSimpleCommandAdaptor.cs" />
     <Compile Include="AsyncCommands\AsyncCommandBase.cs" />
     <Compile Include="AsyncCommands\AsyncCommandFactory.cs" />

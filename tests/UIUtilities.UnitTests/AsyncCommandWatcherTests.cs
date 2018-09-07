@@ -11,9 +11,9 @@ namespace UIUtilities.UnitTests
     using NUnit.Framework;
 
     [TestFixture]
-    public class AsyncCommandBaseTests
+    public class AsyncCommandWatcherTests
     {
-        private AsyncCommandBase2<object> _asyncCommandBase2;
+        private AsyncCommandWatcher<object> _asyncCommandWatcher;
         private INotifyTaskCompletion<object> _notifyTaskCompletion;
 
         private Func<Task<object>> _command;
@@ -24,7 +24,7 @@ namespace UIUtilities.UnitTests
             _notifyTaskCompletion = A.Fake<INotifyTaskCompletion<object>>();
 
             _command = CommandTask;
-            _asyncCommandBase2 = new AsyncCommandBase2<object>();
+            _asyncCommandWatcher = new AsyncCommandWatcher<object>();
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace UIUtilities.UnitTests
             //Arrange
 
             //Act
-            var result = _asyncCommandBase2.CanExecute(null);
+            var result = _asyncCommandWatcher.CanExecute(null);
 
             //Assert
             result.Should().BeTrue();
@@ -44,10 +44,10 @@ namespace UIUtilities.UnitTests
         {
             //Arrange
             A.CallTo(() => _notifyTaskCompletion.IsCompleted).Returns(false);
-            _asyncCommandBase2.Execution = _notifyTaskCompletion;
+            _asyncCommandWatcher.Execution = _notifyTaskCompletion;
 
             //Act
-            var result = _asyncCommandBase2.CanExecute(null);
+            var result = _asyncCommandWatcher.CanExecute(null);
 
             //Assert
             result.Should().BeFalse();
@@ -60,7 +60,7 @@ namespace UIUtilities.UnitTests
             A.CallTo(() => _notifyTaskCompletion.IsCompleted).Returns(true);
 
             //Act
-            var result = _asyncCommandBase2.CanExecute(null);
+            var result = _asyncCommandWatcher.CanExecute(null);
 
             //Assert
             result.Should().BeTrue();
@@ -72,7 +72,7 @@ namespace UIUtilities.UnitTests
             //Arrange
 
             //Act
-            await _asyncCommandBase2.ExecuteAsync(null, _command, _notifyTaskCompletion);
+            await _asyncCommandWatcher.ExecuteAsync(null, _command, _notifyTaskCompletion);
 
             //Assert
             A.CallTo(() => _notifyTaskCompletion.Start(_command)).MustHaveHappened();
@@ -84,8 +84,8 @@ namespace UIUtilities.UnitTests
         {
             //Arrange
             bool called = false;
-            _asyncCommandBase2.CanExecuteChanged += (s, a) => called = true;
-            _asyncCommandBase2.Execution = _notifyTaskCompletion;
+            _asyncCommandWatcher.CanExecuteChanged += (s, a) => called = true;
+            _asyncCommandWatcher.Execution = _notifyTaskCompletion;
 
             //Act
             _notifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_notifyTaskCompletion, new PropertyChangedEventArgs("IsCompleted"));

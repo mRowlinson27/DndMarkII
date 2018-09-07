@@ -20,6 +20,7 @@ namespace BootStrapper
     using UIView.Factories;
     using UIView.ViewModel;
     using Utilities.API;
+    using Utilities.Implementation;
 
     public class BootStrapper : IDisposable
     {
@@ -104,7 +105,7 @@ namespace BootStrapper
             _uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
 
             _notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
-            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, _uiStateController);
+            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, _uiStateController, new TaskWrapper());
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_notifyTaskCompletionFactory);
         }
 

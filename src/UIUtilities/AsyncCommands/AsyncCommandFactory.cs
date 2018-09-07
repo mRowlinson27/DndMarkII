@@ -6,27 +6,29 @@ namespace UIUtilities.AsyncCommands
     using System.Windows.Input;
     using API;
     using API.AsyncCommands;
+    using Utilities.API;
 
     public class AsyncCommandFactory : IAsyncCommandFactory
     {
         private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
         private readonly IUiStateController _stateController;
+        private readonly ITaskWrapper _taskWrapper;
 
-        public AsyncCommandFactory(INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController)
+        public AsyncCommandFactory(INotifyTaskCompletionFactory notifyTaskCompletionFactory, IUiStateController stateController, ITaskWrapper taskWrapper)
         {
             _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
             _stateController = stateController;
+            _taskWrapper = taskWrapper;
         }
 
         public IAsyncCommand Create(Func<Task> command)
         {
-            return null;// new AsyncSimpleCommand(command, _notifyTaskCompletionFactory);
+            return new AsyncSimpleCommand(new AsyncCommandWatcher<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
         }
 
         public IAsyncCommand Create<TIn>(Func<TIn, Task> command)
         {
-            return new AsyncCommandWithInput<TIn>(command, _notifyTaskCompletionFactory, _stateController);
+            return new AsyncCommandWithInput<TIn>(new AsyncCommandWatcher<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
         }
 
         public IAsyncCommandAdaptor CreateAdaptor(Action execute)

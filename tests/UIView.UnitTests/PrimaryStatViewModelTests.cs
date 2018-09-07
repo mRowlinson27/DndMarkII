@@ -13,6 +13,7 @@ namespace UIView.UnitTests
     using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using Utilities.API;
+    using Utilities.Implementation;
     using ViewModel;
 
     [TestFixture]
@@ -28,6 +29,8 @@ namespace UIView.UnitTests
         private INotifyTaskCompletionFactory _fakeNotifyTaskCompletionFactory;
         private IAsyncCommandFactory _asyncCommandFactory;
 
+        private INotifyTaskCompletion<object> _realNotifyTaskCompletion;
+
         [SetUp]
         public void Setup()
         {
@@ -35,7 +38,11 @@ namespace UIView.UnitTests
             _model = A.Fake<IPrimaryStatModel>();
             _uiThreadInvoker = A.Fake<IUiThreadInvoker>();
             _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()));
+
+            _realNotifyTaskCompletion = new NotifyTaskCompletion<object>(_logger);
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<object>()).Returns(_realNotifyTaskCompletion);
+
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()), new TaskWrapper());
 
             _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, _asyncCommandFactory, _uiThreadInvoker);
         }
@@ -47,13 +54,10 @@ namespace UIView.UnitTests
             var uiPrimaryStat = new UiPrimaryStat();
             _primaryStatViewModel.PrimaryStat = uiPrimaryStat;
 
-            var realNotifyTaskCompletion = new NotifyTaskCompletion<object>(_logger);
-            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<object>()).Returns(realNotifyTaskCompletion);
-
             //Act
             var command = (IAsyncCommand) _primaryStatViewModel.UpdatePrimaryStat;
             await command.ExecuteAsync(null);
-            await realNotifyTaskCompletion.Task;
+            await _realNotifyTaskCompletion.Task;
 
             //Assert
             A.CallTo(() => _model.UpdateStatAsync(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();

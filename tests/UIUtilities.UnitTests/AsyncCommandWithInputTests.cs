@@ -11,11 +11,11 @@ namespace UIUtilities.UnitTests
     using Utilities.API;
 
     [TestFixture]
-    public class AsyncSimpleCommandTests
+    public class AsyncCommandWithInputTests
     {
-        private AsyncSimpleCommand _asyncSimpleCommand;
+        private AsyncCommandWithInput<int> _asyncCommandWithInput;
 
-        private Func<Task> _command;
+        private Func<int, Task> _command;
         private Func<Task<object>> _wrappedCommand;
         private INotifyTaskCompletion<object> _notifyTaskCompletion;
         private ITaskWrapper _taskWrapper;
@@ -28,21 +28,21 @@ namespace UIUtilities.UnitTests
             _taskWrapper = A.Fake<ITaskWrapper>();
             _asyncCommandWatcher = A.Fake<IAsyncCommandWatcher<object>>();
 
-            _command = async () => {  };
+            _command = async (intIn) => { };
             _wrappedCommand = async () => null;
 
-            _asyncSimpleCommand = new AsyncSimpleCommand(_asyncCommandWatcher, _command, _notifyTaskCompletion, _taskWrapper);
+            _asyncCommandWithInput = new AsyncCommandWithInput<int>(_asyncCommandWatcher, _command, _notifyTaskCompletion, _taskWrapper);
         }
 
         [Test]
         public async Task ExecuteAsync_WrapsTaskAndPassesToBase()
         {
             //Arrange
-            A.CallTo(() => _taskWrapper.WrapTaskWithNullReturnValue(_command)).Returns(_wrappedCommand);
-            var parameter = new object();
+            var parameter = 5;
+            A.CallTo(() => _taskWrapper.WrapTaskWithNullReturnValue(_command, parameter)).Returns(_wrappedCommand);
 
             //Act
-            await _asyncSimpleCommand.ExecuteAsync(parameter);
+            await _asyncCommandWithInput.ExecuteAsync(parameter);
 
             //Assert
             A.CallTo(() => _asyncCommandWatcher.ExecuteAsync(parameter, _wrappedCommand, _notifyTaskCompletion)).MustHaveHappened();

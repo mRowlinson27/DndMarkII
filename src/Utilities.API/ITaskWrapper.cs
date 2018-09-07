@@ -6,5 +6,7 @@
     public interface ITaskWrapper
     {
         Func<Task<object>> WrapTaskWithNullReturnValue(Func<Task> funcTask);
+
+        Func<Task<object>> WrapTaskWithNullReturnValue<TIn>(Func<TIn, Task> funcTask, TIn param);
     }
 }
