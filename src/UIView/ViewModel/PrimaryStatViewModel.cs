@@ -33,7 +33,6 @@ namespace UIView.ViewModel
         public bool InEdit { get; set; } = true;
 
         public IAsyncCommandAdaptor UpdatePrimaryStat { get; private set; }
-        public bool UpdatePrimaryStatCanExecute => UpdatePrimaryStat.CanExecute(null);
 
         [Bindable(false)]
         public UiPrimaryStat PrimaryStat { get; set; }
@@ -56,7 +55,6 @@ namespace UIView.ViewModel
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
             UpdatePrimaryStat = asyncCommandFactory.Create(UpdatePrimaryStatCommandAsync);
-            UpdatePrimaryStat.CanExecuteChanged += UpdatePrimaryStatOnCanExecuteChanged;
         }
 
         private async Task UpdatePrimaryStatCommandAsync()
@@ -66,14 +64,8 @@ namespace UIView.ViewModel
             await _model.UpdateStatAsync(PrimaryStat).ConfigureAwait(false);
         }
 
-        private void UpdatePrimaryStatOnCanExecuteChanged(object sender, EventArgs e)
-        {
-           OnPropertyChanged("UpdatePrimaryStatCanExecute");
-        }
-
         public override void Dispose()
         {
-            UpdatePrimaryStat.CanExecuteChanged -= UpdatePrimaryStatOnCanExecuteChanged;
             UpdatePrimaryStat.Dispose();
         }
     }

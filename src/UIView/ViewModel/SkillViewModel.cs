@@ -38,10 +38,8 @@ namespace UIView.ViewModel
         private string _backGroundColour;
 
         public IAsyncCommandAdaptor Delete { get; private set; }
-        public bool DeleteCanExecute => Delete.ShouldExecute;
 
         public IAsyncCommandAdaptor ShowDetail { get; private set; }
-        public bool ShowDetailCanExecute => ShowDetail.CanExecute(null);
 
         private readonly ILogger _logger;
 
@@ -60,10 +58,7 @@ namespace UIView.ViewModel
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
             Delete = asyncCommandFactory.Create((Action) DoAction);
-            Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
-
             ShowDetail = asyncCommandFactory.Create(ShowDetailsCommandAsync);
-            ShowDetail.CanExecuteChanged += ShowDetailOnCanExecuteChanged;
         }
 
         private bool _toggle = true;
@@ -101,21 +96,9 @@ namespace UIView.ViewModel
             _logger.LogExit();
         }
 
-        private void DeleteOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("DeleteCanExecute");
-        }
-
-        private void ShowDetailOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("ShowDetailCanExecute");
-        }
-
         public override void Dispose()
         {
-            Delete.CanExecuteChanged -= DeleteOnCanExecuteChanged;
-//            Delete.Dispose();
-            ShowDetail.CanExecuteChanged -= ShowDetailOnCanExecuteChanged;
+            Delete.Dispose();
             ShowDetail.Dispose();
         }
     }

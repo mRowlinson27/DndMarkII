@@ -22,15 +22,6 @@ namespace UIView.ViewModel
         private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
         public IAsyncCommandAdaptor AddSkill { get; private set; }
-        public bool AddSkillCanExecute
-        {
-            get
-            {
-                var result = AddSkill.CanExecute(null);
-                _logger.LogMessage($"DEBUG {result}");
-                return AddSkill.CanExecute(result);
-            }
-        }
 
         private readonly ILogger _logger;
 
@@ -70,7 +61,6 @@ namespace UIView.ViewModel
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
             AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
-            AddSkill.CanExecuteChanged += AddSkillOnCanExecuteChanged;
         }
 
         public override void Init()
@@ -121,14 +111,8 @@ namespace UIView.ViewModel
             _logger.LogExit();
         }
 
-        private void AddSkillOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("AddSkillCanExecute");
-        }
-
         public override void Dispose()
         {
-            AddSkill.CanExecuteChanged -= AddSkillOnCanExecuteChanged;
             AddSkill.Dispose();
             _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
             _skillsRequestTaskRunner.Dispose();

@@ -23,7 +23,6 @@ namespace UIView.ViewModel
         public bool InEdit { get; set; } = true;
 
         public IAsyncCommandAdaptor Delete { get; private set; }
-        public bool DeleteCanExecute => Delete.ShouldExecute;
 
         private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
 
@@ -53,14 +52,12 @@ namespace UIView.ViewModel
             SetupTaskRunners(asyncTaskRunnerFactory);
 
             Delete = asyncCommandFactory.Create(() => { _logger.LogEntry(); });
-            Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
             _uiStateController.UiLockUpdated += UiStateControllerOnUiLockUpdated;
         }
 
         private void UiStateControllerOnUiLockUpdated(object sender, EventArgs e)
         {
             Delete.ShouldExecute = !_uiStateController.UiLocked;
-            OnPropertyChanged("DeleteCanExecute");
         }
 
         public override void Init()
@@ -114,11 +111,6 @@ namespace UIView.ViewModel
             await Task.Delay(1000);
 
             _logger.LogExit();
-        }
-
-        private void DeleteOnCanExecuteChanged(object sender, EventArgs e)
-        {
-//            OnPropertyChanged("DeleteCanExecute");
         }
 
         public override void Dispose()
