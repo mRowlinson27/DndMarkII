@@ -21,7 +21,7 @@ namespace UIView.ViewModel
 
         private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
 
-        public IAsyncCommand AddSkill { get; private set; }
+        public IAsyncCommandAdaptor AddSkill { get; private set; }
         public bool AddSkillCanExecute
         {
             get

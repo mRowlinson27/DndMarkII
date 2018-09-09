@@ -32,7 +32,7 @@ namespace UIView.ViewModel
 
         public bool InEdit { get; set; } = true;
 
-        public IAsyncCommand UpdatePrimaryStat { get; private set; }
+        public IAsyncCommandAdaptor UpdatePrimaryStat { get; private set; }
         public bool UpdatePrimaryStatCanExecute => UpdatePrimaryStat.CanExecute(null);
 
         [Bindable(false)]

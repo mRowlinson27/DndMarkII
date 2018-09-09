@@ -45,7 +45,7 @@ namespace UIView.ViewModel
         public RelayToogleCommand Delete { get; private set; }
         public bool DeleteCanExecute => Delete.ShouldExecute;
 
-        public IAsyncCommand ShowDetail { get; private set; }
+        public IAsyncCommandAdaptor ShowDetail { get; private set; }
         public bool ShowDetailCanExecute => ShowDetail.CanExecute(null);
 
         private readonly ILogger _logger;

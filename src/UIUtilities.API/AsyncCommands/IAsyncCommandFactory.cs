@@ -6,7 +6,7 @@ namespace UIUtilities.API.AsyncCommands
 
     public interface IAsyncCommandFactory
     {
-        IAsyncCommand Create(Func<Task> command);
+        IAsyncCommandAdaptor Create(Func<Task> command);
 
         IAsyncCommand Create<TIn>(Func<TIn, Task> command);
 

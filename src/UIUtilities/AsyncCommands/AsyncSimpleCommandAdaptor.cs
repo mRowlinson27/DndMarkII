@@ -43,7 +43,11 @@ namespace UIUtilities.AsyncCommands
                 return;
 
             await _asyncCommand.ExecuteAsync(null);
-//            await Task.Run(() => _execute());
+        }
+
+        public void Dispose()
+        {
+            _asyncCommand.Dispose();
         }
     }
 }
