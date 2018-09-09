@@ -52,7 +52,7 @@ namespace UIView.ViewModel
 
             SetupTaskRunners(asyncTaskRunnerFactory);
 
-            Delete = asyncCommandFactory.CreateAdaptor(() => { _logger.LogEntry(); });
+            Delete = asyncCommandFactory.Create(() => { _logger.LogEntry(); });
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
             _uiStateController.UiLockUpdated += UiStateControllerOnUiLockUpdated;
         }

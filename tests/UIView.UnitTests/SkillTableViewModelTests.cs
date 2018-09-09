@@ -69,8 +69,8 @@ namespace UIView.UnitTests
             Setup();
 
             //Act
-            var command = (IAsyncCommand)_skillTableViewModel.AddSkill;
-            await command.ExecuteAsync(null);
+            var command = _skillTableViewModel.AddSkill;
+            await command.ExecuteAsync();
             await _addSkillCommandNotifyTaskCompletion.Task;
 
             //Assert

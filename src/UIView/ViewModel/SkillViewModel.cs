@@ -3,9 +3,7 @@ namespace UIView.ViewModel
 {
     using System;
     using System.Threading.Tasks;
-    using System.Windows.Input;
     using API;
-    using Neutronium.MVVMComponents.Relay;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -39,10 +37,7 @@ namespace UIView.ViewModel
         }
         private string _backGroundColour;
 
-        //        public IAsyncCommand Delete { get; private set; }
-        //        public bool DeleteCanExecute => Delete.CanExecute(null);
-
-        public RelayToogleCommand Delete { get; private set; }
+        public IAsyncCommandAdaptor Delete { get; private set; }
         public bool DeleteCanExecute => Delete.ShouldExecute;
 
         public IAsyncCommandAdaptor ShowDetail { get; private set; }
@@ -64,8 +59,7 @@ namespace UIView.ViewModel
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-//            Delete = asyncCommandFactory.Create<SkillViewModel>(DeleteCommandAsync);
-            Delete = new RelayToogleCommand(DoAction);
+            Delete = asyncCommandFactory.Create((Action) DoAction);
             Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
 
             ShowDetail = asyncCommandFactory.Create(ShowDetailsCommandAsync);

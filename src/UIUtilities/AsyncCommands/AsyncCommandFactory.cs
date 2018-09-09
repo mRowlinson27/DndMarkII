@@ -32,7 +32,7 @@ namespace UIUtilities.AsyncCommands
             return new AsyncCommandWithInput<TIn>(new AsyncCommandWatcher<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
         }
 
-        public IAsyncCommandAdaptor CreateAdaptor(Action command)
+        public IAsyncCommandAdaptor Create(Action command)
         {
             return Create(_taskWrapper.WrapActionWithNullReturnValue(command));
         }

@@ -55,8 +55,8 @@ namespace UIView.UnitTests
             _primaryStatViewModel.PrimaryStat = uiPrimaryStat;
 
             //Act
-            var command = (IAsyncCommand) _primaryStatViewModel.UpdatePrimaryStat;
-            await command.ExecuteAsync(null);
+            var command = _primaryStatViewModel.UpdatePrimaryStat;
+            await command.ExecuteAsync();
             await _realNotifyTaskCompletion.Task;
 
             //Assert

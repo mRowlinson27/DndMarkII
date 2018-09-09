@@ -10,6 +10,6 @@ namespace UIUtilities.API.AsyncCommands
 
         IAsyncCommand Create<TIn>(Func<TIn, Task> command);
 
-        IAsyncCommandAdaptor CreateAdaptor(Action execute);
+        IAsyncCommandAdaptor Create(Action execute);
     }
 }
