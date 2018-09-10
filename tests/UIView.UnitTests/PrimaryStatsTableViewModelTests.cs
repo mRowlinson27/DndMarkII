@@ -28,7 +28,7 @@ namespace UIView.UnitTests
         private INotifyTaskCompletionFactory _fakeNotifyTaskCompletionFactory;
         private IObservableHelper _observableHelper;
         private IAsyncCommandFactory _asyncCommandFactory;
-        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+        private IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
         private IPrimaryStatViewModelFactory _fakePrimaryStatViewModelFactory;
 
         private INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> _dataRequestNotifyTaskCompletion;
@@ -119,10 +119,9 @@ namespace UIView.UnitTests
             _observableHelper = new ObservableHelper();
             var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
             _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
-
+            _asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _fakePrimaryStatsTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger), _fakePrimaryStatViewModelFactory, new UiStateController(_logger, new UiLockerContextFactory()));
+                _asyncCommandAdaptorFactory, new UiThreadInvoker(_logger), _fakePrimaryStatViewModelFactory, new UiStateController(_logger, new UiLockerContextFactory()));
         }
 
         private void SetUpModelToReturnFakeViewModels()

@@ -29,5 +29,7 @@ namespace UIUtilities.AsyncCommands
 
             await _asyncCommandWatcher.ExecuteAsync(parameter, wrappedTask, _notifyTaskCompletion);
         }
+
+        public override void Execute(object parameter) => ExecuteAsync(parameter);
     }
 }

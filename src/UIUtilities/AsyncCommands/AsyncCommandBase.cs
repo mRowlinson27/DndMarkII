@@ -34,6 +34,8 @@ namespace UIUtilities.AsyncCommands
             return _asyncCommandWatcher.CanExecute(parameter);
         }
 
+        public abstract void Execute(object parameter);
+
         public void Dispose()
         {
             _asyncCommandWatcher.Dispose();

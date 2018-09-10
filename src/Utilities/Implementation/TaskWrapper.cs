@@ -33,5 +33,10 @@ namespace Utilities.Implementation
                 return null;
             };
         }
+
+        public Func<Task<TResult>> WrapActionWithNullReturnValue<TResult>(Func<TResult> command)
+        {
+            return async () => await Task.Run(command);
+        }
     }
 }

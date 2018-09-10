@@ -10,6 +10,6 @@ namespace UIUtilities.API.AsyncCommands
 
         INotifyTaskCompletion<TResult> Execution { get; }
 
-        bool CanExecute(object parameter);
+        bool CanExecute(object parameter);        
     }
 }

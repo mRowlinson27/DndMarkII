@@ -31,13 +31,15 @@ namespace UIUtilities.AsyncCommands
         }
         private INotifyTaskCompletion<TResult> _execution;
 
-        public async Task ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution)
+        public async Task<TResult> ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution)
         {
             Execution = execution;
 
             Execution.Start(command);
 
             await Execution.TaskCompletion.ConfigureAwait(false);
+
+            return Execution.Result;
         }
 
         public bool CanExecute(object parameter)
@@ -51,6 +53,8 @@ namespace UIUtilities.AsyncCommands
             {
                 RaiseCanExecuteChanged();
             }
+
+            OnPropertyChanged(e.PropertyName);
         }
 
         private void RaiseCanExecuteChanged()

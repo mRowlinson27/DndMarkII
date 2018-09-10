@@ -11,19 +11,19 @@ namespace UIView.Factories
     public class SkillViewModelFactory : ISkillViewModelFactory
     {
         private readonly ILogger _logger;
-        private readonly IAsyncCommandFactory _asyncCommandFactory;
+        private readonly IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModelFactory(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker)
+        public SkillViewModelFactory(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
-            _asyncCommandFactory = asyncCommandFactory;
+            _asyncCommandAdaptorFactory = asyncCommandAdaptorFactory;
             _uiThreadInvoker = uiThreadInvoker;
         }
 
         public ISkillViewModel Create(UiSkill skill)
         {
-            var skillViewModel = new SkillViewModel(_logger, _asyncCommandFactory, _uiThreadInvoker) {Skill = skill};
+            var skillViewModel = new SkillViewModel(_logger, _asyncCommandAdaptorFactory, _uiThreadInvoker) {Skill = skill};
             skillViewModel.Init();
             return skillViewModel;
         }

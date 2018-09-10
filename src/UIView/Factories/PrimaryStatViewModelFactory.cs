@@ -13,24 +13,24 @@ namespace UIView.Factories
     {
         private readonly ILogger _logger;
 
-        private readonly IAsyncCommandFactory _asyncCommandFactory;
+        private readonly IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
         private readonly IPrimaryStatModelFactory _primaryStatModelFactory;
 
-        public PrimaryStatViewModelFactory(ILogger logger, IAsyncCommandFactory asyncCommandFactory,
+        public PrimaryStatViewModelFactory(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory,
             IUiThreadInvoker uiThreadInvoker, IPrimaryStatModelFactory primaryStatModelFactory)
         {
             _logger = logger;
-            _asyncCommandFactory = asyncCommandFactory;
+            _asyncCommandAdaptorFactory = asyncCommandAdaptorFactory;
             _uiThreadInvoker = uiThreadInvoker;
             _primaryStatModelFactory = primaryStatModelFactory;
         }
 
         public IPrimaryStatViewModel Create(UiPrimaryStat primaryStat)
         {
-            var primaryStatViewModel = new PrimaryStatViewModel(_logger, _primaryStatModelFactory.Create(), _asyncCommandFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
+            var primaryStatViewModel = new PrimaryStatViewModel(_logger, _primaryStatModelFactory.Create(), _asyncCommandAdaptorFactory, _uiThreadInvoker) { PrimaryStat = primaryStat };
             primaryStatViewModel.Init();
             return primaryStatViewModel;
         }

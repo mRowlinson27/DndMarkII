@@ -6,6 +6,6 @@ namespace UIUtilities.API.AsyncCommands
 
     public interface IAsyncCommandWatcher<TResult> : IWatchableCommandProperties<TResult>
     {
-        Task ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution);
+        Task<TResult> ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution);
     }
 }

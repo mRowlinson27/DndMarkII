@@ -44,17 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncCommandAdaptorFactory.cs" />
     <Compile Include="AsyncCommands\AsyncCommandWatcher.cs" />
     <Compile Include="AsyncCommands\AsyncCommandWatcherContextDecorator.cs" />
     <Compile Include="AsyncCommands\AsyncCommandWatcherFactory.cs" />
+    <Compile Include="AsyncCommands\AsyncResultCommand.cs" />
     <Compile Include="AsyncCommands\AsyncSimpleCommandAdaptor.cs" />
     <Compile Include="AsyncCommands\AsyncCommandBase.cs" />
     <Compile Include="AsyncCommands\AsyncCommandFactory.cs" />
     <Compile Include="AsyncCommands\AsyncCommandWithInput.cs" />
     <Compile Include="AsyncCommands\AsyncSimpleCommand.cs" />
-    <Compile Include="AsyncTaskRunner.cs" />
-    <Compile Include="AsyncTaskRunnerBase.cs" />
-    <Compile Include="AsyncTaskRunnerFactory.cs" />
     <Compile Include="IUiLockerContextFactory.cs" />
     <Compile Include="NotifyTaskCompletion.cs" />
     <Compile Include="NotifyTaskCompletionFactory.cs" />

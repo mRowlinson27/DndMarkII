@@ -43,25 +43,24 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public PrimaryStatViewModel(ILogger logger, IPrimaryStatModel model, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker): base(uiThreadInvoker)
+        public PrimaryStatViewModel(ILogger logger, IPrimaryStatModel model, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker): base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
             _uiThreadInvoker = uiThreadInvoker;
 
-            SetupCommandBindings(asyncCommandFactory);
+            SetupCommandBindings(asyncCommandAdaptorFactory);
         }
 
-        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
+        private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)
         {
-            UpdatePrimaryStat = asyncCommandFactory.Create(UpdatePrimaryStatCommandAsync);
+            UpdatePrimaryStat = asyncCommandAdaptorFactory.CreateWithContext((Action) UpdatePrimaryStatCommand);
         }
 
-        private async Task UpdatePrimaryStatCommandAsync()
+        private void UpdatePrimaryStatCommand()
         {
             _logger.LogMessage($"AbilityScore: {AbilityScore}");
-            await Task.Delay(1000);
-            await _model.UpdateStatAsync(PrimaryStat).ConfigureAwait(false);
+            _model.UpdateStat(PrimaryStat);
         }
 
         public override void Dispose()

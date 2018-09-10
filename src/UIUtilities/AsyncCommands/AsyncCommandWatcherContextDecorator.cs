@@ -36,12 +36,15 @@ namespace UIUtilities.AsyncCommands
             return _baseAsyncCommandWatcher.CanExecute(parameter) && !_context.UiLocked;
         }
 
-        public async Task ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution)
+        public async Task<TResult> ExecuteAsync(object parameter, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> execution)
         {
+            TResult result;
             using (_context.LockedContext())
             {
-                await _baseAsyncCommandWatcher.ExecuteAsync(parameter, command, execution);
+                result = await _baseAsyncCommandWatcher.ExecuteAsync(parameter, command, execution);
             }
+
+            return result;
         }
 
         private void BaseAsyncCommandWatcherOnCanExecuteChanged(object sender, EventArgs e)

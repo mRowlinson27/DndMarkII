@@ -19,7 +19,7 @@ namespace UIView.ViewModel
     {
         public IList<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
 
-        private IAsyncTaskRunner<IEnumerable<UiSkill>> _skillsRequestTaskRunner;
+        private IAsyncCommand<IEnumerable<UiSkill>> _skillsRequestCommand;
 
         public IAsyncCommandAdaptor AddSkill { get; private set; }
 
@@ -35,8 +35,8 @@ namespace UIView.ViewModel
 
         private readonly IUiStateController _uiStateController;
 
-        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory, 
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
+        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
+            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _observableHelper = observableHelper;
@@ -47,20 +47,20 @@ namespace UIView.ViewModel
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
 
-            SetupTaskRunners(asyncTaskRunnerFactory);
+            SetupTaskRunners(asyncCommandFactory);
 
-            SetupCommandBindings(asyncCommandFactory);
+            SetupCommandBindings(asyncCommandAdaptorFactory);
         }
 
-        private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+        private void SetupTaskRunners(IAsyncCommandFactory asyncTaskRunnerFactory)
         {
-//            _skillsRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestSkills);
-            _skillsRequestTaskRunner.PropertyChanged += SkillsRequestTaskRunnerOnPropertyChanged;
+            _skillsRequestCommand = asyncTaskRunnerFactory.CreateResultCommand(_model.RequestSkills);
+            _skillsRequestCommand.PropertyChanged += SkillsRequestCommandOnPropertyChanged;
         }
 
-        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
+        private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)
         {
-            AddSkill = asyncCommandFactory.Create((Action) AddSkillCommand);
+            AddSkill = asyncCommandAdaptorFactory.CreateWithContext((Action) AddSkillCommand);
         }
 
         public override void Init()
@@ -83,10 +83,10 @@ namespace UIView.ViewModel
             _uiStateController.IncUiLock();
 
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
-            _skillsRequestTaskRunner.StartTask();
+            _skillsRequestCommand.Execute(null);
         }
 
-        private void SkillsRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void SkillsRequestCommandOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsSuccessfullyCompleted")
             {
@@ -98,7 +98,7 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            var newSkillModelList = _skillsRequestTaskRunner.Result.Select(s => _skillViewModelFactory.Create(s)).ToList();
+            var newSkillModelList = _skillsRequestCommand.Execution.Result.Select(s => _skillViewModelFactory.Create(s)).ToList();
             for (int i = 0; i < newSkillModelList.Count; i++)
             {
                 newSkillModelList[i].BackGroundColour = i % 2 == 0 ? Constants.SkillModelEvenIndexBackGroundColour : Constants.SkillModelOddIndexBackGroundColour;
@@ -114,8 +114,8 @@ namespace UIView.ViewModel
         public override void Dispose()
         {
             AddSkill.Dispose();
-            _skillsRequestTaskRunner.PropertyChanged -= SkillsRequestTaskRunnerOnPropertyChanged;
-            _skillsRequestTaskRunner.Dispose();
+            _skillsRequestCommand.PropertyChanged -= SkillsRequestCommandOnPropertyChanged;
+            _skillsRequestCommand.Dispose();
             _model.PropertyChanged -= ModelOnPropertyChanged;
             _model.Dispose();
         }

@@ -10,5 +10,7 @@
         Func<Task<object>> WrapTaskWithNullReturnValue<TIn>(Func<TIn, Task> funcTask, TIn param);
 
         Func<Task<object>> WrapActionWithNullReturnValue(Action action);
+
+        Func<Task<TResult>> WrapActionWithNullReturnValue<TResult>(Func<TResult> command);
     }
 }

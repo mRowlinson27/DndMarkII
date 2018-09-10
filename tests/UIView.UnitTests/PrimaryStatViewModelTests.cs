@@ -44,12 +44,13 @@ namespace UIView.UnitTests
 
             var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
             _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
+            var asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
 
-            _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, _asyncCommandFactory, _uiThreadInvoker);
+            _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, asyncCommandAdaptorFactory, _uiThreadInvoker);
         }
 
         [Test]
-        public async Task UpdatePrimaryStatCommandAsync_CallModelDataUpdated()
+        public async Task UpdatePrimaryStatCommand_CallModelDataUpdated()
         {
             //Arrange
             var uiPrimaryStat = new UiPrimaryStat();
@@ -61,7 +62,7 @@ namespace UIView.UnitTests
             await _realNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _model.UpdateStatAsync(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();
+            A.CallTo(() => _model.UpdateStat(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();
         }
     }
 }

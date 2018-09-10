@@ -34,7 +34,7 @@ namespace BootStrapper
         private INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
         private IUiStateController _uiStateController;
         private IAsyncCommandFactory _asyncCommandFactory;
-        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+        private IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
 
         //Database
         private ModelJsonRepo _masterRepo;
@@ -107,7 +107,7 @@ namespace BootStrapper
 
             _notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
             _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, asyncCommandWatcherFactory, new TaskWrapper());
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_notifyTaskCompletionFactory);
+            _asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
         }
 
         private void SetupDatabase()
@@ -133,16 +133,16 @@ namespace BootStrapper
 
         private void SetupUiView()
         {
-            var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker);
-            var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandFactory, _uiThreadInvoker, _primaryStatModelFactory);
+            var skillViewModelFactory = new SkillViewModelFactory(_logger, _asyncCommandAdaptorFactory, _uiThreadInvoker);
+            var primaryStatViewModelFactory = new PrimaryStatViewModelFactory(_logger, _asyncCommandAdaptorFactory, _uiThreadInvoker, _primaryStatModelFactory);
 
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel, _uiThreadInvoker);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory,
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncCommandAdaptorFactory,
                 _uiThreadInvoker, skillViewModelFactory, _uiStateController);
 
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, _uiThreadInvoker, primaryStatViewModelFactory, _uiStateController);
+                _asyncCommandAdaptorFactory, _uiThreadInvoker, primaryStatViewModelFactory, _uiStateController);
         }
 
         public void Dispose()

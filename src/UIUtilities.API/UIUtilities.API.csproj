@@ -42,16 +42,15 @@
   <ItemGroup>
     <Compile Include="AsyncCommands\IAsyncCommand.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandAdaptor.cs" />
+    <Compile Include="AsyncCommands\IAsyncCommandAdaptorFactory.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandWatcher.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandFactory.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandWatcherFactory.cs" />
     <Compile Include="AsyncCommands\IWatchableCommandProperties.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="IAsyncTaskRunnerFactory.cs" />
     <Compile Include="INotifyTaskCompletion.cs" />
     <Compile Include="INotifyTaskCompletionFactory.cs" />
     <Compile Include="IObservableHelper.cs" />
-    <Compile Include="IAsyncTaskRunner.cs" />
     <Compile Include="IUiLockerContext.cs" />
     <Compile Include="IUiStateController.cs" />
     <Compile Include="IUiThreadInvoker.cs" />

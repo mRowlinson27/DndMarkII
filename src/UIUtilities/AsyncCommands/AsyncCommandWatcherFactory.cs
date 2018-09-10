@@ -15,7 +15,12 @@ namespace UIUtilities.AsyncCommands
 
         public IAsyncCommandWatcher<T> Create<T>()
         {
-            return new AsyncCommandWatcherContextDecorator<T>(new AsyncCommandWatcher<T>(), _stateController);
+            return new AsyncCommandWatcher<T>();
+        }
+
+        public IAsyncCommandWatcher<T> CreateWithContext<T>()
+        {
+            return new AsyncCommandWatcherContextDecorator<T>(Create<T>(), _stateController);
         }
     }
 }

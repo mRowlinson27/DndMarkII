@@ -29,9 +29,9 @@ namespace UIView.UnitTests
         private IObservableHelper _observableHelper;
         private INotifyTaskCompletionFactory _fakeNotifyTaskCompletionFactory;
         private IAsyncCommandFactory _asyncCommandFactory;
-        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
         private IUiThreadInvoker _uiThreadInvoker;
         private ISkillViewModelFactory _skillViewModelFactory;
+        private IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
 
         private INotifyTaskCompletion<IEnumerable<UiSkill>> _skillRequestNotifyTaskCompletion;
         private INotifyTaskCompletion<object> _addSkillCommandNotifyTaskCompletion;
@@ -150,10 +150,10 @@ namespace UIView.UnitTests
             _observableHelper = new ObservableHelper();
             var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
             _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
+            _asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
             _uiThreadInvoker = new UiThreadInvoker(_logger);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, _skillViewModelFactory,
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncCommandAdaptorFactory, _uiThreadInvoker, _skillViewModelFactory,
                 new UiStateController(_logger, new UiLockerContextFactory()));
         }
 

@@ -24,7 +24,7 @@ namespace UIView.ViewModel
 
         public IAsyncCommandAdaptor Delete { get; private set; }
 
-        private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
+        private IAsyncCommand<IEnumerable<UiPrimaryStat>> _primaryStatRequestCommand;
 
         private readonly ILogger _logger;
 
@@ -39,7 +39,7 @@ namespace UIView.ViewModel
         private readonly IUiStateController _uiStateController;
 
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
+            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
@@ -49,9 +49,9 @@ namespace UIView.ViewModel
             _uiStateController = uiStateController;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
-            SetupTaskRunners(asyncTaskRunnerFactory);
+            SetupTaskRunners(asyncCommandFactory);
 
-            Delete = asyncCommandFactory.Create(() => { _logger.LogEntry(); });
+            Delete = asyncCommandAdaptorFactory.CreateWithContext(() => { _logger.LogEntry(); });
         }
 
         public override void Init()
@@ -59,10 +59,10 @@ namespace UIView.ViewModel
             MakePrimaryStatRequest();
         }
 
-        private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+        private void SetupTaskRunners(IAsyncCommandFactory asyncCommandFactory)
         {
-//            _primaryStatRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestPrimaryStats);
-            _primaryStatRequestTaskRunner.PropertyChanged += PrimaryStatRequestTaskRunnerOnPropertyChanged;
+            _primaryStatRequestCommand = asyncCommandFactory.CreateResultCommand(_model.RequestPrimaryStats);
+            _primaryStatRequestCommand.PropertyChanged += PrimaryStatRequestCommandOnPropertyChanged;
         }
 
         private void MakePrimaryStatRequest()
@@ -70,10 +70,10 @@ namespace UIView.ViewModel
             _uiStateController.IncUiLock();
 
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
-            _primaryStatRequestTaskRunner.StartTask();
+            _primaryStatRequestCommand.Execute(null);
         }
 
-        private void PrimaryStatRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void PrimaryStatRequestCommandOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsSuccessfullyCompleted")
             {
@@ -85,7 +85,7 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            var primaryStatViewModels = _primaryStatRequestTaskRunner.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
+            var primaryStatViewModels = _primaryStatRequestCommand.Execution.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
             _observableHelper.Rebind(PrimaryStats, primaryStatViewModels);
             DataAvailable = true;
             _uiStateController.DecUiLock();
@@ -109,8 +109,8 @@ namespace UIView.ViewModel
 
         public override void Dispose()
         {
-            _primaryStatRequestTaskRunner.PropertyChanged -= PrimaryStatRequestTaskRunnerOnPropertyChanged;
-            _primaryStatRequestTaskRunner.Dispose();
+            _primaryStatRequestCommand.PropertyChanged -= PrimaryStatRequestCommandOnPropertyChanged;
+            _primaryStatRequestCommand.Dispose();
             _model.PrimaryStatsUpdated -= ModelOnPrimaryStatsUpdated;
         }
     }

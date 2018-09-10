@@ -6,6 +6,6 @@ namespace UIModel.API
 
     public interface IPrimaryStatModel
     {
-        Task UpdateStatAsync(UiPrimaryStat primaryStat);
+        void UpdateStat(UiPrimaryStat primaryStat);
     }
 }

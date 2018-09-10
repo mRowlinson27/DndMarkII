@@ -15,9 +15,8 @@ namespace UIModel
             _primaryStatsService = primaryStatsService;
         }
 
-        public async Task UpdateStatAsync(UiPrimaryStat primaryStat)
+        public void UpdateStat(UiPrimaryStat primaryStat)
         {
-            await Task.Delay(1);
         }
     }
 }

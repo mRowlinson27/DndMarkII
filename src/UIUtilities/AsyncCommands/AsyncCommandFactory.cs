@@ -20,20 +20,34 @@ namespace UIUtilities.AsyncCommands
             _taskWrapper = taskWrapper;
         }
 
-        public IAsyncCommandAdaptor Create(Func<Task> command)
+        public IAsyncCommand Create(Func<Task> command)
         {
-            var asyncCommand = new AsyncSimpleCommand(_asyncCommandWatcherFactory.Create<object>(), _taskWrapper.WrapTaskWithNullReturnValue(command), _notifyTaskCompletionFactory.Create<object>());
-            return new AsyncSimpleCommandAdaptor(asyncCommand);
+            return new AsyncSimpleCommand(_asyncCommandWatcherFactory.Create<object>(), _taskWrapper.WrapTaskWithNullReturnValue(command), _notifyTaskCompletionFactory.Create<object>());
+        }
+
+        public IAsyncCommand Create(Action action)
+        {
+            return Create(_taskWrapper.WrapActionWithNullReturnValue(action));
+        }
+
+        public IAsyncCommand CreateWithContext(Func<Task> command)
+        {
+            return new AsyncSimpleCommand(_asyncCommandWatcherFactory.CreateWithContext<object>(), _taskWrapper.WrapTaskWithNullReturnValue(command), _notifyTaskCompletionFactory.Create<object>());
+        }
+
+        public IAsyncCommand CreateWithContext(Action action)
+        {
+            return CreateWithContext(_taskWrapper.WrapActionWithNullReturnValue(action));
         }
 
         public IAsyncCommand Create<TIn>(Func<TIn, Task> command)
         {
-            return new AsyncCommandWithInput<TIn>(_asyncCommandWatcherFactory.Create<object>(), command, _notifyTaskCompletionFactory.Create<object>(), _taskWrapper);
+            throw new NotImplementedException();
         }
 
-        public IAsyncCommandAdaptor Create(Action command)
+        public IAsyncCommand<TResult> CreateResultCommand<TResult>(Func<TResult> command)
         {
-            return Create(_taskWrapper.WrapActionWithNullReturnValue(command));
+            return new AsyncResultCommand<TResult>(_asyncCommandWatcherFactory.Create<TResult>(), _taskWrapper.WrapActionWithNullReturnValue(command), _notifyTaskCompletionFactory.Create<TResult>());
         }
     }
 }

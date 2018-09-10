@@ -46,18 +46,18 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
+        public SkillViewModel(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
         {
             _logger = logger;
             _uiThreadInvoker = uiThreadInvoker;
 
-            SetupCommandBindings(asyncCommandFactory);
+            SetupCommandBindings(asyncCommandAdaptorFactory);
         }
 
-        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
+        private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)
         {
-            Delete = asyncCommandFactory.Create((Action) DeleteCommand);
-            ShowDetail = asyncCommandFactory.Create((Action) ShowDetailsCommand);
+            Delete = asyncCommandAdaptorFactory.CreateWithContext((Action) DeleteCommand);
+            ShowDetail = asyncCommandAdaptorFactory.CreateWithContext((Action) ShowDetailsCommand);
         }
 
         private void DeleteCommand(/*SkillViewModel uiSkill*/)
