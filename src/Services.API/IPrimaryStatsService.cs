@@ -10,8 +10,8 @@ namespace Services.API
     {
         event EventHandler PrimaryStatsUpdated;
 
-        Task<IEnumerable<PrimaryStat>> GetAllPrimaryStatsAsync();
+        IEnumerable<PrimaryStat> GetAllPrimaryStats();
 
-        Task AddOrUpdatePrimaryStatAsync(PrimaryStat skill);
+        void AddOrUpdatePrimaryStat(PrimaryStat skill);
     }
 }

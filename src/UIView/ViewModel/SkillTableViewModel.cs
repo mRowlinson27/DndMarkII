@@ -54,13 +54,13 @@ namespace UIView.ViewModel
 
         private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
         {
-            _skillsRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestSkillsAsync);
+//            _skillsRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestSkills);
             _skillsRequestTaskRunner.PropertyChanged += SkillsRequestTaskRunnerOnPropertyChanged;
         }
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            AddSkill = asyncCommandFactory.Create(AddSkillCommandAsync);
+            AddSkill = asyncCommandFactory.Create((Action) AddSkillCommand);
         }
 
         public override void Init()
@@ -68,9 +68,9 @@ namespace UIView.ViewModel
             MakeSkillRequest();
         }
 
-        private async Task AddSkillCommandAsync()
+        private void AddSkillCommand()
         {
-            await _model.AddSkillAsync().ConfigureAwait(false);
+            _model.AddSkill();
         }
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -80,7 +80,7 @@ namespace UIView.ViewModel
 
         private void MakeSkillRequest()
         {
-//            _uiStateController.IncUiLock();
+            _uiStateController.IncUiLock();
 
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
             _skillsRequestTaskRunner.StartTask();
@@ -106,8 +106,8 @@ namespace UIView.ViewModel
             _observableHelper.Rebind(SkillViewModels, newSkillModelList);
 
             DataAvailable = true;
-//            _uiStateController.DecUiLock();
 
+            _uiStateController.DecUiLock();
             _logger.LogExit();
         }
 

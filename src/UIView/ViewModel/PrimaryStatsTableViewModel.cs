@@ -52,12 +52,6 @@ namespace UIView.ViewModel
             SetupTaskRunners(asyncTaskRunnerFactory);
 
             Delete = asyncCommandFactory.Create(() => { _logger.LogEntry(); });
-            _uiStateController.UiLockUpdated += UiStateControllerOnUiLockUpdated;
-        }
-
-        private void UiStateControllerOnUiLockUpdated(object sender, EventArgs e)
-        {
-//            Delete.ShouldExecute = !_uiStateController.UiLocked;
         }
 
         public override void Init()
@@ -67,7 +61,7 @@ namespace UIView.ViewModel
 
         private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
         {
-            _primaryStatRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestPrimaryStatsAsync);
+//            _primaryStatRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestPrimaryStats);
             _primaryStatRequestTaskRunner.PropertyChanged += PrimaryStatRequestTaskRunnerOnPropertyChanged;
         }
 

@@ -46,7 +46,7 @@ namespace UIView.UnitTests
             _skillTableViewModel.Init();
 
             //Assert
-            A.CallTo(() => _skillTableModel.RequestSkillsAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace UIView.UnitTests
             _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
 
             //Assert
-            A.CallTo(() => _skillTableModel.RequestSkillsAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace UIView.UnitTests
             await _addSkillCommandNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _skillTableModel.AddSkillAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.AddSkill()).MustHaveHappened();
         }
 
         [Test]

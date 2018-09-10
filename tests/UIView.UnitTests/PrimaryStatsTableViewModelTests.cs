@@ -53,7 +53,7 @@ namespace UIView.UnitTests
             _primaryStatsTableViewModel.Init();
 
             //Assert
-            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStatsAsync()).MustHaveHappened();
+            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStats()).MustHaveHappened();
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace UIView.UnitTests
             _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.With(_fakePrimaryStatsTableModel, new EventArgs());
 
             //Assert
-            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStatsAsync()).MustHaveHappened();
+            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStats()).MustHaveHappened();
         }
 
         [Test]

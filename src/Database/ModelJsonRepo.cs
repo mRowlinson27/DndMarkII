@@ -20,57 +20,57 @@ namespace Database
             _databaseFile = databaseFile;
         }
 
-        public async Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync()
+        public IEnumerable<PrimaryStat> GetPrimaryStats()
         {
-            var model = await GetModel().ConfigureAwait(false);
+            var model = GetModel();
             return model.PrimaryStats;
         }
 
-        public async Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats)
+        public void UpdatePrimaryStats(IEnumerable<PrimaryStat> stats)
         {
             var statsList = stats.ToList();
 
-            var model = await GetModel().ConfigureAwait(false);
+            var model = GetModel();
             model.PrimaryStats = statsList;
         }
 
-        public async Task<IEnumerable<Skill>> GetSkillsAsync()
+        public IEnumerable<Skill> GetSkills()
         {
-            var model = await GetModel().ConfigureAwait(false);
+            var model = GetModel();
             return model.Skills.Values;
         }
 
-        public async Task AddSkillAsync(Skill skill)
+        public void AddSkill(Skill skill)
         {
-            var model = await GetModel().ConfigureAwait(false);
+            var model = GetModel();
             model.Skills.Add(skill.Id, skill);
         }
 
-        public async Task AddSkillsAsync(IEnumerable<Skill> skills)
+        public void AddSkills(IEnumerable<Skill> skills)
         {
             foreach (var skill in skills)
             {
-                await AddSkillAsync(skill);
+                AddSkill(skill);
             }
         }
 
-        public Task UpdateSkillAsync(Skill skill)
+        public void UpdateSkill(Skill skill)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task UpdateSkillsAsync(IEnumerable<Skill> skills)
+        public void UpdateSkills(IEnumerable<Skill> skills)
         {
-            var model = await GetModel().ConfigureAwait(false);
+            var model = GetModel();
 
             var skillDict = skills.ToDictionary(skill => skill.Id);
 
             model.Skills = skillDict;
         }
 
-        private async Task<Model> GetModel()
+        private Model GetModel()
         {
-            return _model ?? (_model = await _databaseFile.ReadAsync());
+            return _model ?? (_model = _databaseFile.Read());
         }
 
         private async Task SaveModelAsync()

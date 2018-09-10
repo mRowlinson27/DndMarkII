@@ -7,14 +7,14 @@ namespace Database.API
 
     public interface ISkillsRepo
     {
-        Task<IEnumerable<Skill>> GetSkillsAsync();
+        IEnumerable<Skill> GetSkills();
 
-        Task AddSkillAsync(Skill skill);
+        void AddSkill(Skill skill);
 
-        Task AddSkillsAsync(IEnumerable<Skill> skills);
+        void AddSkills(IEnumerable<Skill> skills);
 
-        Task UpdateSkillAsync(Skill skill);
+        void UpdateSkill(Skill skill);
 
-        Task UpdateSkillsAsync(IEnumerable<Skill> skills);
+        void UpdateSkills(IEnumerable<Skill> skills);
     }
 }

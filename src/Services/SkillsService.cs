@@ -31,23 +31,23 @@ namespace Services
             _skillTotalCalculator = skillTotalCalculator;
         }
 
-        public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
+        public IEnumerable<Skill> GetAllSkills()
         {
             _logger.LogEntry();
 
-            var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
+            var dbSkills = _skillsRepo.GetSkills();
             var svcSkills = _svcAutoMapper.MapToSvc(dbSkills);
-            var svcSkillsWithTotal = await _skillTotalCalculator.AddTotalsAsync(svcSkills);
+            var svcSkillsWithTotal = _skillTotalCalculator.AddTotals(svcSkills);
 
             _logger.LogExit();
             return svcSkillsWithTotal;
         }
 
-        public async Task AddSkillAsync(Skill skill)
+        public void AddSkill(Skill skill)
         {
             _logger.LogEntry();
 
-            await _skillsRepo.AddSkillAsync(_svcAutoMapper.MapToDb(skill));
+            _skillsRepo.AddSkill(_svcAutoMapper.MapToDb(skill));
             SkillsUpdated?.Invoke(this, EventArgs.Empty);
 
             _logger.LogExit();

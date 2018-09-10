@@ -32,7 +32,7 @@ namespace Services.UnitTests
         }
 
         [Test]
-        public async Task GetAllPrimaryStatsAsync_GetsFromDatabase_TransformsMundaneAttributes()
+        public void GetAllPrimaryStats_GetsFromDatabase_TransformsMundaneAttributes()
         {
             //Arrange
             var dbPrimaryStats = new List<PrimaryStat>
@@ -56,11 +56,11 @@ namespace Services.UnitTests
             };
 
 
-            A.CallTo(() => _primaryStatsRepo.GetPrimaryStatsAsync()).Returns(dbPrimaryStats);
+            A.CallTo(() => _primaryStatsRepo.GetPrimaryStats()).Returns(dbPrimaryStats);
             A.CallTo(() => _svcAutoMapper.MapToSvc(dbPrimaryStats)).Returns(svcPrimaryStats);
 
             //Act
-            var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
+            var result = _primaryStatsService.GetAllPrimaryStats();
 
             //Assert
             result.Should().BeEquivalentTo(svcPrimaryStats);
@@ -73,7 +73,7 @@ namespace Services.UnitTests
         [TestCase(11, 0)]
         [TestCase(12, 1)]
         [TestCase(16, 3)]
-        public async Task GetAllPrimaryStatsAsync_CorrectModifier(int abilityScore, int correctAbilityModifier)
+        public void GetAllPrimaryStats_CorrectModifier(int abilityScore, int correctAbilityModifier)
         {
             //Arrange
             var svcPrimaryStats = new List<API.Dto.PrimaryStat>
@@ -89,7 +89,7 @@ namespace Services.UnitTests
             A.CallTo(() => _svcAutoMapper.MapToSvc(A<IEnumerable<PrimaryStat>>.Ignored)).Returns(svcPrimaryStats);
 
             //Act
-            var result = await _primaryStatsService.GetAllPrimaryStatsAsync();
+            var result = _primaryStatsService.GetAllPrimaryStats();
             var firstResult = result.FirstOrDefault();
 
             //Assert

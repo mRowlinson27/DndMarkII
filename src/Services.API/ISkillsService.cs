@@ -10,8 +10,8 @@ namespace Services.API
     {
         event EventHandler SkillsUpdated;
 
-        Task<IEnumerable<Skill>> GetAllSkillsAsync();
+        IEnumerable<Skill> GetAllSkills();
 
-        Task AddSkillAsync(Skill skill);
+        void AddSkill(Skill skill);
     }
 }

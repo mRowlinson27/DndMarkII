@@ -27,11 +27,11 @@ namespace Services
             _svcAutoMapper = svcAutoMapper;
         }
 
-        public async Task<IEnumerable<PrimaryStat>> GetAllPrimaryStatsAsync()
+        public IEnumerable<PrimaryStat> GetAllPrimaryStats()
         {
             _logger.LogEntry();
 
-            var dbPrimaryStats = await _primaryStatsRepo.GetPrimaryStatsAsync().ConfigureAwait(false);
+            var dbPrimaryStats = _primaryStatsRepo.GetPrimaryStats();
             var svcPrimaryStats = _svcAutoMapper.MapToSvc(dbPrimaryStats);
             var svcPrimaryStatsWithModifier = svcPrimaryStats.Select(AddModifierToPrimaryStat);
 
@@ -39,7 +39,7 @@ namespace Services
             return svcPrimaryStatsWithModifier;
         }
 
-        public Task AddOrUpdatePrimaryStatAsync(PrimaryStat skill)
+        public void AddOrUpdatePrimaryStat(PrimaryStat skill)
         {
             throw new NotImplementedException();
         }

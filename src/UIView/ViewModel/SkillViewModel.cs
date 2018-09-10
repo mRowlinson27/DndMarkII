@@ -2,6 +2,7 @@
 namespace UIView.ViewModel
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using API;
     using UIModel.API.Dto;
@@ -44,55 +45,37 @@ namespace UIView.ViewModel
         private readonly ILogger _logger;
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
-        private readonly IUiStateController _uiStateController;
 
-        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker, IUiStateController uiStateController) : base(uiThreadInvoker)
+        public SkillViewModel(ILogger logger, IAsyncCommandFactory asyncCommandFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
         {
             _logger = logger;
             _uiThreadInvoker = uiThreadInvoker;
-            _uiStateController = uiStateController;
 
             SetupCommandBindings(asyncCommandFactory);
         }
 
         private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
         {
-            Delete = asyncCommandFactory.Create((Action) DoAction);
-            ShowDetail = asyncCommandFactory.Create(ShowDetailsCommandAsync);
+            Delete = asyncCommandFactory.Create((Action) DeleteCommand);
+            ShowDetail = asyncCommandFactory.Create((Action) ShowDetailsCommand);
         }
 
-        private bool _toggle = true;
-        private void DoAction()
-        {
-            _logger.LogEntry();
-            if (_toggle)
-            {
-                _uiStateController.IncUiLock();
-            }
-            else
-            {
-                _uiStateController.DecUiLock();
-//                Delete.ShouldExecute = false;
-            }
-
-            _toggle = !_toggle;
-            _logger.LogExit();
-        }
-
-        private async Task DeleteCommandAsync(SkillViewModel uiSkill)
+        private void DeleteCommand(/*SkillViewModel uiSkill*/)
         {
             _logger.LogEntry();
 
-            await Task.Delay(1000);
+            Thread.Sleep(1000);
 
             _logger.LogExit();
         }
 
-        private async Task ShowDetailsCommandAsync()
+        private void ShowDetailsCommand()
         {
-            await Task.Delay(1000);
+            _logger.LogEntry();
 
-            ShowingDetails = !ShowingDetails;
+            Thread.Sleep(1000);
+            _uiThreadInvoker.Dispatch(() => ShowingDetails = !ShowingDetails);
+
             _logger.LogExit();
         }
 

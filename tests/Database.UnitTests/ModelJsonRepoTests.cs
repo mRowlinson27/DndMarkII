@@ -36,39 +36,39 @@ namespace Database.UnitTests
         }
 
         [Test]
-        public async Task RequestX_OnlyReadsFromJsonFileOnce()
+        public void RequestX_OnlyReadsFromJsonFileOnce()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             //Act
-            await  _modelJsonRepo.GetPrimaryStatsAsync();
-            await  _modelJsonRepo.GetPrimaryStatsAsync();
-            await  _modelJsonRepo.GetSkillsAsync();
-            await  _modelJsonRepo.GetSkillsAsync();
+             _modelJsonRepo.GetPrimaryStats();
+             _modelJsonRepo.GetPrimaryStats();
+             _modelJsonRepo.GetSkills();
+             _modelJsonRepo.GetSkills();
 
             //Assert
-            A.CallTo(() => _jsonFile.ReadAsync()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _jsonFile.Read()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task GetPrimaryStatsAsync_ReturnsJsonFileResult()
+        public void GetPrimaryStats_ReturnsJsonFileResult()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             //Act
-            var skills = await _modelJsonRepo.GetPrimaryStatsAsync();
+            var skills = _modelJsonRepo.GetPrimaryStats();
 
             //Assert
             skills.Should().BeEquivalentTo(_primaryStats);
         }
 
         [Test]
-        public async Task UpdatePrimaryStatsAsync_NextGetHasNewValues()
+        public void UpdatePrimaryStats_NextGetHasNewValues()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             var newPrimaryStats = new List<PrimaryStat>
             {
@@ -76,31 +76,31 @@ namespace Database.UnitTests
             };
 
             //Act
-            await _modelJsonRepo.UpdatePrimaryStatsAsync(newPrimaryStats);
-            var primaryStats = await _modelJsonRepo.GetPrimaryStatsAsync();
+            _modelJsonRepo.UpdatePrimaryStats(newPrimaryStats);
+            var primaryStats = _modelJsonRepo.GetPrimaryStats();
 
             //Assert
             primaryStats.Should().BeEquivalentTo(newPrimaryStats);
         }
 
         [Test]
-        public async Task GetSkillsAsync_ReturnsJsonFileResult()
+        public void GetSkills_ReturnsJsonFileResult()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             //Act
-            var skills = await _modelJsonRepo.GetSkillsAsync();
+            var skills = _modelJsonRepo.GetSkills();
 
             //Assert
             skills.Should().BeEquivalentTo(_skills);
         }
 
         [Test]
-        public async Task UpdateSkillsAsync_NextGetHasNewValues()
+        public void UpdateSkills_NextGetHasNewValues()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             var newSkills = new List<Skill>
             {
@@ -108,18 +108,18 @@ namespace Database.UnitTests
             };
 
             //Act
-            await _modelJsonRepo.UpdateSkillsAsync(newSkills);
-            var skills = await _modelJsonRepo.GetSkillsAsync();
+            _modelJsonRepo.UpdateSkills(newSkills);
+            var skills = _modelJsonRepo.GetSkills();
 
             //Assert
             skills.Should().BeEquivalentTo(newSkills);
         }
 
         [Test]
-        public async Task AddSkillAsync_AddsUniqueKeys()
+        public void AddSkill_AddsUniqueKeys()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             var correctResult = new List<Skill>
             {
@@ -128,21 +128,21 @@ namespace Database.UnitTests
             };
 
             //Act
-            await _modelJsonRepo.AddSkillAsync(_skill2);
-            var skills = await _modelJsonRepo.GetSkillsAsync();
+            _modelJsonRepo.AddSkill(_skill2);
+            var skills = _modelJsonRepo.GetSkills();
 
             //Assert
             skills.Should().BeEquivalentTo(correctResult);
         }
 
         [Test]
-        public void AddSkillAsync_CannotAddSameKey()
+        public void AddSkill_CannotAddSameKey()
         {
             //Arrange
-            A.CallTo(() => _jsonFile.ReadAsync()).Returns(_model);
+            A.CallTo(() => _jsonFile.Read()).Returns(_model);
 
             //Act
-            Assert.ThrowsAsync<ArgumentException>(async () => await _modelJsonRepo.AddSkillAsync(_skill1));
+            Assert.Throws<ArgumentException>(() => _modelJsonRepo.AddSkill(_skill1));
 
             //Assert
         }

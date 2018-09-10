@@ -4,7 +4,6 @@ namespace Services.UnitTests
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using API;
     using API.Dto;
     using FakeItEasy;
@@ -27,7 +26,7 @@ namespace Services.UnitTests
         }
 
         [Test]
-        public async Task AddTotalsAsync_FactorsInRanks()
+        public void AddTotals_FactorsInRanks()
         {
             //Arrange
             var skills = new List<API.Dto.Skill>
@@ -45,7 +44,7 @@ namespace Services.UnitTests
             };
 
             //Act
-            var result = await _skillTotalCalculator.AddTotalsAsync(skills);
+            var result = _skillTotalCalculator.AddTotals(skills);
             var firstResult = result.FirstOrDefault();
 
             //Assert
@@ -53,7 +52,7 @@ namespace Services.UnitTests
         }
 
         [Test]
-        public async Task AddTotalsAsync_FactorsInAbilityScores()
+        public void AddTotalsAsync_FactorsInAbilityScores()
         {
             //Arrange
             var skills = new List<API.Dto.Skill>
@@ -78,10 +77,10 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _primaryStatsService.GetAllPrimaryStatsAsync()).Returns(abilityScores);
+            A.CallTo(() => _primaryStatsService.GetAllPrimaryStats()).Returns(abilityScores);
 
             //Act
-            var result = await _skillTotalCalculator.AddTotalsAsync(skills);
+            var result = _skillTotalCalculator.AddTotals(skills);
             var firstResult = result.FirstOrDefault();
 
             //Assert
@@ -92,7 +91,7 @@ namespace Services.UnitTests
         [TestCase(false, 1, 1)]
         [TestCase(true, 0, 0)]
         [TestCase(true, 10, 13)]
-        public async Task AddTotalsAsync_Adds3ForTrainedWithAtLeastOneRank(bool trained, int ranks, int total)
+        public void AddTotals_Adds3ForTrainedWithAtLeastOneRank(bool trained, int ranks, int total)
         {
             //Arrange
             var skills = new List<API.Dto.Skill>
@@ -110,7 +109,7 @@ namespace Services.UnitTests
             };
 
             //Act
-            var result = await _skillTotalCalculator.AddTotalsAsync(skills);
+            var result = _skillTotalCalculator.AddTotals(skills);
             var firstResult = result.FirstOrDefault();
 
             //Assert

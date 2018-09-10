@@ -16,9 +16,9 @@ namespace Services
             _primaryStatsService = primaryStatsService;
         }
 
-        public async Task<IEnumerable<Skill>> AddTotalsAsync(IEnumerable<Skill> skills)
+        public IEnumerable<Skill> AddTotals(IEnumerable<Skill> skills)
         {
-            var abilityScores = (await _primaryStatsService.GetAllPrimaryStatsAsync()).ToDictionary(ab => ab.Id);
+            var abilityScores = _primaryStatsService.GetAllPrimaryStats().ToDictionary(ab => ab.Id);
             return skills.Select((s) => AddTotalToSkill(s, abilityScores));
         }
 

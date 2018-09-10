@@ -3,9 +3,6 @@ namespace UIModel
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Threading.Tasks;
     using API;
     using API.Dto;
     using Services.API;
@@ -32,18 +29,18 @@ namespace UIModel
             _autoMapper = autoMapper;
         }
 
-        public async Task<IEnumerable<UiPrimaryStat>> RequestPrimaryStatsAsync()
+        public IEnumerable<UiPrimaryStat> RequestPrimaryStats()
         {
             _logger.LogEntry();
 
-            var svcPrimaryStats = await _primaryStatsService.GetAllPrimaryStatsAsync().ConfigureAwait(false);
+            var svcPrimaryStats = _primaryStatsService.GetAllPrimaryStats();
             var uiPrimaryStats = _autoMapper.Map(svcPrimaryStats);
 
             _logger.LogExit();
             return uiPrimaryStats;
         }
 
-        public async Task AddPrimaryStatAsync()
+        public void AddPrimaryStat()
         {
             throw new System.NotImplementedException();
         }

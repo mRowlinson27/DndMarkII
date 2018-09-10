@@ -7,8 +7,8 @@ namespace Database.API
 
     public interface IPrimaryStatsRepo
     {
-        Task<IEnumerable<PrimaryStat>> GetPrimaryStatsAsync();
+        IEnumerable<PrimaryStat> GetPrimaryStats();
 
-        Task UpdatePrimaryStatsAsync(IEnumerable<PrimaryStat> stats);
+        void UpdatePrimaryStats(IEnumerable<PrimaryStat> stats);
     }
 }

@@ -36,7 +36,7 @@ namespace Services.UnitTests
         }
 
         [Test]
-        public async Task GetAllSkillsAsync_GetsFromDatabaseAndAddsTotals()
+        public void GetAllSkills_GetsFromDatabaseAndAddsTotals()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -69,19 +69,19 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _skillsRepo.GetSkillsAsync()).Returns(dbSkills);
+            A.CallTo(() => _skillsRepo.GetSkills()).Returns(dbSkills);
             A.CallTo(() => _svcAutoMapper.MapToSvc(dbSkills)).Returns(correctSvcSkills);
-            A.CallTo(() => _skillTotalCalculator.AddTotalsAsync(correctSvcSkills)).Returns(correctSvcSkills);
+            A.CallTo(() => _skillTotalCalculator.AddTotals(correctSvcSkills)).Returns(correctSvcSkills);
 
             //Act
-            var result = await _skillsService.GetAllSkillsAsync();
+            var result = _skillsService.GetAllSkills();
 
             //Assert
             result.Should().BeEquivalentTo(correctSvcSkills);
         }
 
         [Test]
-        public async Task AddSkillAsync_GetsCurrentDb_AppendsNewSkill()
+        public void AddSkill_GetsCurrentDb_AppendsNewSkill()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -110,21 +110,21 @@ namespace Services.UnitTests
             A.CallTo(() => _svcAutoMapper.MapToDb(newSkill)).Returns(autoMapperResult);
             
             //Act
-            await _skillsService.AddSkillAsync(newSkill);
+            _skillsService.AddSkill(newSkill);
 
             //Assert
-            A.CallTo(() => _skillsRepo.AddSkillAsync(autoMapperResult)).MustHaveHappened();
+            A.CallTo(() => _skillsRepo.AddSkill(autoMapperResult)).MustHaveHappened();
         }
 
         [Test]
-        public async Task AddSkillAsync_RaisesSkillsUpdated()
+        public void AddSkill_RaisesSkillsUpdated()
         {
             //Arrange
             var wasCalled = false;
             _skillsService.SkillsUpdated += (o, e) => wasCalled = true;
 
             //Act
-            await _skillsService.AddSkillAsync(new API.Dto.Skill());
+            _skillsService.AddSkill(new API.Dto.Skill());
 
             //Assert
             wasCalled.Should().BeTrue();
