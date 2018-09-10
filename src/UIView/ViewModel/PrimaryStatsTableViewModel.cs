@@ -57,7 +57,7 @@ namespace UIView.ViewModel
 
         private void UiStateControllerOnUiLockUpdated(object sender, EventArgs e)
         {
-            Delete.ShouldExecute = !_uiStateController.UiLocked;
+//            Delete.ShouldExecute = !_uiStateController.UiLocked;
         }
 
         public override void Init()

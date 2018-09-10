@@ -72,7 +72,7 @@ namespace UIView.ViewModel
             else
             {
                 _uiStateController.DecUiLock();
-                Delete.ShouldExecute = false;
+//                Delete.ShouldExecute = false;
             }
 
             _toggle = !_toggle;

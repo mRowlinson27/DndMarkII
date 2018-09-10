@@ -2,6 +2,7 @@
 namespace UIUtilities.UnitTests
 {
     using System;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using API.AsyncCommands;
     using AsyncCommands;
@@ -24,10 +25,11 @@ namespace UIUtilities.UnitTests
         }
 
         [Test]
-        public async Task ExecuteAsync_CanExecute_RunsActionAsynchronously()
+        public async Task ExecuteAsync_CanExecute_CallsChildCommand()
         {
             //Arrange
-            _asyncSimpleCommandAdaptor.ShouldExecute = true;
+            A.CallTo(() => _asyncCommand.CanExecute(null)).Returns(true);
+            _asyncCommand.CanExecuteChanged += Raise.FreeForm<EventHandler>.With(_asyncCommand, EventArgs.Empty);
 
             //Act
             await _asyncSimpleCommandAdaptor.ExecuteAsync();
@@ -40,13 +42,28 @@ namespace UIUtilities.UnitTests
         public async Task ExecuteAsync_CannotExecute_DoesNothing()
         {
             //Arrange
-            _asyncSimpleCommandAdaptor.ShouldExecute = false;
+            A.CallTo(() => _asyncCommand.CanExecute(null)).Returns(false);
 
             //Act
             await _asyncSimpleCommandAdaptor.ExecuteAsync();
 
             //Assert
             A.CallTo(() => _asyncCommand.ExecuteAsync(null)).MustNotHaveHappened();
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void CanExecute_ReturnsChildValue(bool canExecuteValue)
+        {
+            //Arrange
+            A.CallTo(() => _asyncCommand.CanExecute(null)).Returns(canExecuteValue);
+            _asyncCommand.CanExecuteChanged += Raise.FreeForm<EventHandler>.With(_asyncCommand, EventArgs.Empty);
+
+            //Act
+            var result = _asyncSimpleCommandAdaptor.CanExecute(null);
+
+            //Assert
+            result.Should().Be(canExecuteValue);
         }
     }
 }

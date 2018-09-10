@@ -24,11 +24,13 @@ namespace UIUtilities.AsyncCommands
         }
 
         private readonly IAsyncCommand _asyncCommand;
-        private bool _shouldExecute = true;
+        private bool _shouldExecute;
 
         public AsyncSimpleCommandAdaptor( IAsyncCommand asyncCommand)
         {
             _asyncCommand = asyncCommand;
+            _shouldExecute = _asyncCommand.CanExecute(null);
+            _asyncCommand.CanExecuteChanged += AsyncCommandOnCanExecuteChanged;
         }
 
         bool ICommandWithoutParameter.CanExecute => CanExecute(null);
@@ -45,8 +47,14 @@ namespace UIUtilities.AsyncCommands
             await _asyncCommand.ExecuteAsync(null);
         }
 
+        private void AsyncCommandOnCanExecuteChanged(object sender, EventArgs e)
+        {
+            ShouldExecute = _asyncCommand.CanExecute(null);
+        }
+
         public void Dispose()
         {
+            _asyncCommand.CanExecuteChanged -= AsyncCommandOnCanExecuteChanged;
             _asyncCommand.Dispose();
         }
     }

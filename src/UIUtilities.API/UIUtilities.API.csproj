@@ -44,6 +44,7 @@
     <Compile Include="AsyncCommands\IAsyncCommandAdaptor.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandWatcher.cs" />
     <Compile Include="AsyncCommands\IAsyncCommandFactory.cs" />
+    <Compile Include="AsyncCommands\IAsyncCommandWatcherFactory.cs" />
     <Compile Include="AsyncCommands\IWatchableCommandProperties.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="IAsyncTaskRunnerFactory.cs" />

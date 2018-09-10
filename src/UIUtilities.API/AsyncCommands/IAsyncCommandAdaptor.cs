@@ -7,7 +7,6 @@ namespace UIUtilities.API.AsyncCommands
 
     public interface IAsyncCommandAdaptor : ICommand, IDisposable
     {
-        bool ShouldExecute { get; set; }
         Task ExecuteAsync();
     }
 }

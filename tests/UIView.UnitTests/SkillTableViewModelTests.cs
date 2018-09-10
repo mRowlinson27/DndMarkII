@@ -148,7 +148,8 @@ namespace UIView.UnitTests
         public void SetupSkillTableViewModel()
         {
             _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()), new TaskWrapper());
+            var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
             _uiThreadInvoker = new UiThreadInvoker(_logger);
 

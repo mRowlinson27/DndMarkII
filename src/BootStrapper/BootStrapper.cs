@@ -103,9 +103,10 @@ namespace BootStrapper
             _observableHelper = new ObservableHelper();
             _uiThreadInvoker = new UiThreadInvoker(_logger);
             _uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
+            var asyncCommandWatcherFactory = new AsyncCommandWatcherFactory(_uiStateController);
 
             _notifyTaskCompletionFactory = new NotifyTaskCompletionFactory(_logger);
-            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, _uiStateController, new TaskWrapper());
+            _asyncCommandFactory = new AsyncCommandFactory(_notifyTaskCompletionFactory, asyncCommandWatcherFactory, new TaskWrapper());
             _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_notifyTaskCompletionFactory);
         }
 

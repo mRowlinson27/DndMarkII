@@ -42,7 +42,8 @@ namespace UIView.UnitTests
             _realNotifyTaskCompletion = new NotifyTaskCompletion<object>(_logger);
             A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<object>()).Returns(_realNotifyTaskCompletion);
 
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new UiStateController(_logger, new UiLockerContextFactory()), new TaskWrapper());
+            var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
 
             _primaryStatViewModel = new PrimaryStatViewModel(_logger, _model, _asyncCommandFactory, _uiThreadInvoker);
         }
