@@ -37,26 +37,28 @@ namespace UIView.UnitTests
         private INotifyTaskCompletion<object> _addSkillCommandNotifyTaskCompletion;
 
         [Test]
-        public void Init_RequestsSkillData()
+        public async Task Init_RequestsSkillData()
         {
             //Arrange
             Setup();
 
             //Act
             _skillTableViewModel.Init();
+            await _skillRequestNotifyTaskCompletion.Task;
 
             //Assert
             A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
         }
 
         [Test]
-        public void Model_OnPropertyChanged_RequestsSkillData()
+        public async Task Model_OnPropertyChanged_RequestsSkillData()
         {
             //Arrange
             Setup();
 
             //Act
             _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
+            await _skillRequestNotifyTaskCompletion.Task;
 
             //Assert
             A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
