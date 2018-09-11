@@ -4,6 +4,7 @@ namespace UIView.ViewModel
     using System;
     using System.Threading;
     using API;
+    using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -19,8 +20,13 @@ namespace UIView.ViewModel
         public bool HasArmourCheckPenalty => Skill.HasArmourCheckPenalty;
         public int ArmourCheckPenalty => Skill.ArmourCheckPenalty;
         public bool UseUntrained => Skill.UseUntrained;
-        public bool Class => Skill.Class;
         public string PrimaryStatModifier => Skill.PrimaryStatModifier;
+
+        public bool Class
+        {
+            get => Skill.Class;
+            set => Skill.Class = value;
+        }
 
         public UiSkill Skill { get; set; }
 
@@ -36,19 +42,23 @@ namespace UIView.ViewModel
             get => _backGroundColour;
             set => Set(ref _backGroundColour, value, "BackGroundColour");
         }
+
+        public bool InEdit { get; } = true;
+
         private string _backGroundColour;
 
         public IAsyncCommandAdaptor Delete { get; private set; }
 
-        public IAsyncCommandAdaptor ShowDetail { get; private set; }
+        public IAsyncCommandAdaptor UpdateSkill { get; private set; }
 
         private readonly ILogger _logger;
-
+        private readonly ISkillModel _model;
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModel(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
+        public SkillViewModel(ILogger logger, ISkillModel model, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
         {
             _logger = logger;
+            _model = model;
             _uiThreadInvoker = uiThreadInvoker;
 
             SetupCommandBindings(asyncCommandAdaptorFactory);
@@ -57,7 +67,7 @@ namespace UIView.ViewModel
         private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)
         {
             Delete = asyncCommandAdaptorFactory.CreateWithContext((Action) DeleteCommand);
-            ShowDetail = asyncCommandAdaptorFactory.CreateWithContext((Action) ShowDetailsCommand);
+            UpdateSkill = asyncCommandAdaptorFactory.CreateWithContext((Action) UpdateSkillCommand);
         }
 
         private void DeleteCommand()
@@ -69,11 +79,11 @@ namespace UIView.ViewModel
             _logger.LogExit();
         }
 
-        private void ShowDetailsCommand()
+        private void UpdateSkillCommand()
         {
             _logger.LogEntry();
 
-            _uiThreadInvoker.Dispatch(() => ShowingDetails = !ShowingDetails);
+            _model.Update(Skill);
 
             _logger.LogExit();
         }
@@ -81,7 +91,7 @@ namespace UIView.ViewModel
         public override void Dispose()
         {
             Delete.Dispose();
-            ShowDetail.Dispose();
+            UpdateSkill.Dispose();
         }
     }
 }

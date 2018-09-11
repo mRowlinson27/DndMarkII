@@ -23,10 +23,12 @@ namespace UIView.API
 
         bool UseUntrained { get; }
 
-        bool Class { get; }
+        bool Class { get; set; }
 
         bool ShowingDetails { get; }
 
         string BackGroundColour { get; set; }
+
+        bool InEdit { get; }
     }
 }

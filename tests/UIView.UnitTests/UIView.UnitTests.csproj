@@ -59,6 +59,8 @@
     <Compile Include="PrimaryStatViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillTableViewModelTests.cs" />
+    <Compile Include="SkillViewModelTests.cs" />
+    <Compile Include="TestUtils\ViewModelCreation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

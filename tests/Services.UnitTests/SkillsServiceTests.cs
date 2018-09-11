@@ -189,10 +189,11 @@ namespace Services.UnitTests
             {
                 Id = guid,
                 Ranks = 4,
+                Class = true
             };
 
             //Act
-            _skillsService.UpdateSkill(new SkillUpdateRequest { Id = guid, Ranks = 4 });
+            _skillsService.UpdateSkill(new SkillUpdateRequest { Id = guid, Ranks = 4, Class = true});
             var result = _skillsService.GetAllSkills();
 
             //Assert

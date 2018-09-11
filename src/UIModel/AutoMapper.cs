@@ -83,7 +83,8 @@ namespace UIModel
             return new SkillUpdateRequest
             {
                 Id = uiSkill.Id,
-                Ranks = uiSkill.Ranks
+                Ranks = uiSkill.Ranks,
+                Class = uiSkill.Class
             };
         }
 

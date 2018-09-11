@@ -8,5 +8,7 @@ namespace Services.API.Dto
         public Guid Id { get; set; }
 
         public int Ranks { get; set; }
+
+        public bool Class { get; set; }
     }
 }

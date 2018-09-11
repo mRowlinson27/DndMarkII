@@ -1,7 +1,7 @@
 ﻿<div class="maxContainer">
 
-    <div class="skillEntry" style="display: table;" data-bind="style: { backgroundColor: $data.BackGroundColour }, execute: $data.ShowDetail, executeoption: { callback : function(){} }">
-        <input type="checkbox" style="background-color: darkgreen; display: inline-block; vertical-align: middle; width: 30px; margin: 0" data-bind="checked:Class">
+    <div class="skillEntry" style="display: table;" data-bind="style: { backgroundColor: $data.BackGroundColour }">
+        <input type="checkbox" style="background-color: darkgreen; display: inline-block; vertical-align: middle; width: 30px; margin: 0" data-bind="checked: Class, enable: $data.InEdit, execute: $data.UpdateSkill, executeoption: { event:'change', callback : function(){} }">
         <div  style="background-color: darkblue; display: inline-block; vertical-align: middle; width:200px" data-bind="text:Name"></div>
         <div  style="background-color: darkcyan; display: inline-block; vertical-align: middle; width:70px" data-bind="text:Total"></div>
         <div  style="background-color: darkmagenta; display: inline-block; vertical-align: middle; width:60px" data-bind="text:PrimaryStatName"></div>

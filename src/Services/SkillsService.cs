@@ -58,8 +58,11 @@ namespace Services
         {
             _logger.LogEntry();
 
-            CachedSvcSkills[skillUpdateRequest.Id].Ranks = skillUpdateRequest.Ranks;
-            _skillTotalCalculator.AddTotal(CachedSvcSkills[skillUpdateRequest.Id]);
+            var cachedSkill = CachedSvcSkills[skillUpdateRequest.Id];
+
+            cachedSkill.Ranks = skillUpdateRequest.Ranks;
+            cachedSkill.Class = skillUpdateRequest.Class;
+            _skillTotalCalculator.AddTotal(cachedSkill);
 
             SkillsUpdated?.Invoke(this, EventArgs.Empty);
 

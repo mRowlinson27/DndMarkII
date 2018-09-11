@@ -147,7 +147,8 @@ namespace UIModel.UnitTests
                 new UiSkill()
                 {
                     Id = guid,
-                    Ranks = 10
+                    Ranks = 10,
+                    Class = true
                 }
             };
 
@@ -157,6 +158,7 @@ namespace UIModel.UnitTests
                 {
                     Id = guid,
                     Ranks = 10,
+                    Class = true
                 }
             };
 

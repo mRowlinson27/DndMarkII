@@ -48,6 +48,7 @@
     <Compile Include="IPrimaryStatModelFactory.cs" />
     <Compile Include="IPrimaryStatsTableModel.cs" />
     <Compile Include="ISkillModel.cs" />
+    <Compile Include="ISkillModelFactory.cs" />
     <Compile Include="ISkillTableModel.cs" />
     <Compile Include="ITitleZoneModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
