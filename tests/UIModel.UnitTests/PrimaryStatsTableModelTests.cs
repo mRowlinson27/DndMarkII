@@ -59,7 +59,7 @@ namespace UIModel.UnitTests
             };
 
             A.CallTo(() => _primaryStatsService.GetAllPrimaryStats()).Returns(svcData);
-            A.CallTo(() => _autoMapper.Map(svcData)).Returns(correctUiPrimaryStats);
+            A.CallTo(() => _autoMapper.MapToUi(svcData)).Returns(correctUiPrimaryStats);
 
             //Act
             var result = _primaryStatsTableModel.RequestPrimaryStats();

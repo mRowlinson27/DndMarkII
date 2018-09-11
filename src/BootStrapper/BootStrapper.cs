@@ -119,7 +119,7 @@ namespace BootStrapper
         {
             var svcAutoMapper = new SvcAutoMapper();
             _primaryStatsService = new PrimaryStatsService(_logger, _masterRepo, svcAutoMapper);
-            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper, new SkillTotalCalculator(_primaryStatsService));
+            _skillsService = new SkillsService(_logger, _masterRepo, svcAutoMapper, new SkillTotalCalculator(_primaryStatsService), _primaryStatsService);
         }
 
         private void SetupUiModel()
@@ -128,7 +128,7 @@ namespace BootStrapper
             _titleZoneModel = new TitleZoneModel();
             _skillTableModel = new SkillTableModel(_logger, _skillsService, autoMapper);
             _primaryStatsTableModel = new PrimaryStatsTableModel(_logger, _primaryStatsService, autoMapper);
-            _primaryStatModelFactory = new PrimaryStatModelFactory(_primaryStatsService);
+            _primaryStatModelFactory = new PrimaryStatModelFactory(_primaryStatsService, autoMapper);
         }
 
         private void SetupUiView()

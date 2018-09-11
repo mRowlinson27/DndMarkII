@@ -60,7 +60,7 @@ namespace UIView.ViewModel
         private void UpdatePrimaryStatCommand()
         {
             _logger.LogMessage($"AbilityScore: {AbilityScore}");
-            _model.UpdateStat(PrimaryStat);
+            _model.Update(PrimaryStat);
         }
 
         public override void Dispose()

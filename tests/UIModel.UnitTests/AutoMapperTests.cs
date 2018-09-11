@@ -24,7 +24,7 @@ namespace UIModel.UnitTests
         [TestCase(1, "+1")]
         [TestCase(-1, "-1")]
         [TestCase(6, "+6")]
-        public void MapPrimaryStat_TransformsDataProperly(int abilityMod, string uiAbilityMod)
+        public void MapPrimaryStatToUi_TransformsDataProperly(int abilityMod, string uiAbilityMod)
         {
             //Arrange
             var inputData = new List<PrimaryStat>
@@ -50,14 +50,14 @@ namespace UIModel.UnitTests
             };
 
             //Act
-            var result = _autoMapper.Map(inputData);
+            var result = _autoMapper.MapToUi(inputData);
 
             //Assert
             result.Should().BeEquivalentTo(correctUiPrimaryStats);
         }
 
         [Test]
-        public void MapSkill_TransformsRegularDataProperly()
+        public void MapSkillToUi_TransformsRegularDataProperly()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -94,10 +94,41 @@ namespace UIModel.UnitTests
             };
 
             //Act
-            var result = _autoMapper.Map(inputData);
+            var result = _autoMapper.MapToUi(inputData);
 
             //Assert
             result.Should().BeEquivalentTo(correctUiSkills);
+        }
+
+        [Test]
+        public void MapPrimaryStatToSvcRequest_TransformsDataProperly()
+        {
+            //Arrange
+            var inputData = new List<UiPrimaryStat>
+            {
+                new UiPrimaryStat()
+                {
+                    AbilityModifier = "0",
+                    AbilityScore = "10",
+                    Name = "Charisma",
+                    ShortName = "CHA"
+                }
+            };
+
+            var correctSvcPrimaryStats = new List<PrimaryStatUpdateRequest>
+            {
+                new PrimaryStatUpdateRequest
+                {
+                    Id = AbilityType.Cha,
+                    AbilityScore = 10,
+                }
+            };
+
+            //Act
+            var result = _autoMapper.MapToSvcRequest(inputData);
+
+            //Assert
+            result.Should().BeEquivalentTo(correctSvcPrimaryStats);
         }
     }
 }

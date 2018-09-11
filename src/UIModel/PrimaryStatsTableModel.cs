@@ -34,7 +34,7 @@ namespace UIModel
             _logger.LogEntry();
 
             var svcPrimaryStats = _primaryStatsService.GetAllPrimaryStats();
-            var uiPrimaryStats = _autoMapper.Map(svcPrimaryStats);
+            var uiPrimaryStats = _autoMapper.MapToUi(svcPrimaryStats);
 
             _logger.LogExit();
             return uiPrimaryStats;

@@ -9,14 +9,17 @@ namespace UIModel
     public class PrimaryStatModel : IPrimaryStatModel
     {
         private readonly IPrimaryStatsService _primaryStatsService;
+        private readonly IAutoMapper _autoMapper;
 
-        public PrimaryStatModel(IPrimaryStatsService primaryStatsService)
+        public PrimaryStatModel(IPrimaryStatsService primaryStatsService, IAutoMapper _autoMapper)
         {
             _primaryStatsService = primaryStatsService;
+            this._autoMapper = _autoMapper;
         }
 
-        public void UpdateStat(UiPrimaryStat primaryStat)
+        public void Update(UiPrimaryStat primaryStat)
         {
+            _primaryStatsService.UpdatePrimaryStat(_autoMapper.MapToSvcRequest(primaryStat));
         }
     }
 }

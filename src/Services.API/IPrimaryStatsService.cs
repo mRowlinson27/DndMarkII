@@ -12,6 +12,8 @@ namespace Services.API
 
         IEnumerable<PrimaryStat> GetAllPrimaryStats();
 
-        void AddOrUpdatePrimaryStat(PrimaryStat skill);
+        void UpdatePrimaryStat(PrimaryStatUpdateRequest skill);
+
+        void AddPrimaryStat(PrimaryStatUpdateRequest skill);
     }
 }

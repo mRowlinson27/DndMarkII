@@ -68,7 +68,7 @@ namespace UIModel.UnitTests
             };
 
             A.CallTo(() => _skillsService.GetAllSkills()).Returns(svcData);
-            A.CallTo(() => _autoMapper.Map(svcData)).Returns(uiSkills);
+            A.CallTo(() => _autoMapper.MapToUi(svcData)).Returns(uiSkills);
 
             //Act
             var result = _skillTableModel.RequestSkills();

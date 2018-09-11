@@ -18,11 +18,17 @@ namespace Services
 
         public IEnumerable<Skill> AddTotals(IEnumerable<Skill> skills)
         {
+            var skillsList = skills.ToList();
             var abilityScores = _primaryStatsService.GetAllPrimaryStats().ToDictionary(ab => ab.Id);
-            return skills.Select((s) => AddTotalToSkill(s, abilityScores));
+            foreach (var skill in skillsList)
+            {
+                AddTotalToSkill(skill, abilityScores);
+            }
+
+            return skillsList;
         }
 
-        private Skill AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
+        private void AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
         {
             skill.Total = skill.Ranks;
             if (skill.Trained && skill.Ranks > 0)
@@ -34,8 +40,6 @@ namespace Services
             {
                 skill.Total += abilityScores[skill.PrimaryStatId].AbilityModifier;
             }
-
-            return skill;
         }
     }
 }

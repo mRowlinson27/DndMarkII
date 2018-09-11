@@ -33,7 +33,7 @@ namespace UIModel
         {
             _logger.LogEntry();
             var svcSkills = _skillsService.GetAllSkills();
-            var uiSkills = _autoMapper.Map(svcSkills);
+            var uiSkills = _autoMapper.MapToUi(svcSkills);
             _logger.LogExit();
             return uiSkills;
         }

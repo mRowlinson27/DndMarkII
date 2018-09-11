@@ -62,7 +62,7 @@ namespace UIView.UnitTests
             await _realNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _model.UpdateStat(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();
+            A.CallTo(() => _model.Update(_primaryStatViewModel.PrimaryStat)).MustHaveHappened();
         }
     }
 }
