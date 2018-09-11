@@ -23,7 +23,7 @@ namespace UIView.API
 
         bool UseUntrained { get; }
 
-        bool Trained { get; }
+        bool Class { get; }
 
         bool ShowingDetails { get; }
 

@@ -19,7 +19,7 @@ namespace UIView.ViewModel
         public bool HasArmourCheckPenalty => Skill.HasArmourCheckPenalty;
         public int ArmourCheckPenalty => Skill.ArmourCheckPenalty;
         public bool UseUntrained => Skill.UseUntrained;
-        public bool Trained => Skill.Class;
+        public bool Class => Skill.Class;
         public string PrimaryStatModifier => Skill.PrimaryStatModifier;
 
         public UiSkill Skill { get; set; }
