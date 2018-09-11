@@ -46,6 +46,7 @@
     <Compile Include="PrimaryStatModelFactory.cs" />
     <Compile Include="PrimaryStatsTableModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillModel.cs" />
     <Compile Include="SkillTableModel.cs" />
     <Compile Include="TitleZoneModel.cs" />
   </ItemGroup>

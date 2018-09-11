@@ -78,9 +78,13 @@ namespace UIModel
             };
         }
 
-        public Skill MapToSvcRequest(UiSkill uiSkill)
+        public SkillUpdateRequest MapToSvcRequest(UiSkill uiSkill)
         {
-            throw new System.NotImplementedException();
+            return new SkillUpdateRequest
+            {
+                Id = uiSkill.Id,
+                Ranks = uiSkill.Ranks
+            };
         }
 
         public IEnumerable<PrimaryStatUpdateRequest> MapToSvcRequest(IEnumerable<UiPrimaryStat> uiPrimaryStat)
@@ -88,7 +92,7 @@ namespace UIModel
             return uiPrimaryStat.Select(MapToSvcRequest);
         }
 
-        public IEnumerable<Skill> MapToSvcRequest(IEnumerable<UiSkill> uiSkills)
+        public IEnumerable<SkillUpdateRequest> MapToSvcRequest(IEnumerable<UiSkill> uiSkills)
         {
             return uiSkills.Select(MapToSvcRequest);
         }

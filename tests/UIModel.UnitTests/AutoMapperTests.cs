@@ -136,5 +136,35 @@ namespace UIModel.UnitTests
             //Assert
             result.Should().BeEquivalentTo(correctSvcPrimaryStats);
         }
+
+        [Test]
+        public void MapSkillToSvcRequest_TransformsDataProperly()
+        {
+            //Arrange
+            var guid = Guid.NewGuid();
+            var inputData = new List<UiSkill>
+            {
+                new UiSkill()
+                {
+                    Id = guid,
+                    Ranks = 10
+                }
+            };
+
+            var correctSkillUpdateRequests = new List<SkillUpdateRequest>
+            {
+                new SkillUpdateRequest
+                {
+                    Id = guid,
+                    Ranks = 10,
+                }
+            };
+
+            //Act
+            var result = _autoMapper.MapToSvcRequest(inputData);
+
+            //Assert
+            result.Should().BeEquivalentTo(correctSkillUpdateRequests);
+        }
     }
 }

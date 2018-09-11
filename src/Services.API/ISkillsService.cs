@@ -12,5 +12,7 @@ namespace Services.API
         IEnumerable<Skill> GetAllSkills();
 
         void AddSkill(Skill skill);
+
+        void UpdateSkill(SkillUpdateRequest skillUpdateRequest);
     }
 }

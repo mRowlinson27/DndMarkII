@@ -7,5 +7,6 @@ namespace Services.API
     public interface ISkillTotalCalculator
     {
         IEnumerable<Skill> AddTotals(IEnumerable<Skill> skills);
+        Skill AddTotal(Skill skills);
     }
 }

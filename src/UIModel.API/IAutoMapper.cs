@@ -17,10 +17,10 @@ namespace UIModel.API
 
         PrimaryStatUpdateRequest MapToSvcRequest(UiPrimaryStat uiPrimaryStat);
 
-        Skill MapToSvcRequest(UiSkill uiSkill);
+        SkillUpdateRequest MapToSvcRequest(UiSkill uiSkill);
 
         IEnumerable<PrimaryStatUpdateRequest> MapToSvcRequest(IEnumerable<UiPrimaryStat> uiPrimaryStats);
 
-        IEnumerable<Skill> MapToSvcRequest(IEnumerable<UiSkill> uiSkills);
+        IEnumerable<SkillUpdateRequest> MapToSvcRequest(IEnumerable<UiSkill> uiSkills);
     }
 }

@@ -28,6 +28,11 @@ namespace Services
             return skillsList;
         }
 
+        public Skill AddTotal(Skill skill)
+        {
+            return AddTotals(new List<Skill> {skill}).FirstOrDefault();
+        }
+
         private void AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
         {
             skill.Total = skill.Ranks;
