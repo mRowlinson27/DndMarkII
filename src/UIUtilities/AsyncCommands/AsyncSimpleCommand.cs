@@ -4,46 +4,28 @@ namespace UIUtilities.AsyncCommands
     using System;
     using System.Threading.Tasks;
     using API;
-    using UIUtilities;
+    using API.AsyncCommands;
+    using Utilities.API;
 
-    public class AsyncSimpleCommand : AsyncCommandBase
+    public class AsyncSimpleCommand : AsyncCommandBase<object>, IAsyncCommand
     {
-        private readonly Func<Task> _command;
+        private readonly Func<Task<object>> _command;
+        private readonly INotifyTaskCompletion<object> _notifyTaskCompletion;
+        private readonly IAsyncCommandWatcher<object> _asyncCommandWatcher;
 
-        private readonly INotifyTaskCompletionFactory _notifyTaskCompletionFactory;
-
-        public AsyncSimpleCommand(Func<Task> command, INotifyTaskCompletionFactory notifyTaskCompletionFactory)
+        public AsyncSimpleCommand(IAsyncCommandWatcher<object> asyncCommandWatcher, Func<Task<object>> command, INotifyTaskCompletion<object> notifyTaskCompletion)
+            : base(asyncCommandWatcher)
         {
             _command = command;
-            _notifyTaskCompletionFactory = notifyTaskCompletionFactory;
+            _notifyTaskCompletion = notifyTaskCompletion;
+            _asyncCommandWatcher = asyncCommandWatcher;
         }
 
-        public override async Task ExecuteAsync(object parameter)
+        public async Task ExecuteAsync(object parameter)
         {
-            if (!CanExecute(parameter))
-            {
-                return;
-            }
-
-            Task<object> wrappedTask = WrapTaskWithReturnValue();
-
-            Execution = _notifyTaskCompletionFactory.Create<object>();
-            Execution.Start(wrappedTask);
-
-            RaiseCanExecuteChanged();
-
-            if (Execution != null)
-            {
-                await Execution.TaskCompletion.ConfigureAwait(false);
-            }
-
-            RaiseCanExecuteChanged();
+            await _asyncCommandWatcher.ExecuteAsync(parameter, _command, _notifyTaskCompletion);
         }
 
-        private async Task<object> WrapTaskWithReturnValue()
-        {
-            await _command().ConfigureAwait(false);
-            return null;
-        }
+        public override void Execute(object parameter) => ExecuteAsync(parameter);
     }
 }

@@ -23,7 +23,7 @@ namespace UIView.API
 
         bool Trained { get; }
 
-        bool ShowDetails { get; }
+        bool ShowingDetails { get; }
 
         string BackGroundColour { get; set; }
     }

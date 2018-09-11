@@ -8,5 +8,9 @@ namespace Utilities.API.DAL
         Task<T> ReadAsync();
 
         Task WriteAsync(T data);
+
+        T Read();
+
+        void Write(T data);
     }
 }

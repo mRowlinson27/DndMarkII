@@ -2,72 +2,29 @@
 namespace UIUtilities.AsyncCommands
 {
     using System;
-    using System.ComponentModel;
     using System.Threading.Tasks;
-    using Neutronium.MVVMComponents;
+    using API;
+    using API.AsyncCommands;
 
-    class AsyncResultCommand<TIn, TResult> : AsyncCommandBase, INotifyPropertyChanged, IResultCommand<TResult>
+    public class AsyncResultCommand<TResult>: AsyncCommandBase<TResult>, IAsyncCommand<TResult>
     {
-        /*public NotifyTaskCompletion<TResult> Execution
-        {
-            get => _execution;
-            private set
-            {
-                _execution = value;
-                OnPropertyChanged();
-            }
-        }
+        private readonly Func<Task<TResult>> _command;
+        private readonly INotifyTaskCompletion<TResult> _notifyTaskCompletion;
+        private readonly IAsyncCommandWatcher<TResult> _asyncCommandWatcher;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private readonly Func<TIn, Task<TResult>> _command;
-
-        private NotifyTaskCompletion<TResult> _execution;
-
-        public AsyncCommandWithInput(Func<TIn, Task<TResult>> command)
+        public AsyncResultCommand(IAsyncCommandWatcher<TResult> asyncCommandWatcher, Func<Task<TResult>> command, INotifyTaskCompletion<TResult> notifyTaskCompletion)
+            : base(asyncCommandWatcher)
         {
             _command = command;
+            _notifyTaskCompletion = notifyTaskCompletion;
+            _asyncCommandWatcher = asyncCommandWatcher;
         }
 
-        public override bool CanExecute(object parameter)
+        public async Task<TResult> ExecuteAsync(object parameter)
         {
-            return Execution == null || Execution.IsCompleted;
+            return await _asyncCommandWatcher.ExecuteAsync(parameter, _command, _notifyTaskCompletion);
         }
 
-        public override async Task ExecuteAsync(object parameter)
-        {
-            if (!CanExecute(parameter))
-            {
-                return;
-            }
-
-            Execution = new NotifyTaskCompletion<TResult>(_command((TIn)parameter));
-
-            RaiseCanExecuteChanged();
-
-            await Execution.TaskCompletion;
-
-            RaiseCanExecuteChanged();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public Task<TResult> Execute()
-        {
-            throw new NotImplementedException();
-        }*/
-        public override Task ExecuteAsync(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TResult> Execute()
-        {
-            throw new NotImplementedException();
-        }
+        public override void Execute(object parameter) => ExecuteAsync(parameter);
     }
 }

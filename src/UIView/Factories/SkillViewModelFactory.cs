@@ -11,24 +11,19 @@ namespace UIView.Factories
     public class SkillViewModelFactory : ISkillViewModelFactory
     {
         private readonly ILogger _logger;
-        private readonly IObservableHelper _observableHelper;
-        private readonly IAsyncCommandFactory _asyncCommandFactory;
-        private readonly IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+        private readonly IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModelFactory(ILogger logger, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+        public SkillViewModelFactory(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker)
         {
             _logger = logger;
-            _observableHelper = observableHelper;
-            _asyncCommandFactory = asyncCommandFactory;
-            _asyncTaskRunnerFactory = asyncTaskRunnerFactory;
+            _asyncCommandAdaptorFactory = asyncCommandAdaptorFactory;
             _uiThreadInvoker = uiThreadInvoker;
         }
 
         public ISkillViewModel Create(UiSkill skill)
         {
-            var skillViewModel = new SkillViewModel(_logger, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker) {Skill = skill};
+            var skillViewModel = new SkillViewModel(_logger, _asyncCommandAdaptorFactory, _uiThreadInvoker) {Skill = skill};
             skillViewModel.Init();
             return skillViewModel;
         }

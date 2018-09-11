@@ -33,7 +33,7 @@ namespace UIModel.UnitTests
         }
 
         [Test]
-        public async Task RequestSkillsAsync_GetsFromServiceAndReturnsCorrectly()
+        public void RequestSkills_GetsFromServiceAndReturnsCorrectly()
         {
             //Arrange
             var svcData = new List<Skill>
@@ -67,18 +67,18 @@ namespace UIModel.UnitTests
                 }
             };
 
-            A.CallTo(() => _skillsService.GetAllSkillsAsync()).Returns(svcData);
-            A.CallTo(() => _autoMapper.Map(svcData)).Returns(uiSkills);
+            A.CallTo(() => _skillsService.GetAllSkills()).Returns(svcData);
+            A.CallTo(() => _autoMapper.MapToUi(svcData)).Returns(uiSkills);
 
             //Act
-            var result = await _skillTableModel.RequestSkillsAsync();
+            var result = _skillTableModel.RequestSkills();
 
             //Assert
             result.Should().BeEquivalentTo(uiSkills);
         }
 
         [Test]
-        public async Task AddSkillAsync_AddsBlankSkill()
+        public void AddSkill_AddsBlankSkill()
         {
             //Arrange
             var blankSkill = new Skill
@@ -93,10 +93,10 @@ namespace UIModel.UnitTests
             };
 
             //Act
-            await _skillTableModel.AddSkillAsync();
+            _skillTableModel.AddSkill();
 
             //Assert
-            A.CallTo(() => _skillsService.AddSkillAsync(A<Skill>.That.Matches(s =>
+            A.CallTo(() => _skillsService.AddSkill(A<Skill>.That.Matches(s =>
                 s.ArmourCheckPenalty == blankSkill.ArmourCheckPenalty &&
                 s.HasArmourCheckPenalty == blankSkill.HasArmourCheckPenalty &&
                 s.Name == blankSkill.Name &&

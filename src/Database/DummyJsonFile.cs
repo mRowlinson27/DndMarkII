@@ -22,6 +22,16 @@ namespace Database
             await Task.Delay(1);
         }
 
+        public Model Read()
+        {
+            return GenerateDummyModel();
+        }
+
+        public void Write(Model data)
+        {
+            throw new NotImplementedException();
+        }
+
         private Model GenerateDummyModel()
         {
             var skills = GenerateSkills();

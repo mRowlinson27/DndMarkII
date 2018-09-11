@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PrimaryStatsTableViewModelTests.cs" />
+    <Compile Include="PrimaryStatViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillTableViewModelTests.cs" />
   </ItemGroup>
@@ -86,6 +87,10 @@
     <ProjectReference Include="..\..\src\Utilities.API\Utilities.API.csproj">
       <Project>{CF0E9721-C68B-4F37-9242-F18F9BED25FE}</Project>
       <Name>Utilities.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Utilities\Utilities.csproj">
+      <Project>{488EA0FF-9B5E-4717-87CE-3AC71E05061C}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

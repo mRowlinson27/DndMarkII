@@ -24,10 +24,9 @@ namespace UIUtilities
 
         public void Dispatch(Action action)
         {
-            if (_syncContext == null)
+            if (_syncContext == null || SynchronizationContext.Current == _syncContext)
             {
                 action();
-                _logger.LogMessage("SYNC CONTEXT IS NULL");
             }
             else
             {

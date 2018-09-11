@@ -7,7 +7,7 @@ namespace UIUtilities
     using API;
     using Utilities.API;
 
-    public sealed class NotifyTaskCompletion<TResult> : INotifyTaskCompletion<TResult>
+    public class NotifyTaskCompletion<TResult> : INotifyTaskCompletion<TResult>
     {
         public Task<TResult> Task { get; private set; }
 
@@ -42,10 +42,20 @@ namespace UIUtilities
             _logger = logger;
         }
 
-        public void Start(Task<TResult> task)
+        public void Start(Func<Task<TResult>> task)
         {
-            Task = task;
-            TaskCompletion = WatchTaskAsync(task);
+            Task = task();
+            TaskCompletion = WatchTaskAsync(Task);
+
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged == null)
+            {
+                return;
+            }
+
+            propertyChanged(this, new PropertyChangedEventArgs("Status"));
+            propertyChanged(this, new PropertyChangedEventArgs("IsCompleted"));
+            propertyChanged(this, new PropertyChangedEventArgs("IsNotCompleted"));
         }
 
         private async Task WatchTaskAsync(Task task)

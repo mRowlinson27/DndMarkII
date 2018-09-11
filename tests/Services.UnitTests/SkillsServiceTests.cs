@@ -23,6 +23,7 @@ namespace Services.UnitTests
         private ISkillsRepo _skillsRepo;
         private ISvcAutoMapper _svcAutoMapper;
         private ISkillTotalCalculator _skillTotalCalculator;
+        private IPrimaryStatsService _primaryStatsService;
 
         [SetUp]
         public void Setup()
@@ -31,12 +32,13 @@ namespace Services.UnitTests
             _skillsRepo = A.Fake<ISkillsRepo>();
             _svcAutoMapper = A.Fake<ISvcAutoMapper>();
             _skillTotalCalculator = A.Fake<ISkillTotalCalculator>();
+            _primaryStatsService = A.Fake<IPrimaryStatsService>();
 
-            _skillsService = new SkillsService(_logger, _skillsRepo, _svcAutoMapper, _skillTotalCalculator);
+            _skillsService = new SkillsService(_logger, _skillsRepo, _svcAutoMapper, _skillTotalCalculator, _primaryStatsService);
         }
 
         [Test]
-        public async Task GetAllSkillsAsync_GetsFromDatabaseAndAddsTotals()
+        public void GetAllSkills_GetsFromDatabaseAndAddsTotals()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -69,19 +71,52 @@ namespace Services.UnitTests
                 }
             };
 
-            A.CallTo(() => _skillsRepo.GetSkillsAsync()).Returns(dbSkills);
+            A.CallTo(() => _skillsRepo.GetSkills()).Returns(dbSkills);
             A.CallTo(() => _svcAutoMapper.MapToSvc(dbSkills)).Returns(correctSvcSkills);
-            A.CallTo(() => _skillTotalCalculator.AddTotalsAsync(correctSvcSkills)).Returns(correctSvcSkills);
+            A.CallTo(() => _skillTotalCalculator.AddTotals(correctSvcSkills)).Returns(correctSvcSkills);
 
             //Act
-            var result = await _skillsService.GetAllSkillsAsync();
+            var result = _skillsService.GetAllSkills();
 
             //Assert
             result.Should().BeEquivalentTo(correctSvcSkills);
         }
 
         [Test]
-        public async Task AddSkillAsync_GetsCurrentDb_AppendsNewSkill()
+        public void GetAllSkills_PreservesOrder()
+        {
+            //Arrange
+            var correctSvcSkills = new List<API.Dto.Skill>
+            {
+                new API.Dto.Skill { Id = Guid.NewGuid() },
+                new API.Dto.Skill { Id = Guid.NewGuid() },
+                new API.Dto.Skill { Id = Guid.NewGuid() },
+                new API.Dto.Skill { Id = Guid.NewGuid() },
+            };
+            A.CallTo(() => _skillTotalCalculator.AddTotals(A<IEnumerable<API.Dto.Skill>>.Ignored)).Returns(correctSvcSkills);
+
+            //Act
+            var result = _skillsService.GetAllSkills();
+
+            //Assert
+            result.Should().BeEquivalentTo(correctSvcSkills);
+        }
+
+        [Test]
+        public void GetAllSkills_GetsFromDatabaseOnce()
+        {
+            //Arrange
+
+            //Act
+            _skillsService.GetAllSkills();
+            _skillsService.GetAllSkills();
+
+            //Assert
+            A.CallTo(() => _skillsRepo.GetSkills()).MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public void AddSkill_GetsCurrentDb_AppendsNewSkill()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -93,41 +128,49 @@ namespace Services.UnitTests
                 HasArmourCheckPenalty = true,
                 Ranks = 5,
                 Trained = true,
-                UseUntrained = true
+                UseUntrained = true,
+                Total = 8
             };
 
-            var autoMapperResult = new Skill
-            {
-                Id = skillId,
-                Name = "Skill1",
-                PrimaryStatId = AbilityType.Cha,
-                HasArmourCheckPenalty = true,
-                Ranks = 5,
-                Trained = true,
-                UseUntrained = true
-            };
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>();
 
-            A.CallTo(() => _svcAutoMapper.MapToDb(newSkill)).Returns(autoMapperResult);
-            
             //Act
-            await _skillsService.AddSkillAsync(newSkill);
+            _skillsService.AddSkill(newSkill);
+            var result = _skillsService.GetAllSkills();
 
             //Assert
-            A.CallTo(() => _skillsRepo.AddSkillAsync(autoMapperResult)).MustHaveHappened();
+            result.FirstOrDefault().Should().Be(newSkill);
         }
 
         [Test]
-        public async Task AddSkillAsync_RaisesSkillsUpdated()
+        public void AddSkill_RaisesSkillsUpdated()
         {
             //Arrange
             var wasCalled = false;
             _skillsService.SkillsUpdated += (o, e) => wasCalled = true;
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>();
 
             //Act
-            await _skillsService.AddSkillAsync(new API.Dto.Skill());
+            _skillsService.AddSkill(new API.Dto.Skill());
 
             //Assert
             wasCalled.Should().BeTrue();
+        }
+
+        [Test]
+        public void PrimaryStatsService_RaisesPrimaryStatsUpdated_UpdatesSkills()
+        {
+            //Arrange
+            var wasCalled = false;
+            _skillsService.SkillsUpdated += (o, e) => wasCalled = true;
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>();
+
+            //Act
+            _primaryStatsService.PrimaryStatsUpdated += Raise.FreeForm<EventHandler>.With(_primaryStatsService, EventArgs.Empty);
+
+            //Assert
+            wasCalled.Should().BeTrue();
+            A.CallTo(() => _skillTotalCalculator.AddTotals(A<IEnumerable<API.Dto.Skill>>.Ignored)).MustHaveHappened();
         }
     }
 }

@@ -4,7 +4,6 @@ namespace Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using API;
     using API.Dto;
     using Database.API;
@@ -15,42 +14,63 @@ namespace Services
     {
         public event EventHandler SkillsUpdated;
 
+        public Dictionary<Guid, Skill> CachedSvcSkills { get; set; }
+
         private readonly ILogger _logger;
-
         private readonly ISkillsRepo _skillsRepo;
-
         private readonly ISvcAutoMapper _svcAutoMapper;
-
         private readonly ISkillTotalCalculator _skillTotalCalculator;
+        private readonly IPrimaryStatsService _primaryStatsService;
 
-        public SkillsService(ILogger logger, ISkillsRepo skillsRepo, ISvcAutoMapper svcAutoMapper, ISkillTotalCalculator skillTotalCalculator)
+        public SkillsService(ILogger logger, ISkillsRepo skillsRepo, ISvcAutoMapper svcAutoMapper, ISkillTotalCalculator skillTotalCalculator, IPrimaryStatsService primaryStatsService)
         {
             _logger = logger;
             _skillsRepo = skillsRepo;
             _svcAutoMapper = svcAutoMapper;
             _skillTotalCalculator = skillTotalCalculator;
+            _primaryStatsService = primaryStatsService;
+            _primaryStatsService.PrimaryStatsUpdated += PrimaryStatsServiceOnPrimaryStatsUpdated;
         }
 
-        public async Task<IEnumerable<Skill>> GetAllSkillsAsync()
+        public IEnumerable<Skill> GetAllSkills()
         {
             _logger.LogEntry();
-
-            var dbSkills = await _skillsRepo.GetSkillsAsync().ConfigureAwait(false);
-            var svcSkills = _svcAutoMapper.MapToSvc(dbSkills);
-            var svcSkillsWithTotal = await _skillTotalCalculator.AddTotalsAsync(svcSkills);
+            if (CachedSvcSkills == null)
+            {
+                PopulateSvcSkills();
+            }
 
             _logger.LogExit();
-            return svcSkillsWithTotal;
+            return CachedSvcSkills.Values;
         }
 
-        public async Task AddSkillAsync(Skill skill)
+        public void AddSkill(Skill skill)
         {
             _logger.LogEntry();
 
-            await _skillsRepo.AddSkillAsync(_svcAutoMapper.MapToDb(skill));
+            CachedSvcSkills.Add(skill.Id, skill);
             SkillsUpdated?.Invoke(this, EventArgs.Empty);
 
             _logger.LogExit();
+        }
+
+        private void PopulateSvcSkills()
+        {
+            var dbSkills = _skillsRepo.GetSkills();
+            var svcSkills = _svcAutoMapper.MapToSvc(dbSkills);
+            CachedSvcSkills = _skillTotalCalculator.AddTotals(svcSkills).ToDictionary(skill => skill.Id);
+            _logger.LogEntry();
+        }
+
+        private void PrimaryStatsServiceOnPrimaryStatsUpdated(object sender, EventArgs e)
+        {
+            _skillTotalCalculator.AddTotals(CachedSvcSkills.Values);
+            SkillsUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Dispose()
+        {
+            _primaryStatsService.PrimaryStatsUpdated -= PrimaryStatsServiceOnPrimaryStatsUpdated;
         }
     }
 }

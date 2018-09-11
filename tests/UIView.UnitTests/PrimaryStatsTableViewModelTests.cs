@@ -2,15 +2,20 @@
 namespace UIView.UnitTests
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using API;
     using FakeItEasy;
+    using FluentAssertions;
     using NUnit.Framework;
     using UIModel.API;
+    using UIModel.API.Dto;
     using UIUtilities;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using Utilities.API;
+    using Utilities.Implementation;
     using ViewModel;
 
     [TestFixture]
@@ -19,25 +24,18 @@ namespace UIView.UnitTests
         private PrimaryStatsTableViewModel _primaryStatsTableViewModel;
 
         private ILogger _logger;
-        private IPrimaryStatsTableModel _primaryStatsTableModel;
+        private IPrimaryStatsTableModel _fakePrimaryStatsTableModel;
+        private INotifyTaskCompletionFactory _fakeNotifyTaskCompletionFactory;
         private IObservableHelper _observableHelper;
         private IAsyncCommandFactory _asyncCommandFactory;
-        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
+        private IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
+        private IPrimaryStatViewModelFactory _fakePrimaryStatViewModelFactory;
 
-        [SetUp]
-        public void Setup()
-        {
-            _logger = A.Fake<ILogger>();
-            _primaryStatsTableModel = A.Fake<IPrimaryStatsTableModel>();
-            var notifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
+        private INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> _dataRequestNotifyTaskCompletion;
+        private IPrimaryStatViewModel _fakeViewModel0;
+        private IPrimaryStatViewModel _fakeViewModel1;
 
-            _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(notifyTaskCompletionFactory);
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(notifyTaskCompletionFactory);
-
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncTaskRunnerFactory, new UiThreadInvoker(_logger));
-        }
+        
 
         [TearDown]
         public void TearDown()
@@ -49,24 +47,96 @@ namespace UIView.UnitTests
         public void Init_RequestPrimaryStatsAsync()
         {
             //Arrange
+            Setup();
 
             //Act
             _primaryStatsTableViewModel.Init();
 
             //Assert
-            A.CallTo(() => _primaryStatsTableModel.RequestPrimaryStatsAsync()).MustHaveHappened();
+            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStats()).MustHaveHappened();
         }
 
         [Test]
         public void Model_OnPropertyChanged_RequestPrimaryStatsAsync()
         {
             //Arrange
+            Setup();
 
             //Act
-            _primaryStatsTableModel.PrimaryStatsUpdated += Raise.With(_primaryStatsTableModel, new EventArgs());
+            _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.With(_fakePrimaryStatsTableModel, new EventArgs());
 
             //Assert
-            A.CallTo(() => _primaryStatsTableModel.RequestPrimaryStatsAsync()).MustHaveHappened();
+            A.CallTo(() => _fakePrimaryStatsTableModel.RequestPrimaryStats()).MustHaveHappened();
+        }
+
+        [Test]
+        public void Model_OnPrimaryStatsRequestTaskCompletion_CreatesPrimaryStatsViewModelsAndDataIsAvailable()
+        {
+            //Arrange
+            Setup(A.Fake<INotifyTaskCompletion<IEnumerable<UiPrimaryStat>>>());
+            SetUpModelToReturnFakeViewModels();
+
+            //Act
+            RaiseModelDataRetrievedSuccessfullyEvents();
+
+            //Assert
+            _primaryStatsTableViewModel.DataAvailable.Should().BeTrue();
+            _primaryStatsTableViewModel.PrimaryStats[0].Should().Be(_fakeViewModel0);
+            _primaryStatsTableViewModel.PrimaryStats[1].Should().Be(_fakeViewModel1);
+        }
+
+        public void Setup(INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> dataRequestNotifyTaskCompletion = null)
+        {
+            SetupContantFakes();
+
+            SetupNotifyTaskCompletion(dataRequestNotifyTaskCompletion);
+
+            SetupPrimaryStatsViewModel();
+        }
+
+        public void SetupContantFakes()
+        {
+            _logger = A.Fake<ILogger>();
+            _fakePrimaryStatsTableModel = A.Fake<IPrimaryStatsTableModel>();
+            _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
+            _fakePrimaryStatViewModelFactory = A.Fake<IPrimaryStatViewModelFactory>();
+        }
+
+        private void SetupNotifyTaskCompletion(INotifyTaskCompletion<IEnumerable<UiPrimaryStat>> dataRequestNotifyTaskCompletion)
+        {
+            if (dataRequestNotifyTaskCompletion == null)
+            {
+                dataRequestNotifyTaskCompletion = new NotifyTaskCompletion<IEnumerable<UiPrimaryStat>>(_logger);
+            }
+
+            _dataRequestNotifyTaskCompletion = dataRequestNotifyTaskCompletion;
+
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiPrimaryStat>>()).Returns(_dataRequestNotifyTaskCompletion);
+        }
+
+        public void SetupPrimaryStatsViewModel()
+        {
+            _observableHelper = new ObservableHelper();
+            var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
+            _asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _fakePrimaryStatsTableModel, _observableHelper, _asyncCommandFactory,
+                _asyncCommandAdaptorFactory, new UiThreadInvoker(_logger), _fakePrimaryStatViewModelFactory, new UiStateController(_logger, new UiLockerContextFactory()));
+        }
+
+        private void SetUpModelToReturnFakeViewModels()
+        {
+            A.CallTo(() => _dataRequestNotifyTaskCompletion.Result).Returns(new List<UiPrimaryStat> { new UiPrimaryStat(), new UiPrimaryStat() });
+
+            _fakeViewModel0 = A.Fake<IPrimaryStatViewModel>();
+            _fakeViewModel1 = A.Fake<IPrimaryStatViewModel>();
+            A.CallTo(() => _fakePrimaryStatViewModelFactory.Create(A<UiPrimaryStat>.Ignored)).ReturnsNextFromSequence(_fakeViewModel0, _fakeViewModel1);
+        }
+
+        private void RaiseModelDataRetrievedSuccessfullyEvents()
+        {
+            _fakePrimaryStatsTableModel.PrimaryStatsUpdated += Raise.FreeForm<EventHandler>.With(_fakePrimaryStatsTableModel, EventArgs.Empty);
+            _dataRequestNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_dataRequestNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
         }
     }
 }

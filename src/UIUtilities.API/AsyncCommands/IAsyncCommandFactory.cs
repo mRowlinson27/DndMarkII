@@ -8,6 +8,12 @@ namespace UIUtilities.API.AsyncCommands
     {
         IAsyncCommand Create(Func<Task> command);
 
-        IAsyncCommand Create<TIn>(Func<TIn, Task> command);
+        IAsyncCommand Create(Action action);
+
+        IAsyncCommand CreateWithContext(Func<Task> command);
+
+        IAsyncCommand CreateWithContext(Action action);
+
+        IAsyncCommand<TResult> CreateResultCommand<TResult>(Func<TResult> command);
     }
 }

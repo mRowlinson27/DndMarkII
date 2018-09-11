@@ -2,10 +2,9 @@
 namespace UIView.ViewModel
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
-    using System.Windows.Input;
     using API;
-    using Neutronium.MVVMComponents.Relay;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
@@ -25,12 +24,12 @@ namespace UIView.ViewModel
 
         public UiSkill Skill { get; set; }
 
-        public bool ShowDetails
+        public bool ShowingDetails
         {
-            get => _showDetails;
-            set => Set(ref _showDetails, value, "ShowDetails");
+            get => _showingDetails;
+            set => Set(ref _showingDetails, value, "ShowingDetails");
         }
-        private bool _showDetails;
+        private bool _showingDetails;
 
         public string BackGroundColour
         {
@@ -39,63 +38,51 @@ namespace UIView.ViewModel
         }
         private string _backGroundColour;
 
-        public ICommand Delete { get; private set; }
-        public bool DeleteSkillCanExecute => Delete.CanExecute(null);
+        public IAsyncCommandAdaptor Delete { get; private set; }
 
-        public ICommand ShowDetail { get; private set; }
+        public IAsyncCommandAdaptor ShowDetail { get; private set; }
 
         private readonly ILogger _logger;
 
-        private readonly IObservableHelper _observableHelper;
-
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
-        public SkillViewModel(ILogger logger, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+        public SkillViewModel(ILogger logger, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker) : base(uiThreadInvoker)
         {
             _logger = logger;
-            _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
 
-            SetupCommandBindings(asyncCommandFactory);
+            SetupCommandBindings(asyncCommandAdaptorFactory);
         }
 
-        private void SetupCommandBindings(IAsyncCommandFactory asyncCommandFactory)
+        private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)
         {
-            Delete = asyncCommandFactory.Create<UiSkill>(DeleteCommandAsync);
-            Delete.CanExecuteChanged += DeleteOnCanExecuteChanged;
-
-            ShowDetail = new RelaySimpleCommand(ShowDetailsCommand);
+            Delete = asyncCommandAdaptorFactory.CreateWithContext((Action) DeleteCommand);
+            ShowDetail = asyncCommandAdaptorFactory.CreateWithContext((Action) ShowDetailsCommand);
         }
 
-        public override void Init()
+        private void DeleteCommand(/*SkillViewModel uiSkill*/)
         {
-        }
+            _logger.LogEntry();
 
-        private async Task DeleteCommandAsync(UiSkill uiSkill)
-        {
-            
+            Thread.Sleep(1000);
+
+            _logger.LogExit();
         }
 
         private void ShowDetailsCommand()
         {
-            ShowDetails = !ShowDetails;
+            _logger.LogEntry();
+
+            Thread.Sleep(1000);
+            _uiThreadInvoker.Dispatch(() => ShowingDetails = !ShowingDetails);
+
             _logger.LogExit();
         }
 
-        private void AddSkillOnCanExecuteChanged(object sender, EventArgs e)
+        public override void Dispose()
         {
-            OnPropertyChanged("AddSkillCanExecute");
-        }
-
-        private void DeleteOnCanExecuteChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged("RemoveSkillCanExecute");
-        }
-
-        public void Dispose()
-        {
-            Delete.CanExecuteChanged -= DeleteOnCanExecuteChanged;
+            Delete.Dispose();
+            ShowDetail.Dispose();
         }
     }
 }

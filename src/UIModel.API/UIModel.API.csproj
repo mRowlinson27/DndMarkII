@@ -44,6 +44,8 @@
     <Compile Include="Dto\UiSkill.cs" />
     <Compile Include="IAutoMapper.cs" />
     <Compile Include="IMainPageModel.cs" />
+    <Compile Include="IPrimaryStatModel.cs" />
+    <Compile Include="IPrimaryStatModelFactory.cs" />
     <Compile Include="IPrimaryStatsTableModel.cs" />
     <Compile Include="ISkillTableModel.cs" />
     <Compile Include="ITitleZoneModel.cs" />

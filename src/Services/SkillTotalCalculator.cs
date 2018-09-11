@@ -16,13 +16,19 @@ namespace Services
             _primaryStatsService = primaryStatsService;
         }
 
-        public async Task<IEnumerable<Skill>> AddTotalsAsync(IEnumerable<Skill> skills)
+        public IEnumerable<Skill> AddTotals(IEnumerable<Skill> skills)
         {
-            var abilityScores = (await _primaryStatsService.GetAllPrimaryStatsAsync()).ToDictionary(ab => ab.Id);
-            return skills.Select((s) => AddTotalToSkill(s, abilityScores));
+            var skillsList = skills.ToList();
+            var abilityScores = _primaryStatsService.GetAllPrimaryStats().ToDictionary(ab => ab.Id);
+            foreach (var skill in skillsList)
+            {
+                AddTotalToSkill(skill, abilityScores);
+            }
+
+            return skillsList;
         }
 
-        private Skill AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
+        private void AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
         {
             skill.Total = skill.Ranks;
             if (skill.Trained && skill.Ranks > 0)
@@ -34,8 +40,6 @@ namespace Services
             {
                 skill.Total += abilityScores[skill.PrimaryStatId].AbilityModifier;
             }
-
-            return skill;
         }
     }
 }

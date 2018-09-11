@@ -39,6 +39,7 @@ namespace UIView
             _logger.LogEntry();
             base.OnClosed(e);
             this.HtmlView.Dispose();
+            _mainPageViewModel.Dispose();
         }
     }
 }

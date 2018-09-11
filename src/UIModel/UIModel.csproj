@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="AutoMapper.cs" />
     <Compile Include="MainPageModel.cs" />
+    <Compile Include="PrimaryStatModel.cs" />
+    <Compile Include="PrimaryStatModelFactory.cs" />
     <Compile Include="PrimaryStatsTableModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillTableModel.cs" />

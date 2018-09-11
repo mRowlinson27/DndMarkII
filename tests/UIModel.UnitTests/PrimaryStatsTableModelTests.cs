@@ -33,7 +33,7 @@ namespace UIModel.UnitTests
         }
 
         [Test]
-        public async Task RequestPrimaryStatsAsync_ReturnsDataProperly()
+        public void RequestPrimaryStats_ReturnsDataProperly()
         {
             //Arrange
             var svcData = new List<PrimaryStat>
@@ -58,11 +58,11 @@ namespace UIModel.UnitTests
                 }
             };
 
-            A.CallTo(() => _primaryStatsService.GetAllPrimaryStatsAsync()).Returns(svcData);
-            A.CallTo(() => _autoMapper.Map(svcData)).Returns(correctUiPrimaryStats);
+            A.CallTo(() => _primaryStatsService.GetAllPrimaryStats()).Returns(svcData);
+            A.CallTo(() => _autoMapper.MapToUi(svcData)).Returns(correctUiPrimaryStats);
 
             //Act
-            var result = await _primaryStatsTableModel.RequestPrimaryStatsAsync();
+            var result = _primaryStatsTableModel.RequestPrimaryStats();
 
             //Assert
             result.Should().BeEquivalentTo(correctUiPrimaryStats);

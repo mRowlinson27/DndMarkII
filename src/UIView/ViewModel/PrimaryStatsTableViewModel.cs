@@ -5,17 +5,26 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+    using API;
+    using Neutronium.MVVMComponents.Relay;
     using UIModel.API;
     using UIModel.API.Dto;
     using UIUtilities.API;
     using UIUtilities.API.AsyncCommands;
     using Utilities.API;
 
-    public class PrimaryStatsTableViewModel : ViewModelBase, IDisposable
+    public class PrimaryStatsTableViewModel : ViewModelBase
     {
-        public ObservableCollection<UiPrimaryStat> PrimaryStats { get; set; } = new ObservableCollection<UiPrimaryStat>();
+        public ObservableCollection<IPrimaryStatViewModel> PrimaryStats { get; set; } = new ObservableCollection<IPrimaryStatViewModel>();
 
-        private IAsyncTaskRunner<IEnumerable<UiPrimaryStat>> _primaryStatRequestTaskRunner;
+        public bool InEdit { get; set; } = true;
+
+        public IAsyncCommandAdaptor Delete { get; private set; }
+
+        private IAsyncCommand<IEnumerable<UiPrimaryStat>> _primaryStatRequestCommand;
 
         private readonly ILogger _logger;
 
@@ -25,16 +34,24 @@ namespace UIView.ViewModel
 
         private readonly IUiThreadInvoker _uiThreadInvoker;
 
+        private readonly IPrimaryStatViewModelFactory _primaryStatViewModelFactory;
+
+        private readonly IUiStateController _uiStateController;
+
         public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncTaskRunnerFactory asyncTaskRunnerFactory, IUiThreadInvoker uiThreadInvoker)
+            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
             _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
+            _primaryStatViewModelFactory = primaryStatViewModelFactory;
+            _uiStateController = uiStateController;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
-            SetupTaskRunners(asyncTaskRunnerFactory);
+            SetupTaskRunners(asyncCommandFactory);
+
+            Delete = asyncCommandAdaptorFactory.CreateWithContext(() => { _logger.LogEntry(); });
         }
 
         public override void Init()
@@ -42,19 +59,21 @@ namespace UIView.ViewModel
             MakePrimaryStatRequest();
         }
 
-        private void SetupTaskRunners(IAsyncTaskRunnerFactory asyncTaskRunnerFactory)
+        private void SetupTaskRunners(IAsyncCommandFactory asyncCommandFactory)
         {
-            _primaryStatRequestTaskRunner = asyncTaskRunnerFactory.Create(_model.RequestPrimaryStatsAsync);
-            _primaryStatRequestTaskRunner.PropertyChanged += PrimaryStatRequestTaskRunnerOnPropertyChanged;
+            _primaryStatRequestCommand = asyncCommandFactory.CreateResultCommand(_model.RequestPrimaryStats);
+            _primaryStatRequestCommand.PropertyChanged += PrimaryStatRequestCommandOnPropertyChanged;
         }
 
         private void MakePrimaryStatRequest()
         {
+            _uiStateController.IncUiLock();
+
             _uiThreadInvoker.Dispatch(() => DataAvailable = false);
-            _primaryStatRequestTaskRunner.StartTask();
+            _primaryStatRequestCommand.Execute(null);
         }
 
-        private void PrimaryStatRequestTaskRunnerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void PrimaryStatRequestCommandOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsSuccessfullyCompleted")
             {
@@ -66,8 +85,10 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            _observableHelper.Rebind(PrimaryStats, _primaryStatRequestTaskRunner.Result);
+            var primaryStatViewModels = _primaryStatRequestCommand.Execution.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
+            _observableHelper.Rebind(PrimaryStats, primaryStatViewModels);
             DataAvailable = true;
+            _uiStateController.DecUiLock();
 
             _logger.LogExit();
         }
@@ -77,10 +98,19 @@ namespace UIView.ViewModel
             MakePrimaryStatRequest();
         }
 
-        public void Dispose()
+        private async Task DeleteCommandAsync(PrimaryStatsTableViewModel uiSkill)
         {
-            _primaryStatRequestTaskRunner.PropertyChanged -= PrimaryStatRequestTaskRunnerOnPropertyChanged;
-            _primaryStatRequestTaskRunner.Dispose();
+            _logger.LogEntry();
+
+            await Task.Delay(1000);
+
+            _logger.LogExit();
+        }
+
+        public override void Dispose()
+        {
+            _primaryStatRequestCommand.PropertyChanged -= PrimaryStatRequestCommandOnPropertyChanged;
+            _primaryStatRequestCommand.Dispose();
             _model.PrimaryStatsUpdated -= ModelOnPrimaryStatsUpdated;
         }
     }

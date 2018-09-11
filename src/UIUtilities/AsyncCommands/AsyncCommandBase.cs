@@ -3,56 +3,42 @@ namespace UIUtilities.AsyncCommands
 {
     using System;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Threading.Tasks;
     using API;
     using API.AsyncCommands;
-    using UIUtilities;
 
-    public abstract class AsyncCommandBase : IAsyncCommand, INotifyPropertyChanged
+    public abstract class AsyncCommandBase<TResult> : IWatchableCommandProperties<TResult>
     {
-        public abstract Task ExecuteAsync(object parameter);
+        public event EventHandler CanExecuteChanged
+        {
+            add => _asyncCommandWatcher.CanExecuteChanged += value;
+            remove => _asyncCommandWatcher.CanExecuteChanged -= value;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add => _asyncCommandWatcher.PropertyChanged += value;
+            remove => _asyncCommandWatcher.PropertyChanged -= value;
+        }
+
+        public INotifyTaskCompletion<TResult> Execution => _asyncCommandWatcher.Execution;
+
+        private readonly IAsyncCommandWatcher<TResult> _asyncCommandWatcher;
+
+        protected AsyncCommandBase(IAsyncCommandWatcher<TResult> asyncCommandWatcher)
+        {
+            _asyncCommandWatcher = asyncCommandWatcher;
+        }
 
         public virtual bool CanExecute(object parameter)
         {
-            return Execution == null || Execution.IsCompleted;
+            return _asyncCommandWatcher.CanExecute(parameter);
         }
 
-        public INotifyTaskCompletion<object> Execution
+        public abstract void Execute(object parameter);
+
+        public void Dispose()
         {
-            get => _execution;
-            protected set
-            {
-                _execution = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private INotifyTaskCompletion<object> _execution;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public async void Execute(object parameter)
-        {
-            await ExecuteAsync(parameter).ConfigureAwait(false);
-        }
-
-        public event EventHandler CanExecuteChanged;
-//        {
-//            add => CommandManager.RequerySuggested += value;
-//            remove => CommandManager.RequerySuggested -= value;
-//        }
-
-        protected void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-//            CommandManager.InvalidateRequerySuggested();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _asyncCommandWatcher.Dispose();
         }
     }
 }

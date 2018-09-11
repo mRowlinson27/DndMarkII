@@ -4,7 +4,6 @@ namespace UIModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading.Tasks;
     using API;
     using API.Dto;
     using Services.API;
@@ -30,18 +29,18 @@ namespace UIModel
             _skillsService.SkillsUpdated += SkillsServiceOnSkillsUpdated;
         }
 
-        public async Task<IEnumerable<UiSkill>> RequestSkillsAsync()
+        public IEnumerable<UiSkill> RequestSkills()
         {
             _logger.LogEntry();
-            var svcSkills = await _skillsService.GetAllSkillsAsync().ConfigureAwait(false);
-            var uiSkills = _autoMapper.Map(svcSkills);
+            var svcSkills = _skillsService.GetAllSkills();
+            var uiSkills = _autoMapper.MapToUi(svcSkills);
             _logger.LogExit();
             return uiSkills;
         }
 
-        public async Task AddSkillAsync()
+        public void AddSkill()
         {
-            await _skillsService.AddSkillAsync(new Skill
+            _skillsService.AddSkill(new Skill
             {
                 Id = Guid.NewGuid(),
                 ArmourCheckPenalty = 0,
@@ -54,10 +53,9 @@ namespace UIModel
             });
         }
 
-        public async Task RemoveSkillAsync(UiSkill uiSkill)
+        public void RemoveSkill(UiSkill uiSkill)
         {
-            await Task.Run(() => UpdateBackEnd()).ConfigureAwait(false);
-//            _skills.Remove(uiSkill);
+            UpdateBackEnd();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Skills"));
         }
 

@@ -1,10 +1,19 @@
 ﻿
 namespace UIView.ViewModel
 {
+    using System;
     using System.ComponentModel;
+    using UIUtilities.API;
 
-    public class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
+        private readonly IUiThreadInvoker _uiThreadInvoker;
+
+        internal ViewModelBase(IUiThreadInvoker uiThreadInvoker)
+        {
+            _uiThreadInvoker = uiThreadInvoker;
+        }
+
         public bool DataAvailable
         {
             get => _dataAvailable;
@@ -24,11 +33,16 @@ namespace UIView.ViewModel
 
         protected virtual void OnPropertyChanged(string pn)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pn));
+            _uiThreadInvoker.Dispatch(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pn));
+            });
         }
 
         public virtual void Init() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public abstract void Dispose();
     }
 }

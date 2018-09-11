@@ -4,6 +4,7 @@ namespace UIView.UnitTests
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using API;
     using FakeItEasy;
     using FluentAssertions;
@@ -15,6 +16,7 @@ namespace UIView.UnitTests
     using UIUtilities.API.AsyncCommands;
     using UIUtilities.AsyncCommands;
     using Utilities.API;
+    using Utilities.Implementation;
     using ViewModel;
 
     [TestFixture]
@@ -27,79 +29,65 @@ namespace UIView.UnitTests
         private IObservableHelper _observableHelper;
         private INotifyTaskCompletionFactory _fakeNotifyTaskCompletionFactory;
         private IAsyncCommandFactory _asyncCommandFactory;
-        private IAsyncTaskRunnerFactory _asyncTaskRunnerFactory;
         private IUiThreadInvoker _uiThreadInvoker;
         private ISkillViewModelFactory _skillViewModelFactory;
+        private IAsyncCommandAdaptorFactory _asyncCommandAdaptorFactory;
 
-        private INotifyTaskCompletion<IEnumerable<UiSkill>> _fakeNotifyTaskCompletion;
-
-        [SetUp]
-        public void Setup()
-        {
-            _logger = A.Fake<ILogger>();
-            _skillTableModel = A.Fake<ISkillTableModel>();
-            _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
-            _observableHelper = new ObservableHelper();
-            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory);
-            _asyncTaskRunnerFactory = new AsyncTaskRunnerFactory(_fakeNotifyTaskCompletionFactory);
-            _uiThreadInvoker = new UiThreadInvoker(_logger);
-            _skillViewModelFactory = A.Fake<ISkillViewModelFactory>();
-
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncTaskRunnerFactory, _uiThreadInvoker, _skillViewModelFactory);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _skillTableViewModel.Dispose();
-        }
+        private INotifyTaskCompletion<IEnumerable<UiSkill>> _skillRequestNotifyTaskCompletion;
+        private INotifyTaskCompletion<object> _addSkillCommandNotifyTaskCompletion;
 
         [Test]
-        public void Init_RequestsSkillData()
+        public async Task Init_RequestsSkillData()
         {
             //Arrange
+            Setup();
 
             //Act
             _skillTableViewModel.Init();
+            await _skillRequestNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _skillTableModel.RequestSkillsAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
         }
 
         [Test]
-        public void Model_OnPropertyChanged_RequestsSkillData()
+        public async Task Model_OnPropertyChanged_RequestsSkillData()
         {
             //Arrange
+            Setup();
 
             //Act
             _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
+            await _skillRequestNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _skillTableModel.RequestSkillsAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.RequestSkills()).MustHaveHappened();
         }
 
         [Test]
-        public void AddSkill_RequestsFromModel()
+        public async Task AddSkill_RequestsFromModel()
         {
             //Arrange
+            Setup();
 
             //Act
-            _skillTableViewModel.AddSkill.Execute(null);
+            var command = _skillTableViewModel.AddSkill;
+            await command.ExecuteAsync();
+            await _addSkillCommandNotifyTaskCompletion.Task;
 
             //Assert
-            A.CallTo(() => _skillTableModel.AddSkillAsync()).MustHaveHappened();
+            A.CallTo(() => _skillTableModel.AddSkill()).MustHaveHappened();
         }
 
         [Test]
         public void Model_OnSkillRequestTaskCompletion_CreatesSkillViewModelsAndDataIsAvailable()
         {
             //Arrange
-            _fakeNotifyTaskCompletion = A.Fake<INotifyTaskCompletion<IEnumerable<UiSkill>>>();
-            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiSkill>>()).Returns(_fakeNotifyTaskCompletion);
+            Setup(skillRequestNotifyTaskCompletion: A.Fake<INotifyTaskCompletion<IEnumerable<UiSkill>>>());
 
             //Act
             _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
-            _fakeNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_fakeNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
+            _skillRequestNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillRequestNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
 
             //Assert
             _skillTableViewModel.DataAvailable.Should().BeTrue();
@@ -109,10 +97,8 @@ namespace UIView.UnitTests
         public void Model_OnSkillRequestTaskCompletion_SetsSkillViewModelBackgroundColour()
         {
             //Arrange
-            _fakeNotifyTaskCompletion = A.Fake<INotifyTaskCompletion<IEnumerable<UiSkill>>>();
-            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiSkill>>()).Returns(_fakeNotifyTaskCompletion);
-
-            A.CallTo(() => _fakeNotifyTaskCompletion.Result).Returns(new List<UiSkill> { new UiSkill(), new UiSkill() });
+            Setup(skillRequestNotifyTaskCompletion: A.Fake<INotifyTaskCompletion<IEnumerable<UiSkill>>>());
+            A.CallTo(() => _skillRequestNotifyTaskCompletion.Result).Returns(new List<UiSkill> { new UiSkill(), new UiSkill() });
 
             var fakeViewModel0 = A.Fake<ISkillViewModel>();
             var fakeViewModel1 = A.Fake<ISkillViewModel>();
@@ -120,11 +106,63 @@ namespace UIView.UnitTests
 
             //Act
             _skillTableModel.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillTableModel, new PropertyChangedEventArgs("SkillViewModels"));
-            _fakeNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_fakeNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
+            _skillRequestNotifyTaskCompletion.PropertyChanged += Raise.FreeForm<PropertyChangedEventHandler>.With(_skillRequestNotifyTaskCompletion, new PropertyChangedEventArgs("IsSuccessfullyCompleted"));
 
             //Assert
             A.CallToSet(() => fakeViewModel0.BackGroundColour).To(Constants.SkillModelEvenIndexBackGroundColour).MustHaveHappened();
             A.CallToSet(() => fakeViewModel1.BackGroundColour).To(Constants.SkillModelOddIndexBackGroundColour).MustHaveHappened();
+        }
+
+        public void Setup(INotifyTaskCompletion<IEnumerable<UiSkill>> skillRequestNotifyTaskCompletion = null, INotifyTaskCompletion<object> addSkillCommandNotifyTaskCompletion = null)
+        {
+            SetupStaticFakes();
+
+            SetupNotifyTaskCompletions(skillRequestNotifyTaskCompletion, addSkillCommandNotifyTaskCompletion);
+
+            SetupSkillTableViewModel();
+        }
+
+        private void SetupStaticFakes()
+        {
+            _logger = A.Fake<ILogger>();
+            _skillTableModel = A.Fake<ISkillTableModel>();
+            _skillViewModelFactory = A.Fake<ISkillViewModelFactory>();
+            _fakeNotifyTaskCompletionFactory = A.Fake<INotifyTaskCompletionFactory>();
+        }
+
+        private void SetupNotifyTaskCompletions(INotifyTaskCompletion<IEnumerable<UiSkill>> skillRequestNotifyTaskCompletion, INotifyTaskCompletion<object> addSkillCommandNotifyTaskCompletion)
+        {
+            if (skillRequestNotifyTaskCompletion == null)
+            {
+                skillRequestNotifyTaskCompletion = new NotifyTaskCompletion<IEnumerable<UiSkill>>(_logger);
+            }
+            _skillRequestNotifyTaskCompletion = skillRequestNotifyTaskCompletion;
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<IEnumerable<UiSkill>>()).Returns(_skillRequestNotifyTaskCompletion);
+
+            if (addSkillCommandNotifyTaskCompletion == null)
+            {
+                addSkillCommandNotifyTaskCompletion = new NotifyTaskCompletion<object>(_logger);
+            }
+            _addSkillCommandNotifyTaskCompletion = addSkillCommandNotifyTaskCompletion;
+            A.CallTo(() => _fakeNotifyTaskCompletionFactory.Create<object>()).Returns(_addSkillCommandNotifyTaskCompletion);
+        }
+
+        public void SetupSkillTableViewModel()
+        {
+            _observableHelper = new ObservableHelper();
+            var uiStateController = new UiStateController(_logger, new UiLockerContextFactory());
+            _asyncCommandFactory = new AsyncCommandFactory(_fakeNotifyTaskCompletionFactory, new AsyncCommandWatcherFactory(uiStateController), new TaskWrapper());
+            _asyncCommandAdaptorFactory = new AsyncCommandAdaptorFactory(_asyncCommandFactory);
+            _uiThreadInvoker = new UiThreadInvoker(_logger);
+
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncCommandAdaptorFactory, _uiThreadInvoker, _skillViewModelFactory,
+                new UiStateController(_logger, new UiLockerContextFactory()));
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            _skillTableViewModel.Dispose();
         }
     }
 }

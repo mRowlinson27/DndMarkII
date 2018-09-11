@@ -19,38 +19,30 @@ namespace UIModel
             {AbilityType.Str, "STR"},
         };
 
-        public IEnumerable<UiPrimaryStat> Map(IEnumerable<PrimaryStat> svcPrimaryStats)
+        private static readonly Dictionary<string, AbilityType> StringToIdMapping = new Dictionary<string, AbilityType>
         {
-            return svcPrimaryStats.Select(MapPrimaryStat);
-        }
+            {"CHA", AbilityType.Cha},
+            {"CON", AbilityType.Con},
+            {"DEX", AbilityType.Dex},
+            {"INT", AbilityType.Int},
+            {"WIS", AbilityType.Wis},
+            {"STR", AbilityType.Str},
+        };
 
-        public IEnumerable<UiSkill> Map(IEnumerable<Skill> svcSkill)
+        public UiPrimaryStat MapToUi(PrimaryStat svcPrimaryStat)
         {
-            return svcSkill.Select(MapSkill);
-        }
-
-        private UiPrimaryStat MapPrimaryStat(PrimaryStat svcPrimaryStat)
-        {
-            var result = new UiPrimaryStat()
+            var result = new UiPrimaryStat
             {
                 Name = svcPrimaryStat.Name,
                 ShortName = IdToStringMapping[svcPrimaryStat.Id],
                 AbilityScore = svcPrimaryStat.AbilityScore.ToString(),
+                AbilityModifier = CreateUiAbilityModifier(svcPrimaryStat),
             };
-
-            if (svcPrimaryStat.AbilityModifier > 0)
-            {
-                result.AbilityModifier = "+" + svcPrimaryStat.AbilityModifier;
-            }
-            else
-            {
-                result.AbilityModifier = svcPrimaryStat.AbilityModifier.ToString();
-            }
 
             return result;
         }
 
-        public UiSkill MapSkill(Skill svcSkill)
+        public UiSkill MapToUi(Skill svcSkill)
         {
             return new UiSkill
             {
@@ -64,6 +56,50 @@ namespace UIModel
                 Total = svcSkill.Total,
                 Id = svcSkill.Id
             };
+        }
+
+        public IEnumerable<UiPrimaryStat> MapToUi(IEnumerable<PrimaryStat> svcPrimaryStats)
+        {
+            return svcPrimaryStats.Select(MapToUi);
+        }
+
+        public IEnumerable<UiSkill> MapToUi(IEnumerable<Skill> svcSkill)
+        {
+            return svcSkill.Select(MapToUi);
+        }
+
+        public PrimaryStatUpdateRequest MapToSvcRequest(UiPrimaryStat uiPrimaryStat)
+        {
+            return new PrimaryStatUpdateRequest
+            {
+                AbilityScore = int.Parse(uiPrimaryStat.AbilityScore),
+                Id = StringToIdMapping[uiPrimaryStat.ShortName]
+            };
+        }
+
+        public Skill MapToSvcRequest(UiSkill uiSkill)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<PrimaryStatUpdateRequest> MapToSvcRequest(IEnumerable<UiPrimaryStat> uiPrimaryStat)
+        {
+            return uiPrimaryStat.Select(MapToSvcRequest);
+        }
+
+        public IEnumerable<Skill> MapToSvcRequest(IEnumerable<UiSkill> uiSkills)
+        {
+            return uiSkills.Select(MapToSvcRequest);
+        }
+
+        private static string CreateUiAbilityModifier(PrimaryStat svcPrimaryStat)
+        {
+            if (svcPrimaryStat.AbilityModifier > 0)
+            {
+                return "+" + svcPrimaryStat.AbilityModifier;
+            }
+
+            return svcPrimaryStat.AbilityModifier.ToString();
         }
     }
 }
