@@ -15,12 +15,14 @@ namespace UIModel.API.Dto
 
         public string PrimaryStatName { get; set; }
 
+        public string PrimaryStatModifier { get; set; }
+
         public bool HasArmourCheckPenalty { get; set; }
 
         public int ArmourCheckPenalty { get; set; }
 
         public bool UseUntrained { get; set; }
 
-        public bool Trained { get; set; }
+        public bool Class { get; set; }
     }
 }

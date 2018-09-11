@@ -66,7 +66,7 @@ namespace Services.UnitTests
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = true,
                     Ranks = 5,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true
                 }
             };
@@ -127,7 +127,7 @@ namespace Services.UnitTests
                 PrimaryStatId = API.Dto.AbilityType.Cha,
                 HasArmourCheckPenalty = true,
                 Ranks = 5,
-                Trained = true,
+                Class = true,
                 UseUntrained = true,
                 Total = 8
             };

@@ -7,10 +7,14 @@
 
     <!-- ko if: ShowingDetails -->
     <div class="skillSpecifics">
-        <div class="skillSpecificsStatName" data-bind="text:PrimaryStatName"></div>
-        <div class="skillSpecificsRanks" data-bind="text:Ranks"></div>
+        <div style="display: inline" data-bind="text:PrimaryStatName"></div>
+        <div style="display: inline" data-bind="text:PrimaryStatModifier"></div>
+        <div style="display: inline" data-bind="text:Ranks"></div>
     </div>
     <!-- /ko -->
-
-    <button data-bind="enable:$data.Delete().CanExecuteValue, execute: $data.Delete, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button>
+    <!--<button data-bind="enable:$data.Delete().CanExecuteValue, execute: $data.Delete, executeoption: { callback : function(){} }" style="width: 100%">Remove skill</button>
+    
+    <div class="skillSpecificsStatName" data-bind="text:PrimaryStatName"></div>
+    <div class="skillSpecificsRanks" data-bind="text:Ranks"></div>
+    -->
 </div>

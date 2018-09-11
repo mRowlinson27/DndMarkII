@@ -3,7 +3,6 @@ namespace UIView.ViewModel
 {
     using System;
     using System.Threading;
-    using System.Threading.Tasks;
     using API;
     using UIModel.API.Dto;
     using UIUtilities.API;
@@ -20,7 +19,8 @@ namespace UIView.ViewModel
         public bool HasArmourCheckPenalty => Skill.HasArmourCheckPenalty;
         public int ArmourCheckPenalty => Skill.ArmourCheckPenalty;
         public bool UseUntrained => Skill.UseUntrained;
-        public bool Trained => Skill.Trained;
+        public bool Trained => Skill.Class;
+        public string PrimaryStatModifier => Skill.PrimaryStatModifier;
 
         public UiSkill Skill { get; set; }
 
@@ -60,7 +60,7 @@ namespace UIView.ViewModel
             ShowDetail = asyncCommandAdaptorFactory.CreateWithContext((Action) ShowDetailsCommand);
         }
 
-        private void DeleteCommand(/*SkillViewModel uiSkill*/)
+        private void DeleteCommand()
         {
             _logger.LogEntry();
 
@@ -73,7 +73,6 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            Thread.Sleep(1000);
             _uiThreadInvoker.Dispatch(() => ShowingDetails = !ShowingDetails);
 
             _logger.LogExit();

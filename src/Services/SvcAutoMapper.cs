@@ -37,7 +37,7 @@ namespace Services
                 Ranks = dbSkill.Ranks,
                 HasArmourCheckPenalty = dbSkill.HasArmourCheckPenalty,
                 UseUntrained = dbSkill.UseUntrained,
-                Trained = dbSkill.Trained,
+                Class = dbSkill.Trained,
                 PrimaryStatId = (AbilityType)dbSkill.PrimaryStatId,
             };
         }
@@ -71,7 +71,7 @@ namespace Services
                 Ranks = svcSkill.Ranks,
                 HasArmourCheckPenalty = svcSkill.HasArmourCheckPenalty,
                 UseUntrained = svcSkill.UseUntrained,
-                Trained = svcSkill.Trained,
+                Trained = svcSkill.Class,
                 PrimaryStatId = (Database.API.Dto.AbilityType)svcSkill.PrimaryStatId,
             };
         }

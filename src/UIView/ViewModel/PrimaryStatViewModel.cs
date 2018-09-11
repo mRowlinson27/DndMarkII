@@ -59,7 +59,7 @@ namespace UIView.ViewModel
 
         private void UpdatePrimaryStatCommand()
         {
-            _logger.LogMessage($"AbilityScore: {AbilityScore}");
+            _logger.LogMessage($"New abilityScore: {AbilityScore}");
             _model.Update(PrimaryStat);
         }
 

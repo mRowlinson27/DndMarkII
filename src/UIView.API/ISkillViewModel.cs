@@ -15,6 +15,8 @@ namespace UIView.API
 
         string PrimaryStatName { get; }
 
+        string PrimaryStatModifier { get; }
+
         bool HasArmourCheckPenalty { get; }
 
         int ArmourCheckPenalty { get; }

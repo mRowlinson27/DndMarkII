@@ -57,7 +57,11 @@ namespace UIModel.UnitTests
         }
 
         [Test]
-        public void MapSkillToUi_TransformsRegularDataProperly()
+        [TestCase(0, "0")]
+        [TestCase(1, "+1")]
+        [TestCase(-1, "-1")]
+        [TestCase(6, "+6")]
+        public void MapSkillToUi_TransformsRegularDataProperly(int abilityMod, string uiAbilityMod)
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -71,9 +75,10 @@ namespace UIModel.UnitTests
                     Name = "Acro",
                     PrimaryStatId = AbilityType.Cha,
                     Ranks = 1,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true,
-                    Total = 3
+                    Total = 3,
+                    PrimaryStatModifier = abilityMod
                 }
             };
 
@@ -87,9 +92,10 @@ namespace UIModel.UnitTests
                     Name = "Acro",
                     PrimaryStatName = "CHA",
                     Ranks = 1,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true,
-                    Total = 3
+                    Total = 3,
+                    PrimaryStatModifier = uiAbilityMod
                 }
             };
 

@@ -36,7 +36,7 @@ namespace UIModel
                 Name = svcPrimaryStat.Name,
                 ShortName = IdToStringMapping[svcPrimaryStat.Id],
                 AbilityScore = svcPrimaryStat.AbilityScore.ToString(),
-                AbilityModifier = CreateUiAbilityModifier(svcPrimaryStat),
+                AbilityModifier = CreateUiAbilityModifier(svcPrimaryStat.AbilityModifier),
             };
 
             return result;
@@ -51,10 +51,11 @@ namespace UIModel
                 Name = svcSkill.Name,
                 PrimaryStatName = IdToStringMapping[svcSkill.PrimaryStatId],
                 Ranks = svcSkill.Ranks,
-                Trained = svcSkill.Trained,
+                Class = svcSkill.Class,
                 UseUntrained = svcSkill.UseUntrained,
                 Total = svcSkill.Total,
-                Id = svcSkill.Id
+                Id = svcSkill.Id,
+                PrimaryStatModifier = CreateUiAbilityModifier(svcSkill.PrimaryStatModifier)
             };
         }
 
@@ -92,14 +93,14 @@ namespace UIModel
             return uiSkills.Select(MapToSvcRequest);
         }
 
-        private static string CreateUiAbilityModifier(PrimaryStat svcPrimaryStat)
+        private static string CreateUiAbilityModifier(int abilityModifier)
         {
-            if (svcPrimaryStat.AbilityModifier > 0)
+            if (abilityModifier > 0)
             {
-                return "+" + svcPrimaryStat.AbilityModifier;
+                return "+" + abilityModifier;
             }
 
-            return svcPrimaryStat.AbilityModifier.ToString();
+            return abilityModifier.ToString();
         }
     }
 }
