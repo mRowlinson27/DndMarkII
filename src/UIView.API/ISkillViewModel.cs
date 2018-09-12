@@ -1,12 +1,10 @@
 ﻿
 namespace UIView.API
 {
-    using System;
+    using UIModel.API.Dto;
 
     public interface ISkillViewModel
     {
-        Guid Id { get; }
-
         int Total { get; }
 
         string Name { get; }
@@ -25,10 +23,10 @@ namespace UIView.API
 
         bool Class { get; set; }
 
-        bool ShowingDetails { get; }
-
         string BackGroundColour { get; set; }
 
         bool InEdit { get; }
+
+        UiSkill Skill { get; set; }
     }
 }

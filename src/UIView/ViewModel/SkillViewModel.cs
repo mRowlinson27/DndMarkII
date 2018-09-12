@@ -2,6 +2,7 @@
 namespace UIView.ViewModel
 {
     using System;
+    using System.ComponentModel;
     using System.Threading;
     using API;
     using UIModel.API;
@@ -41,24 +42,33 @@ namespace UIView.ViewModel
             }
         }
 
-        public UiSkill Skill { get; set; }
-
-        public bool ShowingDetails
-        {
-            get => _showingDetails;
-            set => Set(ref _showingDetails, value, "ShowingDetails");
-        }
-        private bool _showingDetails;
-
         public string BackGroundColour
         {
             get => _backGroundColour;
             set => Set(ref _backGroundColour, value, "BackGroundColour");
         }
+        private string _backGroundColour;
 
         public bool InEdit { get; } = true;
 
-        private string _backGroundColour;
+        [Bindable(false)]
+        public UiSkill Skill {
+            get => _skill;
+            set
+            {
+                _skill = value;
+                OnPropertyChanged("Total");
+                OnPropertyChanged("Name");
+                OnPropertyChanged("PrimaryStatName");
+                OnPropertyChanged("HasArmourCheckPenalty");
+                OnPropertyChanged("ArmourCheckPenalty");
+                OnPropertyChanged("UseUntrained");
+                OnPropertyChanged("PrimaryStatModifier");
+                OnPropertyChanged("Ranks");
+                OnPropertyChanged("Class");
+            } }
+
+        private UiSkill _skill;
 
         public IAsyncCommandAdaptor Delete { get; private set; }
 
@@ -75,6 +85,11 @@ namespace UIView.ViewModel
             _uiThreadInvoker = uiThreadInvoker;
 
             SetupCommandBindings(asyncCommandAdaptorFactory);
+        }
+
+        public void Rebind(UiSkill newBinding)
+        {
+            throw new NotImplementedException();
         }
 
         private void SetupCommandBindings(IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory)

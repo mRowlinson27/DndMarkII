@@ -27,6 +27,11 @@ namespace UIUtilities
             SafeAddRange(collection, newCollection);
         }
 
+        public void SmartRebind<T1, T2>(Dictionary<T1, IRebindable<T2>> currentViewModelsDict, Dictionary<T1, T2> dtoDict, IRebindableFactory<IRebindable<T2>, T2> rebindableFactory)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SafeClear<T>(IList<T> collection)
         {
             for (int i = collection.Count - 1; i >= 0; i--)

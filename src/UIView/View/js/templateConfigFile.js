@@ -11,4 +11,7 @@
     ko.components.register("primary-stats-table", {
         template: { require: "text!./tpl/primaryStatsTableTemplate.html" }
     });
+    ko.options = {
+        deferUpdates: true
+    };
 }());

@@ -18,6 +18,7 @@ namespace BootStrapper
     using UIUtilities.AsyncCommands;
     using UIView;
     using UIView.Factories;
+    using UIView.Helpers;
     using UIView.ViewModel;
     using Utilities.API;
     using Utilities.Implementation;
@@ -139,8 +140,8 @@ namespace BootStrapper
 
             _titleZoneViewModel = new TitleZoneViewModel(_titleZoneModel, _uiThreadInvoker);
 
-            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _observableHelper, _asyncCommandFactory, _asyncCommandAdaptorFactory,
-                _uiThreadInvoker, skillViewModelFactory, _uiStateController);
+            _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _asyncCommandFactory, _asyncCommandAdaptorFactory,
+                _uiThreadInvoker, _uiStateController, new SkillTableViewModelBindingHelper(skillViewModelFactory));
 
             _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
                 _asyncCommandAdaptorFactory, _uiThreadInvoker, primaryStatViewModelFactory, _uiStateController);

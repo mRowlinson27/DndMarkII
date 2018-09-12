@@ -5,9 +5,6 @@ namespace UIView.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
     using API;
     using UIModel.API;
     using UIModel.API.Dto;
@@ -17,32 +14,25 @@ namespace UIView.ViewModel
 
     public class SkillTableViewModel : ViewModelBase
     {
-        public IList<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
+        public ObservableCollection<ISkillViewModel> SkillViewModels { get; set; } = new ObservableCollection<ISkillViewModel>();
 
         private IAsyncCommand<IEnumerable<UiSkill>> _skillsRequestCommand;
 
         public IAsyncCommandAdaptor AddSkill { get; private set; }
 
         private readonly ILogger _logger;
-
         private readonly ISkillTableModel _model;
-
-        private readonly IObservableHelper _observableHelper;
-
         private readonly IUiThreadInvoker _uiThreadInvoker;
-
-        private readonly ISkillViewModelFactory _skillViewModelFactory;
-
         private readonly IUiStateController _uiStateController;
+        private readonly ISkillTableViewModelBindingHelper _bindingHelper;
 
-        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, ISkillViewModelFactory skillViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
+        public SkillTableViewModel(ILogger logger, ISkillTableModel model, IAsyncCommandFactory asyncCommandFactory, IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory,
+            IUiThreadInvoker uiThreadInvoker, IUiStateController uiStateController, ISkillTableViewModelBindingHelper bindingHelper) : base(uiThreadInvoker)
         {
             _logger = logger;
-            _observableHelper = observableHelper;
             _uiThreadInvoker = uiThreadInvoker;
-            _skillViewModelFactory = skillViewModelFactory;
             _uiStateController = uiStateController;
+            _bindingHelper = bindingHelper;
 
             _model = model;
             _model.PropertyChanged += ModelOnPropertyChanged;
@@ -98,12 +88,7 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            var newSkillModelList = _skillsRequestCommand.Execution.Result.Select(s => _skillViewModelFactory.Create(s)).ToList();
-            for (int i = 0; i < newSkillModelList.Count; i++)
-            {
-                newSkillModelList[i].BackGroundColour = i % 2 == 0 ? Constants.SkillModelEvenIndexBackGroundColour : Constants.SkillModelOddIndexBackGroundColour;
-            }
-            _observableHelper.Rebind(SkillViewModels, newSkillModelList);
+            _bindingHelper.Rebind(SkillViewModels, _skillsRequestCommand.Execution.Result);
 
             DataAvailable = true;
 

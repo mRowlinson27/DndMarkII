@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="Factories\PrimaryStatViewModelFactory.cs" />
     <Compile Include="Factories\SkillViewModelFactory.cs" />
+    <Compile Include="Helpers\SkillTableViewModelBindingHelper.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\PrimaryStatViewModel.cs" />
     <Compile Include="ViewModel\PrimaryStatsTableViewModel.cs" />

@@ -51,6 +51,8 @@
     <Compile Include="INotifyTaskCompletion.cs" />
     <Compile Include="INotifyTaskCompletionFactory.cs" />
     <Compile Include="IObservableHelper.cs" />
+    <Compile Include="IRebindable.cs" />
+    <Compile Include="IRebindableFactory.cs" />
     <Compile Include="IUiLockerContext.cs" />
     <Compile Include="IUiStateController.cs" />
     <Compile Include="IUiThreadInvoker.cs" />
