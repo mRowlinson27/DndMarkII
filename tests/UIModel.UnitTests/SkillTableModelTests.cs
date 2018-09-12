@@ -60,7 +60,7 @@ namespace UIModel.UnitTests
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
                     PrimaryStatName = "CHA",
-                    Ranks = 1,
+                    Ranks = "1",
                     Class = true,
                     UseUntrained = true,
                     Total = 3

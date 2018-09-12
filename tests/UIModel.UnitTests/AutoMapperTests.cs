@@ -91,7 +91,7 @@ namespace UIModel.UnitTests
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
                     PrimaryStatName = "CHA",
-                    Ranks = 1,
+                    Ranks = "1",
                     Class = true,
                     UseUntrained = true,
                     Total = 3,
@@ -147,7 +147,7 @@ namespace UIModel.UnitTests
                 new UiSkill()
                 {
                     Id = guid,
-                    Ranks = 10,
+                    Ranks = "10",
                     Class = true
                 }
             };

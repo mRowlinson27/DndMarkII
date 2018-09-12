@@ -11,7 +11,7 @@ namespace UIView.API
 
         string Name { get; }
 
-        int Ranks { get; }
+        string Ranks { get; }
 
         string PrimaryStatName { get; }
 

@@ -50,7 +50,7 @@ namespace UIModel
                 HasArmourCheckPenalty = svcSkill.HasArmourCheckPenalty,
                 Name = svcSkill.Name,
                 PrimaryStatName = IdToStringMapping[svcSkill.PrimaryStatId],
-                Ranks = svcSkill.Ranks,
+                Ranks = svcSkill.Ranks.ToString(),
                 Class = svcSkill.Class,
                 UseUntrained = svcSkill.UseUntrained,
                 Total = svcSkill.Total,
@@ -83,7 +83,7 @@ namespace UIModel
             return new SkillUpdateRequest
             {
                 Id = uiSkill.Id,
-                Ranks = uiSkill.Ranks,
+                Ranks = int.Parse(uiSkill.Ranks),
                 Class = uiSkill.Class
             };
         }

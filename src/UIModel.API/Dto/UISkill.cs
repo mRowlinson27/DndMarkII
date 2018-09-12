@@ -11,7 +11,7 @@ namespace UIModel.API.Dto
 
         public string Name { get; set; }
 
-        public int Ranks { get; set; }
+        public string Ranks { get; set; }
 
         public string PrimaryStatName { get; set; }
 

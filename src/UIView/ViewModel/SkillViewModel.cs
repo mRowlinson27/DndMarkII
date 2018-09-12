@@ -15,17 +15,30 @@ namespace UIView.ViewModel
         public Guid Id => Skill.Id;
         public int Total => Skill.Total;
         public string Name => Skill.Name;
-        public int Ranks => Skill.Ranks;
         public string PrimaryStatName => Skill.PrimaryStatName;
         public bool HasArmourCheckPenalty => Skill.HasArmourCheckPenalty;
         public int ArmourCheckPenalty => Skill.ArmourCheckPenalty;
         public bool UseUntrained => Skill.UseUntrained;
         public string PrimaryStatModifier => Skill.PrimaryStatModifier;
 
+        public string Ranks
+        {
+            get => Skill.Ranks;
+            set
+            {
+                Skill.Ranks = value;
+                OnPropertyChanged("Ranks");
+            }
+        }
+
         public bool Class
         {
             get => Skill.Class;
-            set => Skill.Class = value;
+            set
+            {
+                Skill.Class = value;
+                OnPropertyChanged("Class");
+            }
         }
 
         public UiSkill Skill { get; set; }
