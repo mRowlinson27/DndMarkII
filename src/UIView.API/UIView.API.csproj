@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPrimaryStatTableViewModelBindingHelper.cs" />
     <Compile Include="IPrimaryStatViewModel.cs" />
     <Compile Include="IPrimaryStatViewModelFactory.cs" />
     <Compile Include="ISkillTableViewModelBindingHelper.cs" />

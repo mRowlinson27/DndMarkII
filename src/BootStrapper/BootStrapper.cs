@@ -143,8 +143,8 @@ namespace BootStrapper
             _skillTableViewModel = new SkillTableViewModel(_logger, _skillTableModel, _asyncCommandFactory, _asyncCommandAdaptorFactory,
                 _uiThreadInvoker, _uiStateController, new SkillTableViewModelBindingHelper(skillViewModelFactory));
 
-            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, _observableHelper, _asyncCommandFactory,
-                _asyncCommandAdaptorFactory, _uiThreadInvoker, primaryStatViewModelFactory, _uiStateController);
+            _primaryStatsTableViewModel = new PrimaryStatsTableViewModel(_logger, _primaryStatsTableModel, new PrimaryStatTableViewModelBindingHelper(primaryStatViewModelFactory),
+                _asyncCommandFactory, _asyncCommandAdaptorFactory, _uiThreadInvoker, _uiStateController);
         }
 
         public void Dispose()
