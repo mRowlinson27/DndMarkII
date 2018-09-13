@@ -36,7 +36,7 @@ namespace UIModel
                 Name = svcPrimaryStat.Name,
                 ShortName = IdToStringMapping[svcPrimaryStat.Id],
                 AbilityScore = svcPrimaryStat.AbilityScore.ToString(),
-                AbilityModifier = CreateUiAbilityModifier(svcPrimaryStat),
+                AbilityModifier = CreateUiAbilityModifier(svcPrimaryStat.AbilityModifier),
             };
 
             return result;
@@ -50,11 +50,12 @@ namespace UIModel
                 HasArmourCheckPenalty = svcSkill.HasArmourCheckPenalty,
                 Name = svcSkill.Name,
                 PrimaryStatName = IdToStringMapping[svcSkill.PrimaryStatId],
-                Ranks = svcSkill.Ranks,
-                Trained = svcSkill.Trained,
+                Ranks = svcSkill.Ranks.ToString(),
+                Class = svcSkill.Class,
                 UseUntrained = svcSkill.UseUntrained,
                 Total = svcSkill.Total,
-                Id = svcSkill.Id
+                Id = svcSkill.Id,
+                PrimaryStatModifier = CreateUiAbilityModifier(svcSkill.PrimaryStatModifier)
             };
         }
 
@@ -77,9 +78,14 @@ namespace UIModel
             };
         }
 
-        public Skill MapToSvcRequest(UiSkill uiSkill)
+        public SkillUpdateRequest MapToSvcRequest(UiSkill uiSkill)
         {
-            throw new System.NotImplementedException();
+            return new SkillUpdateRequest
+            {
+                Id = uiSkill.Id,
+                Ranks = int.Parse(uiSkill.Ranks),
+                Class = uiSkill.Class
+            };
         }
 
         public IEnumerable<PrimaryStatUpdateRequest> MapToSvcRequest(IEnumerable<UiPrimaryStat> uiPrimaryStat)
@@ -87,19 +93,19 @@ namespace UIModel
             return uiPrimaryStat.Select(MapToSvcRequest);
         }
 
-        public IEnumerable<Skill> MapToSvcRequest(IEnumerable<UiSkill> uiSkills)
+        public IEnumerable<SkillUpdateRequest> MapToSvcRequest(IEnumerable<UiSkill> uiSkills)
         {
             return uiSkills.Select(MapToSvcRequest);
         }
 
-        private static string CreateUiAbilityModifier(PrimaryStat svcPrimaryStat)
+        private static string CreateUiAbilityModifier(int abilityModifier)
         {
-            if (svcPrimaryStat.AbilityModifier > 0)
+            if (abilityModifier > 0)
             {
-                return "+" + svcPrimaryStat.AbilityModifier;
+                return "+" + abilityModifier;
             }
 
-            return svcPrimaryStat.AbilityModifier.ToString();
+            return abilityModifier.ToString();
         }
     }
 }

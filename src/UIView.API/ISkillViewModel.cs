@@ -1,19 +1,19 @@
 ﻿
 namespace UIView.API
 {
-    using System;
+    using UIModel.API.Dto;
 
     public interface ISkillViewModel
     {
-        Guid Id { get; }
-
         int Total { get; }
 
         string Name { get; }
 
-        int Ranks { get; }
+        string Ranks { get; }
 
         string PrimaryStatName { get; }
+
+        string PrimaryStatModifier { get; }
 
         bool HasArmourCheckPenalty { get; }
 
@@ -21,10 +21,12 @@ namespace UIView.API
 
         bool UseUntrained { get; }
 
-        bool Trained { get; }
-
-        bool ShowingDetails { get; }
+        bool Class { get; set; }
 
         string BackGroundColour { get; set; }
+
+        bool InEdit { get; }
+
+        UiSkill Skill { get; set; }
     }
 }

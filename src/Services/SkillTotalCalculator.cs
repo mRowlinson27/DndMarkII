@@ -28,10 +28,15 @@ namespace Services
             return skillsList;
         }
 
+        public Skill AddTotal(Skill skill)
+        {
+            return AddTotals(new List<Skill> {skill}).FirstOrDefault();
+        }
+
         private void AddTotalToSkill(Skill skill, Dictionary<AbilityType, PrimaryStat> abilityScores)
         {
             skill.Total = skill.Ranks;
-            if (skill.Trained && skill.Ranks > 0)
+            if (skill.Class && skill.Ranks > 0)
             {
                 skill.Total += 3;
             }
@@ -39,6 +44,7 @@ namespace Services
             if (abilityScores.ContainsKey(skill.PrimaryStatId))
             {
                 skill.Total += abilityScores[skill.PrimaryStatId].AbilityModifier;
+                skill.PrimaryStatModifier = abilityScores[skill.PrimaryStatId].AbilityModifier;
             }
         }
     }

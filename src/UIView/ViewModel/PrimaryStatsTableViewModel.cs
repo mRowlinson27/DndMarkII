@@ -27,25 +27,18 @@ namespace UIView.ViewModel
         private IAsyncCommand<IEnumerable<UiPrimaryStat>> _primaryStatRequestCommand;
 
         private readonly ILogger _logger;
-
         private readonly IPrimaryStatsTableModel _model;
-
-        private readonly IObservableHelper _observableHelper;
-
+        private readonly IPrimaryStatTableViewModelBindingHelper _bindingHelper;
         private readonly IUiThreadInvoker _uiThreadInvoker;
-
-        private readonly IPrimaryStatViewModelFactory _primaryStatViewModelFactory;
-
         private readonly IUiStateController _uiStateController;
 
-        public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IObservableHelper observableHelper, IAsyncCommandFactory asyncCommandFactory,
-            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, IPrimaryStatViewModelFactory primaryStatViewModelFactory, IUiStateController uiStateController) : base(uiThreadInvoker)
+        public PrimaryStatsTableViewModel(ILogger logger, IPrimaryStatsTableModel model, IPrimaryStatTableViewModelBindingHelper bindingHelper, IAsyncCommandFactory asyncCommandFactory,
+            IAsyncCommandAdaptorFactory asyncCommandAdaptorFactory, IUiThreadInvoker uiThreadInvoker, IUiStateController uiStateController) : base(uiThreadInvoker)
         {
             _logger = logger;
             _model = model;
-            _observableHelper = observableHelper;
+            _bindingHelper = bindingHelper;
             _uiThreadInvoker = uiThreadInvoker;
-            _primaryStatViewModelFactory = primaryStatViewModelFactory;
             _uiStateController = uiStateController;
             _model.PrimaryStatsUpdated += ModelOnPrimaryStatsUpdated;
 
@@ -85,8 +78,8 @@ namespace UIView.ViewModel
         {
             _logger.LogEntry();
 
-            var primaryStatViewModels = _primaryStatRequestCommand.Execution.Result.Select(uiPrimaryStat => _primaryStatViewModelFactory.Create(uiPrimaryStat));
-            _observableHelper.Rebind(PrimaryStats, primaryStatViewModels);
+            _bindingHelper.Rebind(PrimaryStats, _primaryStatRequestCommand.Execution.Result);
+
             DataAvailable = true;
             _uiStateController.DecUiLock();
 

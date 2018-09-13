@@ -6,13 +6,15 @@ namespace Services.UnitTests
     using System.Linq;
     using System.Threading.Tasks;
     using API;
+    using API.Dto;
     using Database.API;
-    using Database.API.Dto;
     using FakeItEasy;
     using FluentAssertions;
     using FluentAssertions.Common;
     using NUnit.Framework;
     using Utilities.API;
+    using AbilityType = Database.API.Dto.AbilityType;
+    using Skill = Database.API.Dto.Skill;
 
     [TestFixture]
     public class SkillsServiceTests
@@ -66,7 +68,7 @@ namespace Services.UnitTests
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = true,
                     Ranks = 5,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true
                 }
             };
@@ -116,7 +118,7 @@ namespace Services.UnitTests
         }
 
         [Test]
-        public void AddSkill_GetsCurrentDb_AppendsNewSkill()
+        public void AddSkill_AppendsNewSkill()
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -127,7 +129,7 @@ namespace Services.UnitTests
                 PrimaryStatId = API.Dto.AbilityType.Cha,
                 HasArmourCheckPenalty = true,
                 Ranks = 5,
-                Trained = true,
+                Class = true,
                 UseUntrained = true,
                 Total = 8
             };
@@ -171,6 +173,70 @@ namespace Services.UnitTests
             //Assert
             wasCalled.Should().BeTrue();
             A.CallTo(() => _skillTotalCalculator.AddTotals(A<IEnumerable<API.Dto.Skill>>.Ignored)).MustHaveHappened();
+        }
+
+        [Test]
+        public void UpdateSkill_WhenRequested_HasUpdatedInfo()
+        {
+            //Arrange
+            var guid = Guid.NewGuid();
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>
+            {
+                {guid, new API.Dto.Skill {Id = guid, Ranks = 0}}
+            };
+
+            var correctSkill = new API.Dto.Skill
+            {
+                Id = guid,
+                Ranks = 4,
+                Class = true
+            };
+
+            //Act
+            _skillsService.UpdateSkill(new SkillUpdateRequest { Id = guid, Ranks = 4, Class = true});
+            var result = _skillsService.GetAllSkills();
+
+            //Assert
+            result.FirstOrDefault().Should().BeEquivalentTo(correctSkill);
+        }
+
+        [Test]
+        public void UpdateSkill_CalculatesTotalForUpdatedSkill()
+        {
+            //Arrange
+            var guid = Guid.NewGuid();
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>
+            {
+                {guid, new API.Dto.Skill {Id = guid, Ranks = 0}}
+            };
+
+            //Act
+            _skillsService.UpdateSkill(new SkillUpdateRequest { Id = guid, Ranks = 4 });
+
+            //Assert
+            A.CallTo(() => _skillTotalCalculator.AddTotal(A<API.Dto.Skill>.That.Matches(skill => 
+                skill.Id == guid &&
+                skill.Ranks == 4))).MustHaveHappened();
+        }
+
+        [Test]
+        public void UpdateSkill_RaisesSkillsUpdated()
+        {
+            //Arrange
+            var wasCalled = false;
+            _skillsService.SkillsUpdated += (o, e) => wasCalled = true;
+
+            var guid = Guid.NewGuid();
+            _skillsService.CachedSvcSkills = new Dictionary<Guid, API.Dto.Skill>
+            {
+                {guid, new API.Dto.Skill {Id = guid, Ranks = 0}}
+            };
+
+            //Act
+            _skillsService.UpdateSkill(new SkillUpdateRequest {Id = guid, Ranks = 4});
+
+            //Assert
+            wasCalled.Should().BeTrue();
         }
     }
 }

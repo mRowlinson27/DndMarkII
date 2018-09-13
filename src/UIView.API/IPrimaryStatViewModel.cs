@@ -14,5 +14,7 @@ namespace UIView.API
         string AbilityModifier { get; }
 
         bool InEdit { get; set; }
+
+        UiPrimaryStat PrimaryStat { get; set; }
     }
 }

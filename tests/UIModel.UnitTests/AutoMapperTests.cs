@@ -57,7 +57,11 @@ namespace UIModel.UnitTests
         }
 
         [Test]
-        public void MapSkillToUi_TransformsRegularDataProperly()
+        [TestCase(0, "0")]
+        [TestCase(1, "+1")]
+        [TestCase(-1, "-1")]
+        [TestCase(6, "+6")]
+        public void MapSkillToUi_TransformsRegularDataProperly(int abilityMod, string uiAbilityMod)
         {
             //Arrange
             var skillId = Guid.NewGuid();
@@ -71,9 +75,10 @@ namespace UIModel.UnitTests
                     Name = "Acro",
                     PrimaryStatId = AbilityType.Cha,
                     Ranks = 1,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true,
-                    Total = 3
+                    Total = 3,
+                    PrimaryStatModifier = abilityMod
                 }
             };
 
@@ -86,10 +91,11 @@ namespace UIModel.UnitTests
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
                     PrimaryStatName = "CHA",
-                    Ranks = 1,
-                    Trained = true,
+                    Ranks = "1",
+                    Class = true,
                     UseUntrained = true,
-                    Total = 3
+                    Total = 3,
+                    PrimaryStatModifier = uiAbilityMod
                 }
             };
 
@@ -129,6 +135,38 @@ namespace UIModel.UnitTests
 
             //Assert
             result.Should().BeEquivalentTo(correctSvcPrimaryStats);
+        }
+
+        [Test]
+        public void MapSkillToSvcRequest_TransformsDataProperly()
+        {
+            //Arrange
+            var guid = Guid.NewGuid();
+            var inputData = new List<UiSkill>
+            {
+                new UiSkill()
+                {
+                    Id = guid,
+                    Ranks = "10",
+                    Class = true
+                }
+            };
+
+            var correctSkillUpdateRequests = new List<SkillUpdateRequest>
+            {
+                new SkillUpdateRequest
+                {
+                    Id = guid,
+                    Ranks = 10,
+                    Class = true
+                }
+            };
+
+            //Act
+            var result = _autoMapper.MapToSvcRequest(inputData);
+
+            //Assert
+            result.Should().BeEquivalentTo(correctSkillUpdateRequests);
         }
     }
 }

@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPrimaryStatTableViewModelBindingHelper.cs" />
     <Compile Include="IPrimaryStatViewModel.cs" />
     <Compile Include="IPrimaryStatViewModelFactory.cs" />
+    <Compile Include="ISkillTableViewModelBindingHelper.cs" />
     <Compile Include="ISkillViewModel.cs" />
     <Compile Include="ISkillViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -50,6 +52,10 @@
     <ProjectReference Include="..\UIModel.API\UIModel.API.csproj">
       <Project>{7476CE24-8486-4DFB-BF5A-A0DF872678B0}</Project>
       <Name>UIModel.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIUtilities.API\UIUtilities.API.csproj">
+      <Project>{555437F8-52E3-4334-A544-18C3FBA803B3}</Project>
+      <Name>UIUtilities.API</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

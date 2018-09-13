@@ -2,6 +2,7 @@
 namespace UIUtilities.API
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     public interface IObservableHelper
     {

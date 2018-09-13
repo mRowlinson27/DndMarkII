@@ -54,6 +54,21 @@ namespace Services
             _logger.LogExit();
         }
 
+        public void UpdateSkill(SkillUpdateRequest skillUpdateRequest)
+        {
+            _logger.LogEntry();
+
+            var cachedSkill = CachedSvcSkills[skillUpdateRequest.Id];
+
+            cachedSkill.Ranks = skillUpdateRequest.Ranks;
+            cachedSkill.Class = skillUpdateRequest.Class;
+            _skillTotalCalculator.AddTotal(cachedSkill);
+
+            SkillsUpdated?.Invoke(this, EventArgs.Empty);
+
+            _logger.LogExit();
+        }
+
         private void PopulateSvcSkills()
         {
             var dbSkills = _skillsRepo.GetSkills();

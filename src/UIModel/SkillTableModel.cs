@@ -48,7 +48,7 @@ namespace UIModel
                 Name = "",
                 PrimaryStatId = AbilityType.Str,
                 Ranks = 0,
-                Trained = false,
+                Class = false,
                 UseUntrained = true
             });
         }

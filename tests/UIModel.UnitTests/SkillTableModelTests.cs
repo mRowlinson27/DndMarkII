@@ -46,7 +46,7 @@ namespace UIModel.UnitTests
                     Name = "Acro",
                     PrimaryStatId = AbilityType.Cha,
                     Ranks = 1,
-                    Trained = true,
+                    Class = true,
                     UseUntrained = true,
                     Total = 3
                 }
@@ -60,8 +60,8 @@ namespace UIModel.UnitTests
                     HasArmourCheckPenalty = true,
                     Name = "Acro",
                     PrimaryStatName = "CHA",
-                    Ranks = 1,
-                    Trained = true,
+                    Ranks = "1",
+                    Class = true,
                     UseUntrained = true,
                     Total = 3
                 }
@@ -88,7 +88,7 @@ namespace UIModel.UnitTests
                 Name = "",
                 PrimaryStatId = AbilityType.Str,
                 Ranks = 0,
-                Trained = false,
+                Class = false,
                 UseUntrained = true
             };
 

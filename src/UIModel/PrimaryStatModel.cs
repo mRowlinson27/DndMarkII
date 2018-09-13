@@ -11,10 +11,10 @@ namespace UIModel
         private readonly IPrimaryStatsService _primaryStatsService;
         private readonly IAutoMapper _autoMapper;
 
-        public PrimaryStatModel(IPrimaryStatsService primaryStatsService, IAutoMapper _autoMapper)
+        public PrimaryStatModel(IPrimaryStatsService primaryStatsService, IAutoMapper autoMapper)
         {
             _primaryStatsService = primaryStatsService;
-            this._autoMapper = _autoMapper;
+            _autoMapper = autoMapper;
         }
 
         public void Update(UiPrimaryStat primaryStat)

@@ -3,6 +3,14 @@
     <button data-bind="enable: $data.AddSkill().CanExecuteValue, execute: $data.AddSkill, executeoption: { callback : function(){} }">Add</button>
     
     <div class="skillTable">
+        <div  class="skillEntry" style="display: table; font-size: 14px">
+            <div style="background-color: darkgreen; display: inline-block; vertical-align: middle; width: 30px">Class Skill</div>
+            <div style="background-color: darkblue; display: inline-block; vertical-align: middle; width: 200px">Skill Name</div>
+            <div style="background-color: darkcyan; display: inline-block; vertical-align: middle; width: 70px">Skill Total</div>
+            <div style="background-color: darkmagenta; display: inline-block; vertical-align: middle; width: 100px">Ability Modifier</div>
+            <div style="background-color: darkorange; display: inline-block; vertical-align: middle; width: 45px">Ranks</div>
+        </div>
+
         <div class="skillTableBody" data-bind="foreach: SkillViewModels()">
             <div data-bind="component:{name: 'skill-entry', params: $data}"></div>
         </div>

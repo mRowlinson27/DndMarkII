@@ -38,7 +38,7 @@ namespace Services.UnitTests
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = false,
                     Ranks = 5,
-                    Trained = false,
+                    Class = false,
                     UseUntrained = false
                 }
             };
@@ -64,7 +64,7 @@ namespace Services.UnitTests
                     PrimaryStatId = AbilityType.Cha,
                     HasArmourCheckPenalty = false,
                     Ranks = 5,
-                    Trained = false,
+                    Class = false,
                     UseUntrained = false
                 }
             };
@@ -85,6 +85,7 @@ namespace Services.UnitTests
 
             //Assert
             firstResult.Total.Should().Be(10);
+            firstResult.PrimaryStatModifier.Should().Be(5);
         }
 
         [TestCase(true, 1, 4)]
@@ -103,7 +104,7 @@ namespace Services.UnitTests
                     PrimaryStatId = API.Dto.AbilityType.Cha,
                     HasArmourCheckPenalty = false,
                     Ranks = ranks,
-                    Trained = trained,
+                    Class = trained,
                     UseUntrained = false
                 }
             };
